@@ -81,9 +81,32 @@
     });
     socket.on('end moderation', endHideReplies);
   };
+  
+  const prepareOAuthHandler = () => {
+    try {
+      const isNativeWindow = window.top.location.href === location.href;
+    } catch (e) {
+      const button = document.querySelector('form>button');
+      const windowSize = 500;
+      const top = (window.screen.height - windowSize) / 2;
+      const left = (window.screen.width - windowSize) / 2;
+      if (button) {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = document.querySelector('form[action]').getAttribute('action');
+          window.open(
+            url,
+            '',
+            `width=${windowSize},height=${windowSize},top=${top},left=${left}`);
+        });
+      }      
+    }
+    
+  }
 
   setToken();
   prepareStopHideButton();
+  prepareOAuthHandler();
   if (typeof io !== 'undefined') {
     startSocket();
   }
