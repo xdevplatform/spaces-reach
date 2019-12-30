@@ -1,0 +1,91 @@
+(() => {
+  const setToken = () => {
+    const url = new URL(location.href);
+    for (const [key, value] of url.searchParams.entries()) {
+      localStorage.setItem(key, value);
+    }
+  };
+
+  const prepareStopHideButton = () => {
+    const button = document.querySelector('#moderate-stop');
+    if (!button) {
+      return;
+    }
+
+    button.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const response = await fetch('/moderate/stop', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({user_id: localStorage.getItem('user_id')}),
+      });
+
+      const json = await response.json();
+      if (json.success) {
+        localStorage.clear();
+        location.href = '/';        
+      } else {
+        console.error(json);
+      }
+    });
+  };
+
+  const parseOriginalTweet = (body) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(body, 'text/html');
+    return doc.querySelector('blockquote p').innerText || '';
+  }
+
+  const renderTweet = (tweet) => {
+    const now = new Date();
+    const formattedTime = new Intl.DateTimeFormat(navigator.language, {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(now);
+
+    const originalTweet = parseOriginalTweet(tweet.original_tweet);
+    const rendering = `<section class="replies"><p><small>${formattedTime}</small></p><p>Hidden <a target="_blank" href="https://twitter.com/${tweet.user.name}">@${tweet.user.name}</a>’s reply to “${originalTweet}”<a target="_blank" href="https://twitter.com/${tweet.user.name}/status/${tweet.id_str}" class="tweet-link">Show reply on Twitter</a></p></section>`;
+    document.querySelector('main.replies-container').innerHTML += rendering;
+  };
+
+  const endHideReplies = () => {
+    const now = new Date();
+    const formattedTime = new Intl.DateTimeFormat(navigator.language, {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(now);
+
+    document.querySelector('#moderate-stop').style.display = 'none';
+
+    const rendering = `<section class="end-hide"><p><small>${formattedTime}</small>Time’s up! Finished hiding replies on your behalf. <a href="/">Restart</a></p></section>`;
+    document.querySelector('main.replies-container').innerHTML += rendering;
+  }
+
+  const hideTweet = async (tweet) => {
+    try {
+      await fetch('/hide/' + tweet.id_str, {method: 'POST'});  
+    } catch (e) {
+      console.error('Cannot hide Tweet:', e);
+    }
+  };
+
+  const startSocket = () => {
+    const url = new URL(location.href);
+    const socket = io.connect(url.origin);
+    socket.emit('set id', {user_id: localStorage.getItem('user_id')});
+    socket.on('tweet', async (tweet) => {
+      await hideTweet(tweet);
+      renderTweet(tweet);
+    });
+    socket.on('end moderation', endHideReplies);
+  };
+
+  setToken();
+  prepareStopHideButton();
+  if (typeof io !== 'undefined') {
+    startSocket();
+  }
+
+})();

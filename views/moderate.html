@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hide replies</title>
+    <meta name="description" content="Generate a bearer token you can use with the Twitter API">
+    <link id="favicon" rel="icon" href="https://abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/socket.io.js" defer></script>
+    <script src="/client.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        Hiding replies
+      </h1>
+      <section>
+        <p>
+          This app is now checking replies to any conversation you started, and will hide replies containing language deemed toxic.
+        </p>
+        <p>
+          The app will stop checking replies after 15 minutes. To unhide any of the replies, click <b>Show reply on Twitter</b>, then use <b>Unhide reply</b> from the options menu.
+        </p>
+        <p>
+          <b>Remember:</b> replies may contain sensitive content and language. Be careful when showing these replies.
+        </p>
+        <button id="moderate-stop">Stop hiding replies</button>
+      </section>
+    </header>
+
+    <main class="replies-container">
+    </main>
+
+    <footer>
+      <h4>
+        What are you going to build next?
+      </h4>
+      <small>
+        <a href="https://developer.twitter.com">Twitter Developer</a> | 
+        <a href="https://t.co/labs">Twitter Developer Labs</a>
+      </small>
+    </footer>
+  </body>
+</html>
