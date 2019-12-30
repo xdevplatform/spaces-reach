@@ -26,6 +26,7 @@ const callbackURL = new URL(`${baseURL}/oauth-callback`);
 const webhookURL = new URL(`${baseURL}/webhook`);
 
 app.get('/', (request, response) => {
+  response.clearCookie('request_token');
   response.sendFile(__dirname + '/views/index.html');
 });
 
@@ -105,6 +106,7 @@ app.all('/webhook', async (request, response) => {
 
 app.get('/oauth', async (request, response) => {
   try {
+    response.clearCookie('request_token')
     const requestToken = await oauth.requestToken(callbackURL);
     response.cookie('request_token', requestToken);
     const authorizeURL = oauth.getAuthorizeURL(requestToken);
