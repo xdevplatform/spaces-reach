@@ -10,7 +10,7 @@ const scoreTweet = require('./analyze');
 
 const get = util.promisify(request.get);
 
-const { Autohook, validateWebhook } = require('../twitter-autohook');
+const { Autohook, validateWebhook } = require('twitter-autohook');
 const moderate = require('./moderate');
 require('dotenv').config();
 
