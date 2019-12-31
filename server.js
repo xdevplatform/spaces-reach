@@ -46,6 +46,14 @@ io.on('connection', (socket) => {
   socket.on('set id', (msg) => {
     storage.users[msg.user_id] = socket;
   });
+  
+  socket.on('end moderation', async (msg) => {
+    try {
+      await webhook.unsubscribe(msg.user_id);  
+    } catch (e) {
+      console.error(e);
+    }
+  });
 });
 
 const parseEvent = async (event) => {
@@ -150,24 +158,6 @@ app.get('/moderate', async (request, response) => {
   response.sendFile(__dirname + '/views/moderate.html');
 });
 
-app.post('/bearer', async (request, response) => {
-  const consumerKey = request.body.consumer_key || null;
-  const consumerSecret = request.body.consumer_secret || null;
-
-  if (!consumerKey || !consumerSecret) {
-    response.sendStatus(400);
-    return;
-  }
-  
-  try {
-    const token = await bearerToken(consumerKey.trim(), consumerSecret.trim());
-    response.json({bearer_token: token});
-    return;
-  } catch (e) {
-    response.sendStatus(400);
-    return;
-  }
-});
 
 app.post('/moderate/stop', async (request, response) => {
   if (!request.body.user_id) {
@@ -183,7 +173,7 @@ app.post('/moderate/stop', async (request, response) => {
   try {
     const result = await webhook.unsubscribe(request.body.user_id);
     if (result === false) {
-      response.status(400).json({success: false, error: e.getMessage()});
+      response.status(400).json({success: false, error: 'Cannot unsubscribe user'});
       return;  
     }
 
@@ -193,10 +183,9 @@ app.post('/moderate/stop', async (request, response) => {
     response.json({success: true});
   } catch(e) {
     console.error(e);
-    response.json({success: true});
+    response.status(400).json({success: false, error: e.getMessage()});
   }
 });
-
 
 const listener = server.listen(process.env.PORT || 5000, async () => {
   await webhook.removeWebhooks();

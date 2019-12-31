@@ -97,7 +97,7 @@
           window.open(
             url,
             '',
-            `width=${windowSize},height=${windowSize},top=${top},left=${left}`);
+            `width=${windowSize},height=${windowSize},top=${top},left=${left},resizable=0`);
         });
       }      
     }
