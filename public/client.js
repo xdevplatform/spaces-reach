@@ -94,10 +94,13 @@
         button.addEventListener('click', (e) => {
           e.preventDefault();
           const url = document.querySelector('form[action]').getAttribute('action');
-          window.open(
+          const oAuthWindow = window.open(
             url,
             '',
             `width=${windowSize},height=${windowSize},top=${top},left=${left},resizable=0`);
+          oAuthWindow.addEventListener('message', (e) => {
+            console.log(e);
+          });
         });
       }      
     }
