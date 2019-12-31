@@ -98,9 +98,9 @@
             url,
             '',
             `width=${windowSize},height=${windowSize},top=${top},left=${left},resizable=0`);
-          oAuthWindow.addEventListener('message', (e) => {
+          window.addEventListener('message', (e) => {
             console.log(e);
-          });
+          }, false);
         });
       }      
     }
