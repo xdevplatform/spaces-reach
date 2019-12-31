@@ -99,7 +99,9 @@
             '',
             `width=${windowSize},height=${windowSize},top=${top},left=${left},resizable=0`);
           window.addEventListener('message', (e) => {
-            console.log(e);
+            setToken();
+            e.source.close();
+            window.location.href = '/moderate';
           }, false);
         });
       }      

@@ -120,7 +120,7 @@ app.get('/oauth', async (request, response) => {
     response.redirect(authorizeURL);
   } catch (e) {
     console.error(e);
-    response.redirect('/');
+    response.redirect('/oauth-callback/error');
   }
 });
 
@@ -146,14 +146,14 @@ app.get('/oauth-callback', async (request, response) => {
       }
     }, 1000 * 60 * 15, accessToken.user_id);
 
-    response.redirect(`/oauth-callback/success/${accessToken.user_id}`);
+    response.redirect(`/oauth-callback/success?user_id=${accessToken.user_id}`);
   } catch (e) {
     console.error(e);
     response.redirect('/oauth-callback/error');
   }
 });
 
-app.get('/oauth-callback/success/:id', async (request, response) => {
+app.get('/oauth-callback/success', async (request, response) => {
   response.sendFile(__dirname + '/views/oauth-callback.html');
 });
 
