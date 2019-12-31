@@ -1,1 +1,1 @@
-window.opener.postMessage({oauth: location.search}, '*')
+window.opener.postMessage({oauth: location.search});

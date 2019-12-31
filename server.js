@@ -114,7 +114,6 @@ app.all('/webhook', async (request, response) => {
 
 app.get('/oauth', async (request, response) => {
   try {
-    response.clearCookie('request_token')
     const requestToken = await oauth.requestToken(callbackURL);
     response.cookie('request_token', requestToken);
     const authorizeURL = oauth.getAuthorizeURL(requestToken);
@@ -147,11 +146,19 @@ app.get('/oauth-callback', async (request, response) => {
       }
     }, 1000 * 60 * 15, accessToken.user_id);
 
-    response.redirect(`/moderate?user_id=${accessToken.user_id}`);
+    response.redirect(`/oauth-callback/success/${accessToken.user_id}`);
   } catch (e) {
     console.error(e);
-    response.redirect('/');
+    response.redirect('/oauth-callback/error');
   }
+});
+
+app.get('/oauth-callback/success/:id', async (request, response) => {
+  response.sendFile(__dirname + '/views/oauth-callback.html');
+});
+
+app.get('/oauth-callback/error', async (request, response) => {
+  response.sendFile(__dirname + '/views/oauth-error.html');
 });
 
 app.get('/moderate', async (request, response) => {
