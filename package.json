@@ -8,6 +8,7 @@
     "start": "node server.js"
   },
   "author": "",
+  "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.2.0",
