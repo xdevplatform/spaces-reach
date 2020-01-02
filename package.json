@@ -1,5 +1,5 @@
 {
-  "name": "amr-api",
+  "name": "twitter-hide-replies-quick-start",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -8,7 +8,6 @@
     "start": "node server.js"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.2.0",
