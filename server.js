@@ -10,7 +10,7 @@ const scoreTweet = require('./analyze');
 
 const get = util.promisify(request.get);
 
-const { Autohook, validateWebhook } = require('twitter-autohook');
+const { Autohook, validateWebhook, UserSubscriptionError } = require('twitter-autohook');
 const moderate = require('./moderate');
 require('dotenv').config();
 
@@ -148,6 +148,12 @@ app.get('/oauth-callback', async (request, response) => {
 
     response.redirect(`/oauth-callback/success?user_id=${accessToken.user_id}`);
   } catch (e) {
+    if (e instanceof UserSubscriptionError && e.code === 355) {
+      // User is already subscribed
+      response.redirect('/oauth-callback/success');
+      return;
+    }
+    
     console.error(e);
     response.redirect('/oauth-callback/error');
   }

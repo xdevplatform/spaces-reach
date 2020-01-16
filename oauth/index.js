@@ -1,6 +1,6 @@
-const accessTokenURL = new URL('https://api.twitter.com/oauth/access_token');
-const authorizeURL = new URL('https://api.twitter.com/oauth/authorize');
-const requestTokenURL = new URL('https://api.twitter.com/oauth/request_token');
+const accessTokenURL = 'https://api.twitter.com/oauth/access_token';
+const authorizeURL = 'https://api.twitter.com/oauth/authorize';
+const requestTokenURL = 'https://api.twitter.com/oauth/request_token';
 
 require('dotenv').config();
 const request = require('request');
@@ -61,7 +61,7 @@ const getAuthorizeURL = (requestToken) => {
     return;
   }
 
-  const url = authorizeURL;
+  const url = new URL(authorizeURL);
   url.searchParams.append('oauth_token', requestToken.oauth_token);
   return url;
 };
