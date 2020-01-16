@@ -148,7 +148,7 @@ app.get('/oauth-callback', async (request, response) => {
 
     response.redirect(`/oauth-callback/success?user_id=${accessToken.user_id}`);
   } catch (e) {
-    if (e instanceof UserSubscriptionError && e.code === 355) {
+    if (e instanceof UserSubscriptionError && !!e.message.match('Twitter error code: 355')) {
       // User is already subscribed
       response.redirect('/oauth-callback/success');
       return;
