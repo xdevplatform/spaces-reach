@@ -1,25 +1,31 @@
-/* styles */
-/* called by your view template */
-
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: Helvetica Neue LT,Helvetica Neue,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  line-height: 1.125rem;
+  color: #434548; 
   margin: 2em;
 }
 
-h1 {
-  color: #373fff;
-}
-
-.bold {
-  font-weight: bold;
+h1, h2, h3, h4 {
+  font-weight: 700;
+  color: #14171a;
 }
 
 p {
   max-width: 600px;
+  font-size: .87rem;
+}
+
+a {
+  color: #4f0299;
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: underline;
 }
 
 .bearer-token {
@@ -45,35 +51,26 @@ p {
 
 form {
   margin-bottom: 25px;
-  padding: 15px;
-  background-color: cyan;
-  display: inline-block;
-  width: 100%;
-  max-width: 500px;
-  border-radius: 3px;
-}
-
-input {
-  display: block;
-  margin-bottom: 10px;
-  padding: 5px;
-  width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 3px;
-  font-size: 16px;
 }
 
 button {
-  font-size: 16px;
-  border-radius: 3px;
-  background-color: lightgrey;
-  border: 1px solid grey;
-  box-shadow: 2px 2px teal;
-  cursor: pointer;
+  padding: .25em 1em;
+  margin: 0;
+  border: 2px solid #4f0299;
+  background-color: #4f0299;
+  cursor:pointer;
+  color: white;
+  font-weight: 700;
+  font-size: .87rem;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  border-radius: 3rem;
+  text-align: center;
 }
 
 button:hover {
-  background-color: yellow;
+  color: #4f0299;
+  background-color: #fff;
 }
 
 button[disabled]:hover {
