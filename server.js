@@ -23,7 +23,7 @@ const storage = {users: {}};
 const baseURL = `https://${process.env.PROJECT_DOMAIN}.${process.env.PROJECT_BASE_URL || 'glitch.me'}`;
 
 const callbackURL = new URL(`${baseURL}/oauth-callback`);
-const webhookURL = new URL(`${baseURL}/webhook`);
+const webhookURL = new URL(`${baseURL}/webhook/1`);
 
 app.get('/', (request, response) => {
   response.clearCookie('request_token');
@@ -66,7 +66,7 @@ const parseEvent = async (event) => {
 
   if (socket) {
     try {
-      const toxicityScore = scoreTweet(tweet);
+      const toxicityScore = await scoreTweet(tweet);
       if (!isNaN(toxicityScore) && toxicityScore >= 0.94) {
         const url = new URL('https://publish.twitter.com/oembed');
         url.searchParams.append('url', `https://twitter.com/${tweet.in_reply_to_screen_name}/status/${tweet.in_reply_to_status_id_str}`);
@@ -102,12 +102,12 @@ app.post('/hide/:id', async (request, response) => {
   response.sendStatus(200);
 });
 
-app.all('/webhook', async (request, response) => {
+app.all('/webhook/:id', async (request, response) => {
   if (request.query.crc_token) {
     const signature = validateWebhook(request.query.crc_token, {consumer_secret: process.env.TWITTER_CONSUMER_SECRET});
     response.json(signature);
   } else {
-    parseEvent(request.body);
+    await parseEvent(request.body);
     response.sendStatus(200);
   }
 });
