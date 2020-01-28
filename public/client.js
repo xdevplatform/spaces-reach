@@ -6,7 +6,7 @@
 
     console.log('%cIt’s dangerous to go alone!', fontStyle + big);
     console.log('%cIf somebody brought you here asking you to copy, paste or run commands, do not trust them.\n'
-     + 'Do not share your credentials (including the bearer token we generate for you) with anyone.\n'
+     + 'Do not share your credentials with anyone.\n'
      + 'If you shared your credentials, you can invalidate your keys so they become useless: https://developer.twitter.com/en/apps\n\n'
      + 'Be safe out there,\n— Your friends at Twitter', fontStyle + small);
   }
@@ -111,6 +111,7 @@
             '',
             `width=${windowSize},height=${windowSize},top=${top},left=${left},resizable=0`);
           window.addEventListener('message', (e) => {
+            console.log('message received');
             setToken();
             e.source.close();
             window.location.href = '/moderate';
