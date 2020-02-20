@@ -13,7 +13,7 @@ const moderate = async (tweet, oauth = null) => {
   }
 
   const config = {
-    url: `https://api.twitter.com/labs/1/tweets/${id}/hidden`,
+    url: `https://api.twitter.com/labs/2/tweets/${id}/hidden`,
     json: true,
     body: {hidden: true},
     headers: {
