@@ -183,7 +183,17 @@ const header = (url, auth, signature, params) => {
 
 }
 
-const oauth = (url, method, {oauth}, body) => {
+const oauth = (url, method, {oauth}, body = null) => {
+  if (oauth.callback) {
+    return 'OAuth' + oauth.sign(
+      'HMAC-SHA1',
+      method,
+      url,
+      body,
+      oauth.consumer_secret,
+      oauth.token_secret
+    );
+  }
   const params = parameters(url, oauth, body);
   console.log(params);
   const paramString = parameterString(url, oauth, params);
