@@ -54,7 +54,7 @@ async function requestToken(callback) {
       oauth: oAuthConfig,
     }
   });
-console.log(req);
+
   if (req.statusCode !== 200) {
     try {
       const {code, message} = req.body.errors[0];
@@ -184,6 +184,7 @@ const header = (url, auth, signature, params) => {
 }
 
 const oauth = (url, method, {oauth}, body) => {
+  console.log(url, method, body);
   const params = parameters(url, oauth, body);
   const paramString = parameterString(url, oauth, params);
   const baseString = signatureBaseString(url, method, paramString);

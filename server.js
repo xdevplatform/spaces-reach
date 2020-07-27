@@ -13,13 +13,9 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 
-const storage = {users: {}};
-
-let baseURL = 'http://localhost:5000';
-
-if (process.env.PROJECT_DOMAIN && process.env.PROJECT_BASE_URL) {
-  baseURL = `https://${process.env.PROJECT_DOMAIN}.${process.env.PROJECT_BASE_URL || 'glitch.me'}`;
-}
+const baseURL = process.env.PROJECT_DOMAIN ?
+  `https://${process.env.PROJECT_DOMAIN}.glitch.me` :
+  'http://localhost:5000';
 
 
 const callbackURL = new URL(`${baseURL}/oauth-callback`);
