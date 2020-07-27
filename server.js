@@ -15,7 +15,6 @@ app.use(cookieParser());
 
 const storage = {users: {}};
 
-<<<<<<< HEAD
 let baseURL = 'http://localhost:5000';
 
 if (process.env.PROJECT_DOMAIN && process.env.PROJECT_BASE_URL) {
@@ -24,71 +23,12 @@ if (process.env.PROJECT_DOMAIN && process.env.PROJECT_BASE_URL) {
 
 
 const callbackURL = new URL(`${baseURL}/oauth-callback`);
-=======
-const baseURL = `https://${process.env.PROJECT_DOMAIN}.${process.env.PROJECT_BASE_URL || 'glitch.me'}`;
-
-const callbackURL = new URL(`${baseURL}/oauth-callback`);
-const webhookURL = new URL(`${baseURL}/webhook/1`);
->>>>>>> e71159988442e58c7ef38840171b2440ad4602fe
 
 app.get('/', (request, response) => {
   response.clearCookie('request_token');
   response.sendFile(__dirname + '/views/index.html');
 });
 
-<<<<<<< HEAD
-=======
-const autohookConfig = {
-  token: process.env.TWITTER_ACCESS_TOKEN,
-  token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-  consumer_key: process.env.TWITTER_CONSUMER_KEY,
-  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-  env: process.env.TWITTER_WEBHOOK_ENV,
-};
-
-const webhook = new Autohook(autohookConfig);
-
-const u = id => storage.users[id] || null;
-
-io.on('connection', (socket) => {
-  socket.on('set id', (msg) => {
-    storage.users[msg.user_id] = socket;
-  });
-  
-  socket.on('end moderation', async (msg) => {
-    try {
-      await webhook.unsubscribe(msg.user_id);  
-    } catch (e) {
-      console.error(e);
-    }
-  });
-});
-
-const parseEvent = async (event) => {
-  if (!Array.isArray(event.tweet_create_events)) {
-    return;
-  }
-
-  const tweet = event.tweet_create_events[0];
-  const socket = u(tweet.in_reply_to_user_id_str);
-
-  if (socket) {
-    try {
-      const toxicityScore = await scoreTweet(tweet);
-      if (!isNaN(toxicityScore) && toxicityScore >= 0.94) {
-        const url = new URL('https://publish.twitter.com/oembed');
-        url.searchParams.append('url', `https://twitter.com/${tweet.in_reply_to_screen_name}/status/${tweet.in_reply_to_status_id_str}`);
-        const originalTweet = await get({url: url, json: true});
-        tweet.original_tweet = originalTweet.body.html;
-        socket.emit('tweet', tweet);
-      }
-    } catch (e) {
-      console.error('Error while scoring Tweet:', e);
-    }
-  }
-}
-
->>>>>>> e71159988442e58c7ef38840171b2440ad4602fe
 app.delete('/hide/:id', async (request, response) => {
   const token = request.cookies['access_token'] || null;
 
@@ -98,11 +38,7 @@ app.delete('/hide/:id', async (request, response) => {
   }
 
   try {
-<<<<<<< HEAD
     await unmoderate({id: request.params.id}, {
-=======
-    const res = await unmoderate({id_str: request.params.id}, {
->>>>>>> e71159988442e58c7ef38840171b2440ad4602fe
       consumer_key: process.env.TWITTER_CONSUMER_KEY,
       consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
       token: token.oauth_token,
@@ -124,11 +60,7 @@ app.post('/hide/:id', async (request, response) => {
   }
 
   try {
-<<<<<<< HEAD
     await moderate({id: request.params.id}, {
-=======
-    const res = await moderate({id_str: request.params.id}, {
->>>>>>> e71159988442e58c7ef38840171b2440ad4602fe
       consumer_key: process.env.TWITTER_CONSUMER_KEY,
       consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
       token: token.oauth_token,
@@ -141,19 +73,6 @@ app.post('/hide/:id', async (request, response) => {
   response.sendStatus(200);
 });
 
-<<<<<<< HEAD
-=======
-app.all('/webhook/:id', async (request, response) => {
-  if (request.query.crc_token) {
-    const signature = validateWebhook(request.query.crc_token, {consumer_secret: process.env.TWITTER_CONSUMER_SECRET});
-    response.json(signature);
-  } else {
-    await parseEvent(request.body);
-    response.sendStatus(200);
-  }
-});
-
->>>>>>> e71159988442e58c7ef38840171b2440ad4602fe
 app.get('/oauth', async (request, response) => {
   try {
     const requestToken = await oauth.requestToken(callbackURL);
@@ -179,28 +98,8 @@ app.get('/oauth-callback', async (request, response) => {
     await webhook.subscribe(accessToken);
 
     response.cookie('access_token', accessToken);
-<<<<<<< HEAD
     response.redirect(`/oauth-callback/success?user_id=${accessToken.user_id}`);
   } catch (e) {    
-=======
-
-    setTimeout(async (userId) => {
-      await webhook.unsubscribe(userId);
-      const socket = u(userId);
-      if (socket) {
-        socket.emit('end moderation');
-      }
-    }, 1000 * 60 * 15, accessToken.user_id);
-
-    response.redirect(`/oauth-callback/success?user_id=${accessToken.user_id}`);
-  } catch (e) {
-    if (e instanceof UserSubscriptionError && !!e.message.match('Twitter error code: 355')) {
-      // User is already subscribed
-      response.redirect('/oauth-callback/success');
-      return;
-    }
-    
->>>>>>> e71159988442e58c7ef38840171b2440ad4602fe
     console.error(e);
     response.redirect('/oauth-callback/error');
   }
@@ -248,11 +147,5 @@ app.post('/moderate/stop', async (request, response) => {
 });
 
 const listener = server.listen(process.env.PORT || 5000, async () => {
-<<<<<<< HEAD
-=======
-  await webhook.removeWebhooks();
-  await webhook.start(webhookURL.href);
-
->>>>>>> e71159988442e58c7ef38840171b2440ad4602fe
   console.log(`Your app is listening on port ${listener.address().port}`);
 });
