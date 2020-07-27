@@ -184,13 +184,17 @@ const header = (url, auth, signature, params) => {
 }
 
 const oauth = (url, method, {oauth}, body) => {
-  console.log(url, method, body);
   const params = parameters(url, oauth, body);
+  console.log(params);
   const paramString = parameterString(url, oauth, params);
+  console.log(paramString);
   const baseString = signatureBaseString(url, method, paramString);
+  console.log(baseString);
   const signingKey = createSigningKey(oauth);
   const signature = hmacSha1Signature(baseString, signingKey);
+  console.log(signature);
   const signatureHeader = header(url, oauth, signature, params);
+  console.log(signature);
   return signatureHeader;
 }
 
