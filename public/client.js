@@ -82,6 +82,14 @@
       console.error('Cannot hide Tweet:', e);
     }
   };
+  
+  const unhideTweet = async (tweet) => {
+    try {
+      await fetch('/hide/' + tweet.id_str, {method: 'DELETE'});
+    } catch (e) {
+      console.error('Cannot unhide Tweet:', e);
+    }
+  };
 
   const startSocket = () => {
     const url = new URL(location.href);

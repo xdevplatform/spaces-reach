@@ -5,7 +5,7 @@ const path = require('path');
 
 const put = util.promisify(request.put);
 
-const moderate = async (tweet, oauth = null) => {
+const moderateRequest = async (tweet, hidden, oauth = null) => {
   const id = tweet.id_str;
   if (!id) {
     throw new TypeError('Invalid Tweet ID.');
@@ -13,11 +13,11 @@ const moderate = async (tweet, oauth = null) => {
   }
 
   const config = {
-    url: `https://api.twitter.com/labs/2/tweets/${id}/hidden`,
+    url: `https://api.twitter.com/2/tweets/${id}/hidden`,
     json: true,
-    body: {hidden: true},
+    body: {hidden: hidden},
     headers: {
-      'User-Agent': 'HideRepliesQuickStartJavaScript',
+      'User-Agent': 'HideRepliesJavaScript-v2',
     },
     oauth: oauth,
   };
@@ -35,4 +35,7 @@ const moderate = async (tweet, oauth = null) => {
   return res.body.status && res.body.status === 'success';
 }
 
-module.exports = moderate;
+const moderate = (tweet, oauth = null) => moderateRequest(tweet, true, oauth);
+const unmoderate = (tweet, oauth = null) => moderateRequest(tweet, false, oauth);
+
+module.exports = { moderate, unmoderate };

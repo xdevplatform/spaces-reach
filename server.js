@@ -11,7 +11,7 @@ const scoreTweet = require('./analyze');
 const get = util.promisify(request.get);
 
 const { Autohook, validateWebhook, UserSubscriptionError } = require('twitter-autohook');
-const moderate = require('./moderate');
+const { moderate, unmoderate } = require('./moderate');
 require('dotenv').config();
 
 app.use(express.static('public'));
@@ -79,6 +79,28 @@ const parseEvent = async (event) => {
     }
   }
 }
+
+app.delete('/hide/:id', async (request, response) => {
+  const token = request.cookies['access_token'] || null;
+
+  if (!token) {
+    response.sendStatus(400).json({success: false, error: 'Missing access token'});
+    return;
+  }
+
+  try {
+    const res = await unmoderate({id_str: request.params.id}, {
+      consumer_key: process.env.TWITTER_CONSUMER_KEY,
+      consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+      token: token.oauth_token,
+      token_secret: token.oauth_token_secret,
+    });
+  } catch (e) {
+    console.error('Moderation error:', e);
+  }
+
+  response.sendStatus(200);
+});
 
 app.post('/hide/:id', async (request, response) => {
   const token = request.cookies['access_token'] || null;
