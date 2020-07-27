@@ -1,0 +1,112 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Helvetica Neue LT,Helvetica Neue,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  line-height: 1.125rem;
+  color: #434548; 
+  margin: 2em;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  color: #14171a;
+}
+
+p {
+  max-width: 600px;
+  font-size: .87rem;
+}
+
+a {
+  color: #1da1f2;
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: underline;
+}
+
+.bearer-token {
+  display: none;
+}
+
+.bearer-token.success input {
+  margin-bottom: 0.2em;
+}
+
+.bearer-token .copied {
+  color: silver;
+  display: none;
+}
+
+.bearer-token.error h3 {
+  color: darkorange;
+}
+
+#howto {
+  display: none;
+}
+
+form {
+  margin-bottom: 25px;
+}
+
+button {
+  padding: .25em 1em;
+  margin: 0;
+  border: 2px solid #1da1f2;
+  background-color: #1da1f2;
+  cursor:pointer;
+  color: white;
+  font-weight: 700;
+  font-size: .87rem;
+  line-height: 1.5rem;
+  letter-spacing: 0;
+  border-radius: 3rem;
+  text-align: center;
+}
+
+button:hover {
+  color: #1da1f2;
+  background-color: #fff;
+}
+
+button[disabled]:hover {
+  background-color: lightgrey;
+}
+
+button:active {
+  box-shadow: none;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+footer {
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid lightgrey;
+}
+
+.replies {
+  display: flex;
+}
+
+.replies > p:nth-child(2) {
+  flex-grow: 2;
+}
+
+.replies small,
+.end-hide small {
+  min-width: 4.5rem;
+  display: inline-block;
+  color: grey;
+}
+
+.replies p a.tweet-link {
+  display: block;
+  font-size: 0.8rem;
+}
