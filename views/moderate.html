@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Hide replies</title>
+    <title>Hide replies — 🐮🐶🦎</title>
     <meta name="description" content="Detect and hide abusive replies to any of your tweets.">
     <link id="favicon" rel="icon" href="https://abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
     <meta charset="utf-8">
@@ -14,12 +14,12 @@
   <body>
     <header>
       <h1>
-        Pet explorer
+        Pet explorer 🐮🐶🦎
       </h1>
       <p>Make your pet related conversations more a-meow-zing. This app lets you manage replies that are not pet related, based on <a target="_blank" href="https://developer.twitter.com/en/docs/twitter-api/annotations">Tweet annotations</a> (Twitter's artificial intelligence to detect topic and entities of a Tweet).</p>
       <section>
         <h2>
-          How to make Pet explorer work for you:
+          How to make Pet explorer work for you
         </h2>
         <ol>
           <li>Ask your friends on Twitter to reply to your Tweet with a story, fact, or favorite pet name. There needs to be at least pet mentioned in their Tweet.</li>
@@ -28,10 +28,28 @@
           <li>Hide and unhide replies following the app's suggestion.</li>
         </ok>
       </section>
-      <section>
+      <section class="tweet-url-container">
         <input aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button id="fetch">Fetch 🦴</button>
       </section>
     </header>
+    <main class="error tweet-too-old">
+      <p>🐢</p>
+      <h1>Sadness</h1>
+      <h2>This Tweet is too old. Try with something you Tweeted in the past 7 days.</h2>
+      <button id="try-again-button">Try another Tweet</button>
+    </main>
+    <main class="error not-your-tweet">
+      <p>🙈</p>
+      <h1>That's not your Tweet</h1>
+      <h2>You can only manage replies to your conversations.</h2>
+      <button id="try-again-button">Try another Tweet</button>
+    </main>
+    <main class="error no-replies">
+      <p>🦥</p>
+      <h1>No replies yet</h1>
+      <h2>This Tweet did not receive any reply… Yet. Try another Tweet or check back later.</h2>
+      <button id="try-again-button">Try another Tweet</button>
+    </main>
 
     <main class="replies-container">
     </main>

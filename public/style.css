@@ -119,7 +119,7 @@ input, input:focus {
   margin: 1rem auto;
 }
 
-section input, section button {
+section input, section button, main button {
   display: block;
   margin: 1rem auto;
 }
@@ -128,3 +128,13 @@ section input, section button {
   width: 50%;
 }
 
+img.emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0 .05em 0 .1em;
+  vertical-align: -0.1em;
+}
+
+main.error {
+  
+}
