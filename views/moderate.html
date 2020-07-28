@@ -56,7 +56,7 @@
       <h4>This Tweet did not receive any replies… Yet. Try another Tweet or check back later.</h4>
       <button id="try-again-button">Try another Tweet</button>
     </main>
-    <main class="error general-error">
+    <main class="error api-error">
       <p>🐳</p>
       <h1>Oops</h1>
       <h4>Something's not right with the Twitter API. Please again later.</h4>
@@ -64,9 +64,11 @@
     </main>
     <main class="error auth-error">
       <p>🐞</p>
-      <h1>Can't find your token</h1>
-      <h4>Something's not right with the Twitter API. Please again later.</h4>
-      <button id="try-again-button">Try another Tweet</button>
+      <h1>Can't find your access token</h1>
+      <h4>This may be a bug, or you may have your cookies disabled. Try to authenticate again.</h4>
+      <form action="/">
+        <button>Restart</button>
+      </form>
     </main>
 
     <main class="replies-container">

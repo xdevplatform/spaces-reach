@@ -3,7 +3,7 @@ const app = express();
 const server = require('http').Server(app);
 const cookieParser = require('cookie-parser');
 
-const { defaults } = require('./client');
+const { defaults, get } = require('./client');
 defaults({headers: {'x-des-apiservices': 'staging2'}});
 const { moderate, unmoderate } = require('./moderate');
 const oauth = require('./oauth/index.js');
@@ -74,7 +74,33 @@ app.get('/tweet/:id', async (request, response) => {
   const token = request.cookies['access_token'] || null;
 
   if (!token) {
-    response.sendStatus(400).json({success: false, error: ''})
+    response.sendStatus(400).json({success: false, error: 'auth-error'});
+    return;
+  }
+
+  try {
+    const url = `https://api.twitter.com/2/tweets/${request.params.id}?tweet_fields=author_id`
+    const res = await get(url, {
+      consumer_key: process.env.TWITTER_CONSUMER_KEY,
+      consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+      token: token.oauth_token,
+      token_secret: token.oauth_token_secret,
+    });
+
+    if (res.statusCode !== 200) {
+      response.sendStatus(400).json({success: false, error: 'api-error'});
+      return;
+    }
+
+    if (res.body.errors) {
+      const error = res.body.errors.pop();
+      const type = error.type.split('/').pop();
+      switch (type) {
+        case ''
+      }
+    }
+
+
   }
 });
 
