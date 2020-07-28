@@ -183,29 +183,15 @@ const header = (url, auth, signature, params) => {
 
 }
 
-const oauth = (url, method, {oauth}, body = null) => {
-  if (oauth.callback) {
-    return 'OAuth' + oauth.sign(
-      'HMAC-SHA1',
-      method,
-      url,
-      body,
-      oauth.consumer_secret,
-      oauth.token_secret
-    );
-  }
-  const params = parameters(url, oauth, body);
-  console.log(params);
-  const paramString = parameterString(url, oauth, params);
-  console.log(paramString);
-  const baseString = signatureBaseString(url, method, paramString);
-  console.log(baseString);
-  const signingKey = createSigningKey(oauth);
-  const signature = hmacSha1Signature(baseString, signingKey);
-  console.log(signature);
-  const signatureHeader = header(url, oauth, signature, params);
-  console.log(signature);
-  return signatureHeader;
+const oauth = (url, method, {oauth}, body = {}) => {
+  return 'OAuth' + oauth.sign(
+    'HMAC-SHA1',
+    method,
+    url,
+    Object.assign(oauth, body),
+    oauth.consumer_secret,
+    oauth.token_secret
+  );
 }
 
 module.exports = {accessToken, requestToken, getAuthorizeURL, oauth, setNonceFn, setTimestampFn};
