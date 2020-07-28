@@ -1,8 +1,8 @@
-html { max-width: 800px; margin: 0 auto }
+html { max-width: 80%; margin: 0 auto }
 
 body {
   font-family: Helvetica Neue LT,Helvetica Neue,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
-  line-height: 1.125rem;
+  line-height: 1.5rem;
   color: #434548; 
   margin: 2em;
 }
@@ -50,6 +50,7 @@ button:active {
 
 li {
   margin-bottom: 5px;
+  line-height: 1.5rem;
 }
 
 footer {
@@ -78,7 +79,10 @@ footer {
   font-size: 0.8rem;
 }
 
-input, input:focus {
+input[type=url], input[type=url]:focus {
+  border-radius: 0.2rem;
+  padding: 0.5rem;
+  width: 60%;
   border: 1px solid #d3d3d3;
   font-size: 1.5rem;
   line-height: 2rem;
@@ -89,10 +93,6 @@ input, input:focus {
 section input, section button, main button {
   display: block;
   margin: 1rem auto;
-}
-
-#tweet-url {
-  width: 50%;
 }
 
 img.emoji {
