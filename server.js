@@ -105,9 +105,8 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
           response.sendStatus(400).json({success: false, error: 'other-error'});
       }
     }
-
-
   }
+  catch (e) {}
 });
 
 app.get('/oauth', async (request, response) => {
