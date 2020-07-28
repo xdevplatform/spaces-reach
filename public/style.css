@@ -135,6 +135,15 @@ img.emoji {
   vertical-align: -0.1em;
 }
 
-main.error {
-  
+main.error p,
+main.error h1,
+main.error h4,
+main.error button  {
+  display: block;
+  margin: 4rem auto;
+  text-align: center;
+}
+
+main.error p {
+  font-size: 10em;
 }

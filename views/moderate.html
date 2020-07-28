@@ -32,22 +32,40 @@
         <input aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button id="fetch">Fetch 🦴</button>
       </section>
     </header>
+    <main class="error not-found">
+      <p>🦗</p>
+      <h1>Crickets</h1>
+      <h4>We couldn't find this Tweet. Please try a different one.</h4>
+      <button id="try-again-button">Try another Tweet</button>
+    </main>
     <main class="error tweet-too-old">
       <p>🐢</p>
-      <h1>Sadness</h1>
-      <h2>This Tweet is too old. Try with something you Tweeted in the past 7 days.</h2>
+      <h1>Tweet too old</h1>
+      <h4>This Tweet is too old. Try with something you Tweeted in the past 7 days.</h4>
       <button id="try-again-button">Try another Tweet</button>
     </main>
     <main class="error not-your-tweet">
       <p>🙈</p>
       <h1>That's not your Tweet</h1>
-      <h2>You can only manage replies to your conversations.</h2>
+      <h4>You can only manage replies to your conversations.</h4>
       <button id="try-again-button">Try another Tweet</button>
     </main>
     <main class="error no-replies">
       <p>🦥</p>
       <h1>No replies yet</h1>
-      <h2>This Tweet did not receive any reply… Yet. Try another Tweet or check back later.</h2>
+      <h4>This Tweet did not receive any replies… Yet. Try another Tweet or check back later.</h4>
+      <button id="try-again-button">Try another Tweet</button>
+    </main>
+    <main class="error general-error">
+      <p>🐳</p>
+      <h1>Oops</h1>
+      <h4>Something's not right with the Twitter API. Please again later.</h4>
+      <button id="try-again-button">Try another Tweet</button>
+    </main>
+    <main class="error auth-error">
+      <p>🐞</p>
+      <h1>Can't find your token</h1>
+      <h4>Something's not right with the Twitter API. Please again later.</h4>
       <button id="try-again-button">Try another Tweet</button>
     </main>
 

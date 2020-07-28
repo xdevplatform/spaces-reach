@@ -86,7 +86,10 @@
   // prepareFetchButton();
 
   if (twemoji) {
-    twemoji.parse(document.body);
+    twemoji.parse(document.body, {
+      folder: 'svg',
+      ext: '.svg'
+    });
   }
 
   /*

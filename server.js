@@ -70,6 +70,14 @@ app.post('/hide/:id', async (request, response) => {
   response.sendStatus(200);
 });
 
+app.get('/tweet/:id', async (request, response) => {
+  const token = request.cookies['access_token'] || null;
+
+  if (!token) {
+    response.sendStatus(400).json({success: false, error: ''})
+  }
+});
+
 app.get('/oauth', async (request, response) => {
   try {
     const requestToken = await oauth.requestToken(callbackURL);
