@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/style.css">
     <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+    <script src="/emitter.js"></script>
     <script src="/client.js" defer></script>
   </head>
   <body>
@@ -28,8 +29,8 @@
           <li>Have fun! Hide and unhide replies by following the app’s prompts.</li>
         </ok>
       </section>
-      <section class="tweet-url-container">
-        <input aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button id="fetch">Fetch 🦴</button>
+      <section e:class="TweetLink" class="tweet-url-container">
+        <input type="url" aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button disabled="true" id="fetch">Fetch 🦴</button>
       </section>
     </header>
     <main class="error resource-not-found">
@@ -82,5 +83,8 @@
         <a href="https://developer.twitter.com">Twitter Developer</a>
       </small>
     </footer>
+    <script>
+      Emitter.init('/components/');
+    </script>
   </body>
 </html>

@@ -77,13 +77,23 @@
         });
       }      
     }
-    
+  };
+  
+  const fetchTweet = async (tweetId) => {
+    const tweet = await fetch('/')
   }
+
+  const getTweetId = () => document.getElementById('tweet-url').match(/status\/(\d{1,19})/)[1];
+
+  const prepareFetchButton = async () => {
+    document.getElementById('fetch').addEventListener('click', async () => {
+      await fetchTweet(getTweetId());
+    });
+  };
   
   printConsoleMessage();
   setToken();
   prepareOAuthHandler();
-  // prepareFetchButton();
 
   if (twemoji) {
     twemoji.parse(document.body, {
