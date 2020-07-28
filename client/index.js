@@ -1,6 +1,6 @@
 const needle = require('needle');
 const package = require('../package.json');
-const oauth = require('../oauth-signature');
+const { oauth } = require('../oauth-signature/index.js');
 needle.defaults({user_agent: `${package.name}/${package.version}`})
 
 let defaultOptions = {};
