@@ -90,6 +90,9 @@ app.get('/oauth-callback', async (request, response) => {
   }
 
   try {
+    const requestToken = request.cookies.request_token;
+    const accessToken = await oauth.accessToken(requestToken, request.query);
+
     response.cookie('access_token', accessToken);
     response.redirect(`/oauth-callback/success?user_id=${accessToken.user_id}`);
   } catch (e) {    
