@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
-const oauth = require('./oauth');
 const server = require('http').Server(app);
 const cookieParser = require('cookie-parser');
 
 const { defaults } = require('./client');
-// defaults({headers: {'x-des-apiservices': 'staging2'}});
+defaults({headers: {'x-des-apiservices': 'staging2'}});
 const { moderate, unmoderate } = require('./moderate');
+const oauth = require('./oauth/index.js');
+
 require('dotenv').config();
 
 app.use(express.static('public'));
@@ -15,7 +16,7 @@ app.use(cookieParser());
 
 const baseURL = process.env.PROJECT_DOMAIN ?
   `https://${process.env.PROJECT_DOMAIN}.glitch.me` :
-  'http://localhost:5000';
+  'http://127.0.0.1:5000';
 
 
 const callbackURL = new URL(`${baseURL}/oauth-callback`);

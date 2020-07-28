@@ -1,6 +1,6 @@
 const needle = require('needle');
 const package = require('../package.json');
-const oauth = require('../oauth');
+const oauth = require('../oauth-signature');
 needle.defaults({user_agent: `${package.name}/${package.version}`})
 
 let defaultOptions = {};
@@ -9,8 +9,6 @@ const defaults = (config) => {
 }
 
 const auth = (method, url, options, body) => {
-  const {oauth} = require('../oauth');
-
   if (Object.prototype.toString.call(options) !== '[object Object]') {
     return {};
   }
