@@ -70,11 +70,11 @@ app.post('/hide/:id', async (request, response) => {
   response.sendStatus(200);
 });
 
-app.get('/tweet/:id', async (request, response) => {
+app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
   const token = request.cookies['access_token'] || null;
 
   if (!token) {
-    response.sendStatus(400).json({success: false, error: 'auth-error'});
+    response.sendStatus(400).json({success: false, error: 'other-error'});
     return;
   }
 
@@ -96,7 +96,13 @@ app.get('/tweet/:id', async (request, response) => {
       const error = res.body.errors.pop();
       const type = error.type.split('/').pop();
       switch (type) {
-        case ''
+        case 'not-authorized-for-resource':
+        case 'resource-not-found':
+          response.sendStatus(400).json({success: false, error: error});
+          return;
+        
+        default:
+          response.sendStatus(400).json({success: false, error: 'other-error'});
       }
     }
 
