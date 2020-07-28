@@ -111,8 +111,20 @@ footer {
   font-size: 0.8rem;
 }
 
-input {
+input, input:focus {
   border: 1px solid #d3d3d3;
   font-size: 1.5rem;
   line-height: 2rem;
+  outline: none;
+  margin: 1rem auto;
 }
+
+section input, section button {
+  display: block;
+  margin: 1rem auto;
+}
+
+#tweet-url {
+  width: 50%;
+}
+
