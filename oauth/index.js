@@ -44,8 +44,6 @@ async function requestToken(callback) {
     callback: callback.href,
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    token: process.env.TWITTER_ACCESS_TOKEN,
-    token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
   };
 
   const req = await post({
@@ -131,8 +129,11 @@ const parameters = (url, auth, body = {}) => {
     params.oauth_callback = auth.callback;
   }
 
+  if (auth.token) {
+    params.oauth_token = auth.token;
+  }
+
   params.oauth_consumer_key = auth.consumer_key;
-  params.oauth_token = auth.token;
   params.oauth_nonce = oAuthFunctions.nonceFn();
   params.oauth_timestamp = oAuthFunctions.timestampFn();
   params.oauth_signature_method = 'HMAC-SHA1';
@@ -183,15 +184,14 @@ const header = (url, auth, signature, params) => {
 
 }
 
-const oauth = (url, method, {oauth}, body = {}) => {
-  return 'OAuth' + oauth.sign(
-    'HMAC-SHA1',
-    method,
-    url,
-    Object.assign(oauth, body),
-    oauth.consumer_secret,
-    oauth.token_secret
-  );
+const oauth = (url, method, {oauth}, body) => {
+  const params = parameters(url, oauth, body);
+  const paramString = parameterString(url, oauth, params);
+  const baseString = signatureBaseString(url, method, paramString);
+  const signingKey = createSigningKey(oauth);
+  const signature = hmacSha1Signature(baseString, signingKey);
+  const signatureHeader = header(url, oauth, signature, params);
+  return signatureHeader;
 }
 
 module.exports = {accessToken, requestToken, getAuthorizeURL, oauth, setNonceFn, setTimestampFn};
