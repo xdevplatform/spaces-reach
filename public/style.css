@@ -119,3 +119,5 @@ main.error button  {
 main.error p {
   font-size: 10em;
 }
+
+main.error.show {display:block}

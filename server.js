@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 const baseURL = process.env.PROJECT_DOMAIN ?
   `https://${process.env.PROJECT_DOMAIN}.glitch.me` :
-  'http://127.0.0.1:5000';
+  'http://5f9cc4d6c1c8.ngrok.io';
 
 
 const callbackURL = new URL(`${baseURL}/oauth-callback`);
@@ -30,7 +30,7 @@ app.delete('/hide/:id', async (request, response) => {
   const token = request.cookies['access_token'] || null;
 
   if (!token) {
-    response.sendStatus(400).json({success: false, error: 'Missing access token'});
+    response.status(400).json({success: false, error: 'Missing access token'});
     return;
   }
 
@@ -45,14 +45,14 @@ app.delete('/hide/:id', async (request, response) => {
     console.error('Moderation error:', e);
   }
 
-  response.sendStatus(200);
+  response.status(200);
 });
 
 app.post('/hide/:id', async (request, response) => {
   const token = request.cookies['access_token'] || null;
 
   if (!token) {
-    response.sendStatus(400).json({success: false, error: 'Missing access token'});
+    response.status(400).json({success: false, error: 'Missing access token'});
     return;
   }
 
@@ -67,50 +67,59 @@ app.post('/hide/:id', async (request, response) => {
     console.error('Moderation error:', e);
   }
 
-  response.sendStatus(200);
+  response.status(200);
 });
+
+app.get('/test', (req, res) => res.json({success: true, message: 'test'}));
 
 app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
   const token = request.cookies['access_token'] || null;
 
   if (!token) {
-    response.sendStatus(400).json({success: false, error: 'other-error'});
+    response.status(400).json({success: false, error: 'other-error'});
     return;
   }
 
+  let res;
   try {
-    const url = `https://api.twitter.com/2/tweets/${request.params.id}?tweet_fields=author_id`
-    const res = await get(url, {
-      consumer_key: process.env.TWITTER_CONSUMER_KEY,
-      consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-      token: token.oauth_token,
-      token_secret: token.oauth_token_secret,
-    });
-
-    if (res.statusCode !== 200) {
-      response.sendStatus(400).json({success: false, error: 'api-error'});
-      return;
-    }
-
-    if (res.body.errors) {
-      const error = res.body.errors.pop();
-      const type = error.type.split('/').pop();
-      switch (type) {
-        case 'not-authorized-for-resource':
-        case 'resource-not-found':
-          response.sendStatus(400).json({success: false, error: error});
-          return;
-        
-        default:
-          response.sendStatus(400).json({success: false, error: 'other-error'});
-          return;
+    const url = `https://api.twitter.com/2/tweets/${request.params.id}?tweet_fields=author_id`;
+    res = await get({
+      url: url, 
+      options: {
+        oauth: {
+          consumer_key: process.env.TWITTER_CONSUMER_KEY,
+          consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+          token: token.oauth_token,
+          token_secret: token.oauth_token_secret,
+        }
       }
-    }
-  }
-  catch (e) {
-    response.sendStatus(400).json({success: false, error: 'other-error'});
+    });
+  } catch (e) {
+    response.status(400).json({success: false, error: 'other-error'});
     return;
   }
+
+  if (res.statusCode !== 200) {
+    // console.log(res.body);
+    response.status(400).json({success: false, error: 'api-error'});
+    return;
+  }
+
+  if (res.body.errors) {
+    const error = res.body.errors.pop();
+    const type = error.type.split('/').pop();
+    switch (type) {
+      case 'not-authorized-for-resource':
+      case 'resource-not-found':
+        response.status(400).json({success: false, error: error});
+        return;
+      
+      default:
+        response.status(400).json({success: false, error: 'other-error'});
+        return;
+    }
+  }
+
 });
 
 app.get('/oauth', async (request, response) => {

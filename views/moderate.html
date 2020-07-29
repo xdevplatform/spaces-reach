@@ -33,37 +33,37 @@
         <input type="url" aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button disabled="true" id="fetch">Fetch 🦴</button>
       </section>
     </header>
-    <main class="error resource-not-found">
+    <main e:class="ErrorMessage" class="error" data-message="resource-not-found">
       <p>🦗</p>
       <h1>Crickets</h1>
       <h4>We couldn't find this Tweet. Please try a different one.</h4>
-      <button id="try-again-button">Try another Tweet</button>
+      <button class="try-again">Try another Tweet</button>
     </main>
-    <main class="error tweet-too-old">
+    <main e:class="ErrorMessage" class="error" data-message="tweet-too-old">
       <p>🦕</p>
       <h1>Tweet too old</h1>
       <h4>This Tweet is too old. Try with something you Tweeted in the past 7 days.</h4>
-      <button id="try-again-button">Try another Tweet</button>
+      <button class="try-again">Try another Tweet</button>
     </main>
-    <main class="error not-authorized-for-resource">
+    <main e:class="ErrorMessage" class="error" data-message="not-authorized-for-resource">
       <p>🙈</p>
       <h1>That’s not your Tweet</h1>
       <h4>You can only manage replies to your conversations.</h4>
-      <button id="try-again-button">Try another Tweet</button>
+      <button class="try-again">Try another Tweet</button>
     </main>
-    <main class="error no-replies">
+    <main e:class="ErrorMessage" class="error" data-message="no-replies">
       <p>🦥</p>
       <h1>No replies yet</h1>
       <h4>This Tweet did not receive any replies… Yet. Try another Tweet or check back later.</h4>
-      <button id="try-again-button">Try another Tweet</button>
+      <button class="try-again">Try another Tweet</button>
     </main>
-    <main class="error api-error">
+    <main e:class="ErrorMessage" class="error" data-message="api-error">
       <p>🐳</p>
       <h1>Oops</h1>
       <h4>Something’s not right with the Twitter API. You can check the <a target="_blank" href="https://api.twitterstat.us">platform status</a> or try again later.</h4>
-      <button id="try-again-button">Try again</button>
+      <button class="try-again">Try again</button>
     </main>
-    <main class="error other-error">
+    <main e:class="ErrorMessage" class="error" data-message="other-error">
       <p>🐞</p>
       <h1>Something’s wrong</h1>
       <h4>This may be a bug, or you may have your cookies disabled. Try to authenticate again.</h4>

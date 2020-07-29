@@ -13,6 +13,8 @@ class Emitter {
     }
   }
 
+  didReceiveData(data) {}
+
   childNodes(className = null) {
     let selector = '';
     if (typeof className === 'function') {
@@ -52,24 +54,43 @@ class Emitter {
     });
   }
 
-  static init(path = '') {
-    document.querySelectorAll('[e\\:class]').forEach(element => {
-      const className = element.getAttribute('e:class');
-      const fn = new Function('element', `new ${className}(element)`);
-      if (new Function(`return typeof ${className} !== 'undefined'`)()) {
-        return fn(element);
-      }
+  static registry = new WeakMap();
 
-      if (!document.querySelector(`script[for='${className}']`)) {
-        const script = document.createElement('script');
-        script.setAttribute('src', `${path}${className}.js`);
-        script.setAttribute('async', '');
-        script.setAttribute('for', className);
-        script.onload = () => {
-          document.querySelectorAll(`[e\\:class=${className}]`).forEach(element => fn(element));
-        };
-        document.head.appendChild(script);
-      }
-    });   
+  static async fetch(fetchFn) {
+    const data = await fetchFn;
+    document.querySelectorAll('[e\\:class]').forEach(el => Emitter.registry.get(el).didReceiveData(data));
+  }
+
+  static init(path = '') {
+    const elements = document.querySelectorAll('[e\\:class]');
+    const initFn = (elements) => 
+      elements.forEach(element => {
+        if (typeof element.getAttribute === 'undefined' || Emitter.registry.has(element)) {
+          return;
+        }
+        const className = element.getAttribute('e:class');
+        const fn = new Function('element', `return new ${className}(element)`);
+        if (new Function(`return typeof ${className} !== 'undefined'`)()) {
+          Emitter.registry.set(element, fn(element));
+        }
+
+        if (!document.querySelector(`script[for='${className}']`)) {
+          const script = document.createElement('script');
+          script.setAttribute('src', `${path}${className}.js`);
+          script.setAttribute('async', '');
+          script.setAttribute('for', className);
+          script.onload = () => {
+            document.querySelectorAll(`[e\\:class=${className}]`).forEach(element => Emitter.registry.set(element, fn(element)));
+          };
+          document.head.appendChild(script);
+        }
+      });   
+
+      const observer = new MutationObserver((mutations) => {
+        const addedNodeLists = mutations.map(mutation => mutation.addedNodes);
+        addedNodeLists.forEach(nodeList => initFn(nodeList));
+      });
+      observer.observe(document.body, {childList: true});
+      initFn(elements);
   }
 }
