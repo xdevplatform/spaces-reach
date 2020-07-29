@@ -82,7 +82,7 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
 
   let res;
   try {
-    const url = `https://api.twitter.com/2/tweets/${request.params.id}?tweet_fields=author_id`;
+    const url = `https://api.twitter.com/2/tweets/${request.params.id}?tweet.fields=author_id`;
     res = await get({
       url: url, 
       options: {
