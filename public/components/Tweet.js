@@ -10,7 +10,11 @@ class Tweet extends Emitter {
   }
 
   getInitialStatus() {
-    return {show: false};
+    return {show: false, showAnnotationsControls: false};
+  }
+
+  showAnnotationsControls(value) {
+    this.setState({showAnnotationsControls: value});
   }
 
   async didReceiveData(response) {
