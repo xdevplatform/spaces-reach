@@ -1,12 +1,15 @@
 class ErrorMessage extends Emitter {
   constructor(component) {
     super(component);
-    this.component.addEventListener('click', (e) => {
-      if(e.target.className === 'try-again') {
-        this.setState({show: false});
-      }
-    })
+    this.button = this.component.querySelector('button');
   }
+
+  dismiss(event) {
+    if (event.target === this.button) {
+      this.setState({show: false});
+    }
+  }
+
   getInitialState() {
     return {show: false};
   }

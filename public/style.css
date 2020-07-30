@@ -121,3 +121,26 @@ main.error p {
 }
 
 main.error.show {display:block}
+main.tweet {
+  width: 50%;
+  margin: 0 auto;
+  border: 1px solid #d3d3d3;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: none;
+}
+
+main.tweet h1 { line-height: normal;}
+
+main.tweet div.flex-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+main.tweet div.flex-container > div.grow {
+  flex-grow: 2;
+}
+
+main.tweet img { width: 48px;height: 48px; margin-right: 0.5rem;border-radius: 32px;}
+
+main.tweet .name { font-weight: bold;}
