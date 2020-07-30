@@ -128,6 +128,7 @@ main.tweet {
   border-radius: 0.5rem;
   padding: 1rem;
   display: none;
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
 }
 
 main.tweet h1 { line-height: normal;}

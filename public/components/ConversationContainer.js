@@ -1,0 +1,1 @@
+class ConversationContainer extends Emitter {}
