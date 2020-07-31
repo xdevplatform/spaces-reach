@@ -1,6 +1,7 @@
 class Tweet extends Emitter {
   constructor(component) {
     super(component);
+    this.wrapper = component.querySelector('.tweet-wrapper');
     this.profilePic = component.querySelector('img');
     this.name = component.querySelector('.name');
     this.username = component.querySelector('.username');
@@ -8,11 +9,18 @@ class Tweet extends Emitter {
     this.repliesCount = component.querySelector('.replies-count');
     this.timestamp = component.querySelector('.timestamp');
     this.annotationsControls = component.querySelector('.annotations-controls');
-    this.datasetMap = ['profilePic', 'name', 'username', 'text', 'repliesCount', 'timestamp'];
+    this.hideReplyButton = this.annotationsControls.querySelector('button');
+    this.annotationsLabel = this.annotationsControls.querySelector('.related-label');
+    this.datasetMap = ['profilePic', 'name', 'username', 'text', 'repliesCount', 'timestamp', 'tweetId', 'domains'];
     this.props.tweet = {};
+    this.isHidden = false;
     this.datasetMap.forEach(key => {
       if (this.component.dataset[key]) {
         this.props.tweet[key] = this.component.dataset[key];
+      }
+
+      if (key === 'domains') {
+        this.props[key] = this.component.dataset[key] ? this.component.dataset[key].split(',') : [];
       }
     });
 
@@ -28,6 +36,7 @@ class Tweet extends Emitter {
 
   getInitialState() {
     const state = {
+      replyIsHidden: false,
       showAnnotationsControls: 
         typeof this.component.dataset.annotationsControls !== 'undefined' &&
           this.component.dataset.annotationsControls === 'false' ?
@@ -68,6 +77,7 @@ class Tweet extends Emitter {
     this.props.tweet.text = tweet.data.text;
     this.props.tweet.repliesCount = tweet.data.public_metrics.reply_count;
     this.props.tweet.timestamp = tweet.data.created_at;
+    this.props.tweet.domains = tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => ctx.domain.id) : [];
 
     this.setState({
       show: true,
@@ -75,8 +85,55 @@ class Tweet extends Emitter {
     });
   }
 
+  getDomainAffinityLabel() {
+    const sportsDomains = ['6', '11', '12', '26', '27', '28', '60', '68', '92', '93', '136', '137', '138'];
+    const intersection = sportsDomains.filter(domain => typeof this.props.tweet.domains !== 'undefined' && this.props.tweet.domains.includes(domain));
+
+    if (intersection.length > 0) {
+      return {
+        annotationsLabel: 'Sports related according to Twitter machine learning',
+        buttonLabel: 'Hide anyway',
+      };
+    } else {
+      return {
+        annotationsLabel: 'Probably not sports related',
+        buttonLabel: 'Hide',
+      };
+    }
+  }
+
+  renderAnnotationsControls() {
+    if (this.state.showAnnotationsControls) {
+      this.annotationsControls.classList.remove('hidden');
+    } else {
+      this.annotationsControls.classList.add('hidden');
+      return;
+    }
+
+    if (this.state.replyIsHidden) {
+      this.annotationsLabel.innerText = 'You hid this Tweet.';
+      this.hideReplyButton.innerText = 'Undo';
+    } else {
+      const labels = this.getDomainAffinityLabel();
+      this.annotationsLabel.innerText = labels.annotationsLabel;
+      this.hideReplyButton.innerText = labels.buttonLabel;
+    }
+
+  }
+  
+  hideReply() {
+    const tweetWillHide = !this.state.replyIsHidden;
+    this.setState({replyIsHidden: newStateValue});
+
+    if (tweetWillHide) {
+      // DELETE /hide/:id
+    } else {
+      // POST /hide/:id
+    }
+    
+  }
+
   render() {
-    console.log(this.props);
     if (!this.state.show) {
       this.component.classList.add('hidden');
       return;
@@ -84,10 +141,12 @@ class Tweet extends Emitter {
 
     this.component.classList.remove('hidden');
 
-    if (this.state.showAnnotationsControls) {
-      this.annotationsControls.classList.remove('hidden');
+    this.renderAnnotationsControls();
+
+    if (this.state.replyIsHidden) {
+      this.wrapper.classList.add('hidden');
     } else {
-      this.annotationsControls.classList.add('hidden');
+      this.wrapper.classList.remove('hidden');
     }
 
     Object.keys(this.props.tweet).forEach(key => {

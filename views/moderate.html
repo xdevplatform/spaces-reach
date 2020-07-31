@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Hide replies — 🐮🐶🦎</title>
-    <meta name="description" content="Detect and hide abusive replies to any of your tweets.">
+    <title>Hide replies — 🏈⚽🎾🕹👾</title>
+    <meta name="description" content="Moderate replies with the help of an app and Twitter's ML.">
     <link id="favicon" rel="icon" href="https://abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,22 +15,22 @@
   <body>
     <header>
       <h1>
-        Pet explorer 🐮🐶🦎
+        Sports explorer 🏈⚽🎾🕹👾
       </h1>
-      <p>Make your pet related conversations more a-meow-zing. This app lets you manage replies that are not pet related, based on <a target="_blank" href="https://developer.twitter.com/en/docs/twitter-api/annotations">Tweet annotations</a> (Twitter’s artificial intelligence to detect topic and entities of a Tweet).</p>
+      <p>Make your sports related conversations knock it out of the park. This app lets you manage replies that are not sports related, based on <a target="_blank" href="https://developer.twitter.com/en/docs/twitter-api/annotations">Tweet annotations</a> (Twitter’s artificial intelligence to detect topic and entities of a Tweet).</p>
       <section>
         <h2>
-          How to make Pet explorer work for you
+          How to make Sports explorer work for you
         </h2>
         <ol>
-          <li>Ask your friends on Twitter to reply to your Tweet with a story, fact, or favorite pet name. There needs to be at least one pet mentioned in their Tweet.</li>
-          <li>Get the ID of your Tweet (on Twitter, click on <div aria-label="Share Tweet" style="display: inline-block;width:1rem;height:1rem"><svg viewBox="0 0 24 24" class="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi"><g><path d="M17.53 7.47l-5-5c-.293-.293-.768-.293-1.06 0l-5 5c-.294.293-.294.768 0 1.06s.767.294 1.06 0l3.72-3.72V15c0 .414.336.75.75.75s.75-.336.75-.75V4.81l3.72 3.72c.146.147.338.22.53.22s.384-.072.53-.22c.293-.293.293-.767 0-1.06z"></path><path d="M19.708 21.944H4.292C3.028 21.944 2 20.916 2 19.652V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 .437.355.792.792.792h15.416c.437 0 .792-.355.792-.792V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 1.264-1.028 2.292-2.292 2.292z"></path></g></svg></div>, then paste it in the field below).</li>
-          <li>If the Tweet has replies, it will show you whether it contains pet-related replies or not, based on Twitter’s understanding of each reply.</li>
+          <li>Ask your friends on Twitter to reply to your Tweet with a sport-related story or fact, or with a name of a sports team (including eSports).</li>
+          <li>Paste a link to your Tweet (on Twitter, click on <div aria-label="Share Tweet" style="display: inline-block;width:1rem;height:1rem"><svg viewBox="0 0 24 24" class="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi"><g><path d="M17.53 7.47l-5-5c-.293-.293-.768-.293-1.06 0l-5 5c-.294.293-.294.768 0 1.06s.767.294 1.06 0l3.72-3.72V15c0 .414.336.75.75.75s.75-.336.75-.75V4.81l3.72 3.72c.146.147.338.22.53.22s.384-.072.53-.22c.293-.293.293-.767 0-1.06z"></path><path d="M19.708 21.944H4.292C3.028 21.944 2 20.916 2 19.652V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 .437.355.792.792.792h15.416c.437 0 .792-.355.792-.792V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 1.264-1.028 2.292-2.292 2.292z"></path></g></svg></div>, then paste it in the field below).</li>
+          <li>If the Tweet has replies, it will show you whether it contains sports-related replies or not, based on Twitter’s understanding of each reply.</li>
           <li>Have fun! Hide and unhide replies by following the app’s prompts.</li>
         </ok>
       </section>
       <section e:class="TweetLink" class="tweet-url-container">
-        <input e:keyup="validate" type="url" aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button disabled="true" e:click="fetch" id="fetch">Fetch 🦴</button>
+        <input e:keyup="validate" type="url" aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button disabled="true" e:click="fetch" id="fetch">Get conversation</button>
       </section>
     </header>
 
@@ -49,20 +49,20 @@
         </div>
       </div>
       <div class="flex-container annotations-controls">
-        <div class="related-label">Probably not pet related</div>
+        <div class="related-label">Probably not sports related</div>
         <div class="grow"></div>
-        <div><button>Hide</button></div>
+        <div><button e:click="hideReply">Hide</button></div>
       </div>
     </main>
     <div e:class="ConversationContainer" class="convo-container hidden"></div>
     <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="resource-not-found">
-      <p>🦗</p>
+      <p>🏏</p>
       <h1>Crickets</h1>
       <h4>We couldn't find this Tweet. Please try a different one.</h4>
       <button class="try-again">Try another Tweet</button>
     </main>
     <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="tweet-too-old">
-      <p>🦕</p>
+      <p>⏱️</p>
       <h1>Tweet too old</h1>
       <h4>This Tweet is too old. Try with something you Tweeted in the past 7 days.</h4>
       <button class="try-again">Try another Tweet</button>
@@ -74,7 +74,7 @@
       <button class="try-again">Try another Tweet</button>
     </main>
     <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="no-replies">
-      <p>🦥</p>
+      <p>🙅</p>
       <h1>No replies yet</h1>
       <h4>This Tweet did not receive any replies… Yet. Try another Tweet or check back later.</h4>
       <button class="try-again">Try another Tweet</button>

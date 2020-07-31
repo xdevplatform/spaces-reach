@@ -169,7 +169,7 @@ app.get('/conversation/:id', async (request, response) => {
     response.status(400).json({success: false, error: 'other-error'});
     return;
   }
-  console.log(res.body);
+  
   if (res.statusCode !== 200) {
     return response.status(400).json({success: false, error: 'api-error'});
   }
