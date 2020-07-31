@@ -4,14 +4,19 @@ class ConversationContainer extends Emitter {
   }
 
   getInitialState() {
-    return {show: false, canLoadConversation: false};
+    return {show: false};
   }
 
   async didReceiveData(response) {
+    if (response.url.match(/\/tweet\/\d{1,19}/) && !response.ok) {
+      this.setState({canRenderConversation: false});
+      return;
+    }
+
     if (response.url.match(/\/conversation\/\d{1,19}/) && response.ok) {
       const data = await response.clone().json();
 
-      const state = {show: true, conversation: data};
+      const state = {show: true, canRenderConversation: true, conversation: data};
       if (data.meta) {
         state.token = data.meta.token;
       }
@@ -22,7 +27,7 @@ class ConversationContainer extends Emitter {
   }
 
   render() {
-    if (!this.state.show) {
+    if (!this.state.show || !this.state.canRenderConversation) {
       this.component.classList.add('hidden');
       return;
     }
@@ -37,7 +42,8 @@ class ConversationContainer extends Emitter {
       tweetComponent.dataset.username = user.username;
       tweetComponent.dataset.text = tweet.text;
       tweetComponent.dataset.repliesCount = tweet.public_metrics.reply_count;
-      tweetComponent.dataset.timestamp = tweet.timestamp;
+      tweetComponent.dataset.timestamp = tweet.created_at;
+      tweetComponent.dataset.annotationsControls = 'true';
       this.component.appendChild(tweetComponent);
       tweetComponent.classList.remove('hidden');
     });

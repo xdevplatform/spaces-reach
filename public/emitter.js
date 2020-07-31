@@ -59,6 +59,7 @@ class Emitter {
   static async fetch(fetchFn) {
     const data = await fetchFn;
     document.querySelectorAll('[e\\:class]').forEach(el => Emitter.registry.get(el).didReceiveData(data));
+    return data;
   }
 
   static init(path = '') {

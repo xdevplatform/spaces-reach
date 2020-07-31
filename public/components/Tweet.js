@@ -16,11 +16,14 @@ class Tweet extends Emitter {
       }
     });
 
+    if (Object.keys(this.props.tweet).length > 0) {
+      this.setState({show: true});
+    }
+
     this.props.acceptsDataFromApi = false;
     if (typeof this.component.dataset.acceptsDataFromApi !== 'undefined' && this.component.dataset.acceptsDataFromApi !== 'false') {
       this.props.acceptsDataFromApi = true;
     }
-
   }
 
   getInitialState() {
@@ -57,11 +60,18 @@ class Tweet extends Emitter {
       return;
     }
 
-    const data = await response.clone().json();
+    const tweet = await response.clone().json();
+
+    this.props.tweet.profilePic = tweet.includes.users[0].profile_image_url;
+    this.props.tweet.name = tweet.includes.users[0].name;
+    this.props.tweet.username = tweet.includes.users[0].username;
+    this.props.tweet.text = tweet.data.text;
+    this.props.tweet.repliesCount = tweet.data.public_metrics.reply_count;
+    this.props.tweet.timestamp = tweet.data.created_at;
 
     this.setState({
       show: true,
-      tweetId: data.data.id,
+      tweetId: tweet.data.id,
     });
   }
 
@@ -94,6 +104,7 @@ class Tweet extends Emitter {
           break;
         case 'username':
           this[key].innerText = '@' + this.props.tweet.username;
+          break;
         case 'timestamp':
           this[key].innerText = Intl.DateTimeFormat(navigator.language, {dateStyle: 'long'}).format(new Date(this.props.tweet.timestamp));
           break;

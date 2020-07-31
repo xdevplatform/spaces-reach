@@ -127,7 +127,7 @@ main.error p {
 
 main.tweet {
   width: 50%;
-  margin: 0 auto;
+  margin: 0 auto 3rem;
 }
 
 main.tweet .tweet-wrapper {

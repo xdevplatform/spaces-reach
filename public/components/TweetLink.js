@@ -28,14 +28,17 @@ class TweetLink extends Emitter {
     }
   }
 
-  fetch(event) {
+  async fetch(event) {
     if (event.target !== this.button) {
       return;
     }
 
     const [, , tweetId] = this.getTweetUrlRegex(this.field.value);
-    Emitter.fetch(fetch(`/tweet/${tweetId}`));
-    Emitter.fetch(fetch(`/conversation/${tweetId}`));
+    const tweet = await Emitter.fetch(fetch(`/tweet/${tweetId}`));
+
+    if (tweet.ok) {
+      await Emitter.fetch(fetch(`/conversation/${tweetId}`));
+    }
   }
 
   render() {
