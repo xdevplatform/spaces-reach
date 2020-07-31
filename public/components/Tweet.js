@@ -7,10 +7,13 @@ class Tweet extends Emitter {
     this.text = component.querySelector('h1');
     this.repliesCount = component.querySelector('.replies-count');
     this.timestamp = component.querySelector('.timestamp');
+    this.annotationsControls = component.querySelector('.annotations-controls');
   }
 
-  getInitialStatus() {
-    return {show: false, showAnnotationsControls: false};
+  getInitialState() {
+    return {
+      showAnnotationsControls: this.component.dataset.annotationsControls === 'false' ? false : true,
+    };
   }
 
   showAnnotationsControls(value) {
@@ -42,8 +45,16 @@ class Tweet extends Emitter {
 
   render() {
     if (!this.state.show) {
-      this.component.style.display = 'none';
+      this.component.classList.add('hidden');
       return;
+    }
+
+    this.component.classList.remove('hidden');
+
+    if (this.state.showAnnotationsControls) {
+      this.annotationsControls.classList.remove('hidden');
+    } else {
+      this.annotationsControls.classList.add('hidden');
     }
 
     Object.keys(this.state).forEach(key => {
@@ -57,7 +68,5 @@ class Tweet extends Emitter {
         this[key].innerText = this.state[key];
       }
     });
-
-    this.component.style.display = 'block';
   }
 }

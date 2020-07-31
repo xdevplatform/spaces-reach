@@ -103,7 +103,7 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
     return response.status(400).json({success: false, error: 'api-error'});
   }
 
-  if (res.body.data.author_id !== token.oauth_token.split('-')[0]) {
+  if (res.body.data && res.body.data.author_id !== token.oauth_token.split('-')[0]) {
     return response.status(400).json({success: false, error: 'not-authorized-for-resource'});
   }
 
@@ -113,7 +113,7 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
     switch (type) {
       case 'not-authorized-for-resource':
       case 'resource-not-found':
-        return response.status(400).json({success: false, error: error});
+        return response.status(400).json({success: false, error: type});
       
       default:
         return response.status(400).json({success: false, error: 'other-error'});

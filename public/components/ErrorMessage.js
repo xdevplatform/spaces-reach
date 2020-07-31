@@ -15,6 +15,7 @@ class ErrorMessage extends Emitter {
   }
 
   async didReceiveData(data) {
+    this.setState({show: false});
     if (data.ok) {
       this.setState({show: false});
       return;
@@ -27,6 +28,10 @@ class ErrorMessage extends Emitter {
   }
 
   render() {
-    this.component.setAttribute('class', this.state.show ? 'error show' : 'error');
+    if (this.state.show) {
+      this.component.classList.remove('hidden');
+    } else {
+      this.component.classList.add('hidden');
+    }
   }
 }
