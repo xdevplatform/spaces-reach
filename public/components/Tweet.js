@@ -86,7 +86,7 @@ class Tweet extends Emitter {
   }
 
   getDomainAffinityLabel() {
-    const sportsDomains = ['6', '11', '12', '26', '27', '28', '60', '68', '92', '93', '136', '137', '138'];
+    const sportsDomains = ['6', '11', '12', '26', '27', '28', '39', '40', '60', '68', '92', '93', '136', '137', '138'];
     const intersection = sportsDomains.filter(domain => typeof this.props.tweet.domains !== 'undefined' && this.props.tweet.domains.includes(domain));
 
     if (intersection.length > 0) {
@@ -126,9 +126,9 @@ class Tweet extends Emitter {
     this.setState({replyIsHidden: newStateValue});
 
     if (tweetWillHide) {
-      // DELETE /hide/:id
+      Emitter.fetch(fetch(`/hide/${this.props.tweet.tweetId}`, {method: 'POST'}));
     } else {
-      // POST /hide/:id
+      Emitter.fetch(fetch(`/hide/${this.props.tweet.tweetId}`, {method: 'DELETE'}));
     }
     
   }
