@@ -27,10 +27,11 @@ app.get('/', (request, response) => {
 });
 
 app.delete('/hide/:id', async (request, response) => {
+  return response.json({success: true});
   const token = request.cookies['access_token'] || null;
 
   if (!token) {
-    response.status(400).json({success: false, error: 'Missing access token'});
+    response.status(400).json({success: false, error: 'other-error'});
     return;
   }
 
@@ -43,28 +44,33 @@ app.delete('/hide/:id', async (request, response) => {
     });
   } catch (e) {
     console.error('Moderation error:', e);
+    response.status(400).json({success: false, error: 'other-error'});
   }
 
   response.status(200);
 });
 
 app.post('/hide/:id', async (request, response) => {
+  return response.json({success: true});
   const token = request.cookies['access_token'] || null;
 
   if (!token) {
-    response.status(400).json({success: false, error: 'Missing access token'});
+    response.status(400).json({success: false, error: 'other-error'});
     return;
   }
 
   try {
-    await moderate({id: request.params.id}, {
+    console.log('request');
+    const res = await moderate({id: request.params.id}, {
       consumer_key: process.env.TWITTER_CONSUMER_KEY,
       consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
       token: token.oauth_token,
       token_secret: token.oauth_token_secret,
     });
+    console.log(res);
   } catch (e) {
     console.error('Moderation error:', e);
+    response.status(400).json({success: false, error: 'cannot-hide-reply'})
   }
 
   response.status(200);

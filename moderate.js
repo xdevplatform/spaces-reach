@@ -1,4 +1,5 @@
-const { put } = require('./client');
+const { defaults, put } = require('./client');
+defaults({headers: {'x-des-apiservices': 'staging2'}});
 
 const moderateRequest = async (tweet, hidden, oauth) => {
   if (!tweet.id) {
@@ -15,10 +16,12 @@ const moderateRequest = async (tweet, hidden, oauth) => {
   };
 
   const res = await put(config);
+  console.log(config)
+  console.log(res.body);
   return res.body.hidden && res.body.hidden === hidden;
 }
 
-const moderate = (tweet, oauth) => moderateRequest(tweet, true, oauth);
-const unmoderate = (tweet, oauth) => moderateRequest(tweet, false, oauth);
+const moderate = async (tweet, oauth) => moderateRequest(tweet, true, oauth);
+const unmoderate = async (tweet, oauth) => moderateRequest(tweet, false, oauth);
 
 module.exports = { moderate, unmoderate };

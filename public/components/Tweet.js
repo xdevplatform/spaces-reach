@@ -36,7 +36,10 @@ class Tweet extends Emitter {
 
   getInitialState() {
     const state = {
-      replyIsHidden: false,
+      replyIsHidden: 
+        typeof this.component.dataset.tweetId !== 'undefined' ? 
+          this.getHiddenStatus(this.component.dataset.tweetId) : 
+          false,
       showAnnotationsControls: 
         typeof this.component.dataset.annotationsControls !== 'undefined' &&
           this.component.dataset.annotationsControls === 'false' ?
@@ -81,6 +84,7 @@ class Tweet extends Emitter {
 
     this.setState({
       show: true,
+      replyIsHidden: this.getHiddenStatus(tweet.data.id) || false,
       tweetId: tweet.data.id,
     });
   }
@@ -123,14 +127,34 @@ class Tweet extends Emitter {
   
   hideReply() {
     const tweetWillHide = !this.state.replyIsHidden;
-    this.setState({replyIsHidden: newStateValue});
 
     if (tweetWillHide) {
-      Emitter.fetch(fetch(`/hide/${this.props.tweet.tweetId}`, {method: 'POST'}));
+      Emitter.dispatch(fetch(`/hide/${this.props.tweet.tweetId}`, {method: 'POST'}));
     } else {
-      Emitter.fetch(fetch(`/hide/${this.props.tweet.tweetId}`, {method: 'DELETE'}));
+      Emitter.dispatch(fetch(`/hide/${this.props.tweet.tweetId}`, {method: 'DELETE'}));
     }
-    
+
+    this.setHiddenStatus(this.props.tweet.tweetId, tweetWillHide);
+  }
+
+  setHiddenStatus(tweetId, hiddenStatus) {
+    try {
+      window.localStorage.setItem(tweetId, hiddenStatus);
+    } catch (e) {
+      window.sessionStorage.setItem(tweetId, hiddenStatus);
+    }
+    this.setState({replyIsHidden: hiddenStatus});
+  }
+
+  getHiddenStatus(tweetId) {
+    let storageValue = null;
+    try {
+      storageValue = window.localStorage.getItem(tweetId);
+    } catch (e) {
+      storageValue = window.sessionStorage.getItem(tweetId);
+    }
+
+    return storageValue === null || storageValue === 'false' ? false : true;
   }
 
   render() {

@@ -56,8 +56,8 @@ class Emitter {
 
   static registry = new WeakMap();
 
-  static async fetch(fetchFn) {
-    const data = await fetchFn;
+  static async dispatch(dispatchFn) {
+    const data = dispatchFn instanceof Promise ? await dispatchFn : dispatchFn;
     document.querySelectorAll('[e\\:class]').forEach(el => Emitter.registry.get(el).didReceiveData(data));
     return data;
   }
