@@ -144,11 +144,13 @@ main.tweet div.flex-container {
   flex-wrap: nowrap;
 }
 
+main.tweet div.flex-container.hidden {display:none}
+
 main.tweet div.flex-container > div.grow {
   flex-grow: 2;
 }
 
-main.tweet img { width: 48px;height: 48px; margin-right: 0.5rem;border-radius: 32px;}
+main.tweet img.profile-pic { width: 48px;height: 48px; margin-right: 0.5rem;border-radius: 32px;}
 main.tweet .name { font-weight: bold;}
 main.tweet .annotations-controls {margin: 0.5rem}
 main.tweet .related-label {line-height:2.2rem}

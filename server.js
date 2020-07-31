@@ -82,9 +82,12 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
 
   let res;
   try {
-    const url = `https://api.twitter.com/2/tweets/${request.params.id}?tweet.fields=author_id,created_at,public_metrics&user.fields=profile_image_url&expansions=author_id`;
+    const url = new URL(`https://api.twitter.com/2/tweets/${request.params.id}`);
+    url.searchParams.append('tweet.fields', 'author_id,created_at,public_metrics')
+    url.searchParams.append('user.fields', 'profile_image_url');
+    url.searchParams.append('expansions', 'author_id');
     res = await get({
-      url: url, 
+      url: url.href, 
       options: {
         oauth: {
           consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -135,7 +138,43 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
 });
 
 app.get('/conversation/:id', async (request, response) => {
+  const token = request.cookies['access_token'] || null;
 
+  if (!token) {
+    response.status(400).json({success: false, error: 'other-error'});
+    return;
+  }
+
+  const userId = token.oauth_token.split('-')[0];
+
+  let res;
+  try {
+    const url = new URL('https://api.twitter.com/2/tweets/search/recent');
+    url.searchParams.append('tweet.fields', 'author_id,created_at,public_metrics,context_annotations')
+    url.searchParams.append('user.fields', 'profile_image_url');
+    url.searchParams.append('expansions', 'author_id');
+    url.searchParams.append('query', `conversation_id:${request.params.id} -from:${userId}`);
+    res = await get({
+      url: url.href, 
+      options: {
+        oauth: {
+          consumer_key: process.env.TWITTER_CONSUMER_KEY,
+          consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+          token: token.oauth_token,
+          token_secret: token.oauth_token_secret,
+        }
+      }
+    });
+  } catch (e) {
+    response.status(400).json({success: false, error: 'other-error'});
+    return;
+  }
+  console.log(res.body);
+  if (res.statusCode !== 200) {
+    return response.status(400).json({success: false, error: 'api-error'});
+  }
+
+  return response.status(200).json(res.body);
 });
 
 app.get('/oauth', async (request, response) => {

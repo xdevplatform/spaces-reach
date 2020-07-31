@@ -8,12 +8,35 @@ class Tweet extends Emitter {
     this.repliesCount = component.querySelector('.replies-count');
     this.timestamp = component.querySelector('.timestamp');
     this.annotationsControls = component.querySelector('.annotations-controls');
+    this.datasetMap = ['profilePic', 'name', 'username', 'text', 'repliesCount', 'timestamp'];
+    this.props.tweet = {};
+    this.datasetMap.forEach(key => {
+      if (this.component.dataset[key]) {
+        this.props.tweet[key] = this.component.dataset[key];
+      }
+    });
+
+    this.props.acceptsDataFromApi = false;
+    if (typeof this.component.dataset.acceptsDataFromApi !== 'undefined' && this.component.dataset.acceptsDataFromApi !== 'false') {
+      this.props.acceptsDataFromApi = true;
+    }
+
   }
 
   getInitialState() {
-    return {
-      showAnnotationsControls: this.component.dataset.annotationsControls === 'false' ? false : true,
+    const state = {
+      showAnnotationsControls: 
+        typeof this.component.dataset.annotationsControls !== 'undefined' &&
+          this.component.dataset.annotationsControls === 'false' ?
+            false :
+            true,
     };
+
+    if (this.component.dataset.text) {
+      state.show = true;
+    }
+
+    return state;
   }
 
   showAnnotationsControls(value) {
@@ -21,6 +44,10 @@ class Tweet extends Emitter {
   }
 
   async didReceiveData(response) {
+    if (!this.props.acceptsDataFromApi) {
+      return;
+    }
+
     if (!response.url.match(/\/tweet\/\d{1,19}/)) {
       return;
     }
@@ -34,16 +61,12 @@ class Tweet extends Emitter {
 
     this.setState({
       show: true,
-      profilePic: data.includes.users[0].profile_image_url,
-      name:  data.includes.users[0].name,
-      username: '@' + data.includes.users[0].username,
-      text: data.data.text,
-      repliesCount: `${data.data.public_metrics.reply_count} ${data.data.public_metrics.reply_count === 1 ? 'reply' : 'replies'}`,
-      timestamp: Intl.DateTimeFormat(navigator.language, {dateStyle: 'long'}).format(new Date(data.data.created_at)),
+      tweetId: data.data.id,
     });
   }
 
   render() {
+    console.log(this.props);
     if (!this.state.show) {
       this.component.classList.add('hidden');
       return;
@@ -57,16 +80,34 @@ class Tweet extends Emitter {
       this.annotationsControls.classList.add('hidden');
     }
 
-    Object.keys(this.state).forEach(key => {
+    Object.keys(this.props.tweet).forEach(key => {
       if (!this[key]) {
         return;
       }
 
-      if (key === 'profilePic') {
-        this[key].src = this.state[key];
-      } else {
-        this[key].innerText = this.state[key];
+      switch (key) {
+        case 'profilePic':
+          this[key].src = this.props.tweet.profilePic;
+          break;
+        case 'repliesCount':
+          this[key].innerText = `${this.props.tweet.repliesCount} ${this.props.tweet.repliesCount === 1 ? 'reply' : 'replies'}`;
+          break;
+        case 'username':
+          this[key].innerText = '@' + this.props.tweet.username;
+        case 'timestamp':
+          this[key].innerText = Intl.DateTimeFormat(navigator.language, {dateStyle: 'long'}).format(new Date(this.props.tweet.timestamp));
+          break;
+        default:
+          this[key].innerText = this.props.tweet[key];
       }
     });
+
+    if (twemoji) {
+      twemoji.parse(this.component, {
+        folder: 'svg',
+        ext: '.svg'
+      });
+    }
+  
   }
 }
