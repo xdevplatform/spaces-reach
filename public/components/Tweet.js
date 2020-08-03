@@ -95,7 +95,7 @@ class Tweet extends Emitter {
 
     if (intersection.length > 0) {
       return {
-        annotationsLabel: 'Sports related according to Twitter machine learning',
+        annotationsLabel: 'Sports related according to Twitter’s AI',
         buttonLabel: 'Hide anyway',
       };
     } else {

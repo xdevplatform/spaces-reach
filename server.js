@@ -160,6 +160,9 @@ app.get('/conversation/:id', async (request, response) => {
     url.searchParams.append('user.fields', 'profile_image_url');
     url.searchParams.append('expansions', 'author_id');
     url.searchParams.append('query', `conversation_id:${request.params.id} -from:${userId}`);
+
+    ['next_token', 'since_id'].forEach(query => request.query[query] ? url.searchParams.append(query, request.query[query]) : null);
+
     res = await get({
       url: url.href, 
       options: {

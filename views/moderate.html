@@ -54,7 +54,14 @@
         <div><button e:click="hideReply">Hide</button></div>
       </div>
     </main>
-    <div e:class="ConversationContainer" class="convo-container hidden"></div>
+    <div e:class="ConversationContainer" class="hidden convo-container">
+      <div class="conversation"></div>
+      <div class="pagination flex-container">
+        <div><h4>All caught up!</h4></div>
+        <div class="grow"></div>
+        <div><button e:click="refresh">Check for recent Tweets</button></div>
+      </div>
+    </div>
     <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="resource-not-found">
       <p>🏏</p>
       <h1>Crickets</h1>

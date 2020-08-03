@@ -154,3 +154,18 @@ main.tweet img.profile-pic { width: 48px;height: 48px; margin-right: 0.5rem;bord
 main.tweet .name { font-weight: bold;}
 main.tweet .annotations-controls {margin: 0.5rem}
 main.tweet .related-label {line-height:2.2rem}
+
+.convo-container .pagination {width: 50%; margin: 0 auto}
+
+div.pagination.flex-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+div.pagination.flex-container > div.grow {
+  flex-grow: 2;
+}
+
+div.pagination h4 {
+  line-height: 0rem;
+}
