@@ -1,5 +1,4 @@
 const { defaults, put } = require('./client');
-defaults({headers: {'x-des-apiservices': 'staging2'}});
 
 const moderateRequest = async (tweet, hidden, oauth) => {
   if (!tweet.id) {

@@ -4,7 +4,6 @@ const server = require('http').Server(app);
 const cookieParser = require('cookie-parser');
 
 const { defaults, get } = require('./client');
-defaults({headers: {'x-des-apiservices': 'staging2'}});
 const { moderate, unmoderate } = require('./moderate');
 const oauth = require('./oauth/index.js');
 
@@ -16,7 +15,7 @@ app.use(cookieParser());
 
 const baseURL = process.env.PROJECT_DOMAIN ?
   `https://${process.env.PROJECT_DOMAIN}.glitch.me` :
-  'http://5f9cc4d6c1c8.ngrok.io';
+  'http://localhost';
 
 
 const callbackURL = new URL(`${baseURL}/oauth-callback`);
