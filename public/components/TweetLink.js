@@ -2,7 +2,8 @@ class TweetLink extends Emitter {
   constructor(component) {
     super(component);
     
-    this.tweetId = location.pathname.match(/\d{1,19}/);
+    [this.tweetId] = location.pathname.match(/\d{1,19}/);
+    console.log(this.tweetId)
     
     if (this.tweetId) {
       Emitter.dispatch(fetch(`/tweet/${this.tweetId}`));
@@ -10,6 +11,7 @@ class TweetLink extends Emitter {
     
     this.field = document.getElementById('tweet-url');
     this.button = document.getElementById('fetch');
+    this.component.hidden = true;
   }
 
   getTweetUrlRegex(value) {
@@ -46,8 +48,8 @@ class TweetLink extends Emitter {
   }
 
   render() {
-    if (this.tweetId) {
-      this.component.hidden = true;  
+    if (!this.tweetId) {
+      this.component.hidden = false;  
       return;
     }
     

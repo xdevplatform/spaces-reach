@@ -64,6 +64,7 @@ class Tweet extends Emitter {
   }
   
   render() {
+    this.component.classList.remove('hidden');
     Object.keys(this.props.tweet).forEach(key => {
       if (!this[key]) {
         return;
