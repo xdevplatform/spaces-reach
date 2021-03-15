@@ -1,6 +1,13 @@
 class TweetLink extends Emitter {
   constructor(component) {
     super(component);
+    
+    this.tweetId = location.pathname.match(/\d{1,19}/);
+    
+    if (this.tweetId) {
+      Emitter.dispatch(fetch(`/tweet/${this.tweetId}`));
+    }
+    
     this.field = document.getElementById('tweet-url');
     this.button = document.getElementById('fetch');
   }
@@ -36,12 +43,14 @@ class TweetLink extends Emitter {
     const [, , tweetId] = this.getTweetUrlRegex(this.field.value);
     const tweet = await Emitter.dispatch(fetch(`/tweet/${tweetId}`));
     console.log(tweet);
-    // if (tweet.ok) {
-    //   await Emitter.dispatch(fetch(`/conversation/${tweetId}`));
-    // }
   }
 
   render() {
+    if (this.tweetId) {
+      this.component.hidden = true;  
+      return;
+    }
+    
     if (!this.state.tweetUrlIsValid) {
       this.button.setAttribute('disabled', 'true');
       this.field.setAttribute('class', 'error');        

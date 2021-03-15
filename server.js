@@ -20,7 +20,7 @@ const baseURL = process.env.PROJECT_DOMAIN ?
 
 const callbackURL = new URL(`${baseURL}/oauth-callback`);
 
-app.get('/', (request, response) => {
+app.get('/:id([0-9]{1,19})', (request, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
