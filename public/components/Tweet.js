@@ -10,7 +10,9 @@ class Tweet extends Emitter {
     this.timestamp = component.querySelector('.timestamp');
     // this.annotationsLabel = this.annotationsControls.querySelector('.related-label');
     this.datasetMap = ['profilePic', 'name', 'username', 'text', 'repliesCount', 'timestamp', 'tweetId'];
-    this.props.tweet = {};
+    this.props.tweet = {
+      countsQuery: [],
+    };
     this.datasetMap.forEach(key => {
       if (this.component.dataset[key]) {
         this.props.tweet[key] = this.component.dataset[key];
@@ -53,11 +55,20 @@ class Tweet extends Emitter {
     this.props.tweet.text = tweet.data.text;
     this.props.tweet.repliesCount = tweet.data.public_metrics.reply_count;
     this.props.tweet.timestamp = tweet.data.created_at;
-    this.props.tweet.annotations = tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => {
-      const annotationId = `${ctx.domain.id}.${ctx.entity.id}`;
-      Emitter.emit(fetch('/'))
-      return {context: annotationId, name: ctx.entity.name}
-    }) : [];
+    this.props.tweet.countsQuery =
+      [].concat(tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => {
+        const obj = {};
+        obj[`context:${ctx.domain.id}.${ctx.entity.id}`] = ctx.entity.name
+        return obj;
+      }) : [])
+      .concat(tweet.data.entities && tweet.data.entities.hashtags ? tweet.data.entities.hashtags.map(hashtag => {
+        const obj = {};
+        {query: `#${hashtag.tag}`, name: `#${hashtag.tag}`}
+        return obj;
+      }) : [])
+      .concat(tweet.data.entities && tweet.data.entities.mentions ? tweet.data.entities.mentions.map(mention => {
+        return {query: `@${mention.username}`, name: `@${mention.username}`}
+      }) : [])
 
     this.setState({
       show: true,
