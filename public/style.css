@@ -139,14 +139,14 @@ main.tweet .tweet-wrapper {
 
 main.tweet h1 { line-height: normal;}
 
-main.tweet div.flex-container {
+div.flex-container {
   display: flex;
   flex-wrap: nowrap;
 }
 
-main.tweet div.flex-container.hidden {display:none}
+div.flex-container.hidden {display:none}
 
-main.tweet div.flex-container > div.grow {
+div.flex-container > div.grow {
   flex-grow: 2;
 }
 
