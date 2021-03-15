@@ -19,13 +19,14 @@ const auth = (method, url, options, body) => {
   } else if (options.bearer) {
     options.headers.authorization = `Bearer ${options.bearer}`;
   }
-
   return options;
 }
 
 const get = ({url, ...options}) => {
   method = 'GET';
   options.options = auth(method, url, options.options);
+  console.log(options)
+
   return needle(method, url, null, options.options);
 }
 

@@ -35,10 +35,10 @@ class TweetLink extends Emitter {
 
     const [, , tweetId] = this.getTweetUrlRegex(this.field.value);
     const tweet = await Emitter.dispatch(fetch(`/tweet/${tweetId}`));
-
-    if (tweet.ok) {
-      await Emitter.dispatch(fetch(`/conversation/${tweetId}`));
-    }
+    console.log(tweet);
+    // if (tweet.ok) {
+    //   await Emitter.dispatch(fetch(`/conversation/${tweetId}`));
+    // }
   }
 
   render() {
