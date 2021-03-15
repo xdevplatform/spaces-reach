@@ -25,7 +25,6 @@ const auth = (method, url, options, body) => {
 const get = ({url, ...options}) => {
   method = 'GET';
   options.options = auth(method, url, options.options);
-  console.log(options)
 
   return needle(method, url, null, options.options);
 }

@@ -76,14 +76,7 @@ app.get('/', (request, response) => {
 
 // app.get('/test', (req, res) => res.json({success: true, message: 'test'}));
 
-app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
-  const token = request.cookies['access_token'] || null;
-
-  if (!token) {
-    response.status(400).json({success: false, error: 'other-error'});
-    return;
-  }
-
+app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {  
   let res;
   try {
     const url = new URL(`https://api.twitter.com/2/tweets/${request.params.id}`);
@@ -98,19 +91,13 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
         }
       }
     });
-    console.log(res);
   } catch (e) {
-    console.error(e)
     response.status(400).json({success: false, error: 'other-error'});
     return;
   }
 
   if (res.statusCode !== 200) {
     return response.status(400).json({success: false, error: 'api-error'});
-  }
-
-  if (res.body.data && res.body.data.author_id !== token.oauth_token.split('-')[0]) {
-    return response.status(400).json({success: false, error: 'not-authorized-for-resource'});
   }
 
   if (res.body.errors) {
@@ -125,17 +112,6 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
         return response.status(400).json({success: false, error: 'other-error'});
     }
   }
-
-//   if (res.body.data.public_metrics.reply_count === 0) {
-//     return response.status(400).json({success: false, error: 'no-replies'});
-//   }
-
-//   const sevenDaysAgo = new Date().setDate(new Date().getDate() - 7);
-//   const tweetDate = new Date(res.body.created_at);
-  
-//   if (Math.round((tweetDate - sevenDaysAgo) / 1000 / 60 / 60 / 24) >= 7) {
-//     return response.status(400).json({success: false, error: 'tweet-too-old'});
-//   }
 
   return response.status(200).json(res.body);
 });
