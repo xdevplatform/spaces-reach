@@ -58,7 +58,7 @@ class Emitter {
 
   static async dispatch(dispatchFn) {
     const data = dispatchFn instanceof Promise ? await dispatchFn : dispatchFn;
-    document.querySelectorAll('[e\\:class]').forEach(el => Emitter.registry.get(el).didReceiveData(data));
+    document.querySelectorAll('[e\\:class]').forEach(el => Emitter.registry.get(el)?.didReceiveData(data));
     return data;
   }
 

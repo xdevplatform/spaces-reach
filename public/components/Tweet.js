@@ -57,24 +57,22 @@ class Tweet extends Emitter {
     this.props.tweet.timestamp = tweet.data.created_at;
     this.props.tweet.countsQuery =
       [].concat(tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => {
-        const obj = {};
-        obj[`context:${ctx.domain.id}.${ctx.entity.id}`] = ctx.entity.name;
-        return obj;
+        return { query: `context:${ctx.domain.id}.${ctx.entity.id}`], name: ctx.entity.name }
       }) : [])
       .concat(tweet.data.entities && tweet.data.entities.hashtags ? tweet.data.entities.hashtags.map(hashtag => {
-        const obj = {};
-        obj[`#${hashtag.tag}`] = `#${hashtag.tag}`;
-        return obj;
+        return { query: `#${hashtag.tag}`, name:  `#${hashtag.tag}` }
       }) : [])
       .concat(tweet.data.entities && tweet.data.entities.mentions ? tweet.data.entities.mentions.map(mention => {
-        const obj = {};
-        obj[`@${mention.username}`] = `@${mention.username}`;
-        return obj;
+        return {query: `@${mention.username}`, name: `@${mention.username}` };
       }) : [])
 
     this.setState({
       show: true,
       tweetId: tweet.data.id,
+    });
+    
+    this.props.tweet.countsQuery.map(query => {
+      const
     });
   }
   
