@@ -54,7 +54,9 @@ class Tweet extends Emitter {
     this.props.tweet.repliesCount = tweet.data.public_metrics.reply_count;
     this.props.tweet.timestamp = tweet.data.created_at;
     this.props.tweet.annotations = tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => {
-      return {context: `${ctx.domain.id}.${ctx.entity.id}`, name: ctx.entity.name}
+      const annotationId = `${ctx.domain.id}.${ctx.entity.id}`;
+      Emitter.emit(fetch('/'))
+      return {context: annotationId, name: ctx.entity.name}
     }) : [];
 
     this.setState({
