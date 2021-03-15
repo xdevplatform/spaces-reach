@@ -57,13 +57,13 @@ class Tweet extends Emitter {
     this.props.tweet.timestamp = tweet.data.created_at;
     this.props.tweet.countsQuery =
       [].concat(tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => {
-        return { query: `context:${ctx.domain.id}.${ctx.entity.id}`], name: ctx.entity.name }
+        return { query: `context:${ctx.domain.id}.${ctx.entity.id}`, name: ctx.entity.name }
       }) : [])
       .concat(tweet.data.entities && tweet.data.entities.hashtags ? tweet.data.entities.hashtags.map(hashtag => {
         return { query: `#${hashtag.tag}`, name:  `#${hashtag.tag}` }
       }) : [])
       .concat(tweet.data.entities && tweet.data.entities.mentions ? tweet.data.entities.mentions.map(mention => {
-        return {query: `@${mention.username}`, name: `@${mention.username}` };
+        return { query: `@${mention.username}`, name: `@${mention.username}` };
       }) : [])
 
     this.setState({
@@ -71,9 +71,7 @@ class Tweet extends Emitter {
       tweetId: tweet.data.id,
     });
     
-    this.props.tweet.countsQuery.map(query => {
-      const
-    });
+    this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.query}`)));
   }
   
   render() {

@@ -76,6 +76,10 @@ app.get('/:id([0-9]{1,19})', (request, response) => {
 
 // app.get('/test', (req, res) => res.json({success: true, message: 'test'}));
 
+app.get('/counts', async (request, response) => {
+  return response.json({"results":[{"timePeriod":"202102130000","count":424594},{"timePeriod":"202102140000","count":439903},{"timePeriod":"202102150000","count":490756},{"timePeriod":"202102160000","count":513076},{"timePeriod":"202102170000","count":500841},{"timePeriod":"202102180000","count":507220},{"timePeriod":"202102190000","count":460923},{"timePeriod":"202102200000","count":597278},{"timePeriod":"202102210000","count":569671},{"timePeriod":"202102220000","count":467396},{"timePeriod":"202102230000","count":480023},{"timePeriod":"202102240000","count":427938},{"timePeriod":"202102250000","count":515445},{"timePeriod":"202102260000","count":464564},{"timePeriod":"202102270000","count":458256},{"timePeriod":"202102280000","count":455672},{"timePeriod":"202103010000","count":386009},{"timePeriod":"202103020000","count":431053},{"timePeriod":"202103030000","count":427710},{"timePeriod":"202103040000","count":433137},{"timePeriod":"202103050000","count":403013},{"timePeriod":"202103060000","count":400818},{"timePeriod":"202103070000","count":439445},{"timePeriod":"202103080000","count":317944},{"timePeriod":"202103090000","count":436296},{"timePeriod":"202103100000","count":422811},{"timePeriod":"202103110000","count":375261},{"timePeriod":"202103120000","count":390623},{"timePeriod":"202103130000","count":400381},{"timePeriod":"202103140000","count":398169},{"timePeriod":"202103150000","count":354545}],"totalCount":13790771,"requestParameters":{"bucket":"day","fromDate":"202102130000","toDate":"202103152330"}});
+})
+
 app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {  
   let res;
   try {

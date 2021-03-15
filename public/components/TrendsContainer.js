@@ -15,7 +15,13 @@ class TrendsContainer extends Emitter {
   }
   
   didReceiveData(response) {
-    console.log(response)
+    if (!response.url.match(/\/counts/)) {
+      return;
+    }
+    
+    const url = new URL(response.url);
+    const query = url.searchParams.get('q');
+    const stats
   }
   
   render() {}
