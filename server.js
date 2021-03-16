@@ -41,7 +41,7 @@ app.get('/counts', async (request, response) => {
     
     if (res.statusCode !== 200) {
       console.error('HTTP error', res.statusCode, res);
-      res.status(400).json({success: false, error: 'api-error'});
+      response.status(400).json({success: false, error: 'api-error'});
     }
     response.json(res.body);
   }, 1000);
