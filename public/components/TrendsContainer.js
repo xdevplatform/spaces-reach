@@ -2,12 +2,11 @@ class TrendsContainer extends Emitter {
   constructor(element) {
     super(element);
     this.props = {};
-    // this.props.queries = Emitter.registry.get(document.querySelector('main.tweet')).props.tweet.countsQuery;
-    // this.props.queries.map(query => Emitter.dispatch(fetch(`/counts/${Object.entries(query[0][0])}`)));
+    this.stats = [];
   }
   
   getInitialState() {
-    return {done: {}}
+    return {done: []}
   }
   
   async didReceiveData(response) {
@@ -33,26 +32,20 @@ class TrendsContainer extends Emitter {
     }
 
     const json = await response.json();
-    const done = Object.create(this.state.done);
-    done[query] = {query: query, name: name, stats: json};
-    console.log(done);
-    this.setState({done: this.state.done});
+    this.setState({query: query, name: name, stats: json});
   }
   
   render() {
-    console.log(this.state)
-    this.state.done.forEach(stat => {
-      console.log(stat, stat.query);
+    if (document.querySelector(`[data-query="${this.state.query}"]`)) {
+      return;
+    }
+    const bigNumber = document.querySelector('[e\\:class="BigNumber"]').cloneNode(true);
+    bigNumber.dataset.results = this.state.stats.results;
+    bigNumber.dataset.volume = this.state.stats.totalCount;
+    bigNumber.dataset.name = this.state.name;
+    bigNumber.dataset.query = this.state.query;
+    this.stats.push(this.state);
+    this.component.appendChild(bigNumber);
 
-      if (document.querySelector(`[data-query="${stat.query}"]`)) {
-        return;
-      }
-      const bigNumber = document.querySelector('[e\\:class="BigNumber"]').cloneNode(true);
-      bigNumber.dataset.results = stat.stats.results;
-      bigNumber.dataset.volume = stat.stats.totalCount;
-      bigNumber.dataset.name = stat.name;
-      bigNumber.dataset.query = stat.query;
-      this.component.appendChild(bigNumber);
-    })    
   }
 }

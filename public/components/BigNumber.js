@@ -1,3 +1,5 @@
 class BigNumber extends Emitter {
-  render() {}
+  render() {
+    
+  }
 }
