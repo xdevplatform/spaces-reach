@@ -3,7 +3,6 @@ class TweetLink extends Emitter {
     super(component);
     
     [this.tweetId] = location.pathname.match(/\d{1,19}/);
-    console.log(this.tweetId)
     
     if (this.tweetId) {
       Emitter.dispatch(fetch(`/tweet/${this.tweetId}`));
@@ -44,7 +43,6 @@ class TweetLink extends Emitter {
 
     const [, , tweetId] = this.getTweetUrlRegex(this.field.value);
     const tweet = await Emitter.dispatch(fetch(`/tweet/${tweetId}`));
-    console.log(tweet);
   }
 
   render() {

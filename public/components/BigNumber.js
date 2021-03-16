@@ -4,7 +4,8 @@ class BigNumber extends Emitter {
     this.title = element.querySelector('h2');
     this.number = element.querySelector('h1');
     this.trend = element.querySelector('h4');
-    this.chart = this.childNodes()[0].instance;
+    this.chart = this.childNodes()[0];
+    this.render()
   }
   
   update() {
@@ -12,9 +13,11 @@ class BigNumber extends Emitter {
   }
   
   render() {
-    console.log(this.component.dataset)
     this.title.innerText = this.component.dataset.name;
     this.number.innerText = new Intl.NumberFormat().format(this.component.dataset.volume);
-    this.chart.update(JSON.parse(this.component.dataset.results));
+    this.chart.dataset.data = this.component.dataset.results;
+    delete this.component.dataset.results;
+    console.log(this.chart.instance.update)
+    
   }
 }
