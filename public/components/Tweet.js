@@ -23,10 +23,6 @@ class Tweet extends Emitter {
       this.setState({show: true});
     }
 
-    this.props.acceptsDataFromApi = false;
-    if (typeof this.component.dataset.acceptsDataFromApi !== 'undefined' && this.component.dataset.acceptsDataFromApi !== 'false') {
-      this.props.acceptsDataFromApi = true;
-    }
   }
 
   showAnnotationsControls(value) {
@@ -34,10 +30,6 @@ class Tweet extends Emitter {
   }
 
   async didReceiveData(response) {
-    if (!this.props.acceptsDataFromApi) {
-      return;
-    }
-
     if (!response.url.match(/\/tweet\/\d{1,19}/)) {
       return;
     }
@@ -76,7 +68,7 @@ class Tweet extends Emitter {
         return { query: `#${hashtag.tag}`, name:  `#${hashtag.tag}`, search: encodeURIComponent(`#${hashtag.tag}`) }
       }) : [])
       .concat(tweet.data.entities && tweet.data.entities.mentions ? tweet.data.entities.mentions.map(mention => {
-        return { query: `@${mention.username}`, name: `@${mention.username}` };
+        return { query: `@${mention.username}`, name: `@${mention.username}`, search: `@${mention.username}` };
       }) : []);
     
     this.props.tweet.entities = tweet.data.entities;
@@ -86,7 +78,7 @@ class Tweet extends Emitter {
       tweetId: tweet.data.id,
     });
     
-    this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.query}`)));
+    this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.search}`)));
   }
   
   render() {
