@@ -13,10 +13,6 @@ class Emitter {
     }
   }
   
-  template() {
-    return window[this.component.getAttribute('e:class') + 'Template'].content.firstElementChild.cloneNode(true);
-  }
-
   didReceiveData(data) {}
 
   childNodes(className = null) {
@@ -57,8 +53,6 @@ class Emitter {
       });
     });
   }
-
-  //static registry = new WeakMap();
 
   static async dispatch(dispatchFn) {
     const data = dispatchFn instanceof Promise ? await dispatchFn : dispatchFn;
@@ -118,3 +112,5 @@ class Emitter {
   }
 }
 Emitter.registry = new WeakMap();
+
+HTMLTemplateElement.clone = () => this.content.firstElementChild.cloneNode(true);

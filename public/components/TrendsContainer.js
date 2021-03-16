@@ -38,7 +38,7 @@ class TrendsContainer extends Emitter {
       return;
     }
     
-    const bigNumber = BigNumber.template();
+    const bigNumber = BigNumberTemplate.clone();
     bigNumber.dataset.results = JSON.stringify(this.state.stats.results);
     bigNumber.dataset.volume = this.state.stats.totalCount;
     bigNumber.dataset.name = this.state.name;
