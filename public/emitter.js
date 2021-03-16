@@ -65,7 +65,7 @@ class Emitter {
   static init(path = '') {
     const elements = document.querySelectorAll('[e\\:class]');
     const initFn = (elements) =>
-      elements.forEach(element => {        
+      elements.forEach(element => {
         if (element.childElementCount) {
           initFn(element.childNodes);
         }
@@ -95,14 +95,21 @@ class Emitter {
           };
           document.head.appendChild(script);
         }
-        
       });
 
       const observer = new MutationObserver((mutations) => {
-        const addedNodeLists = mutations.map(mutation => mutation.addedNodes);
-        addedNodeLists.forEach(nodeList => initFn(nodeList));
+        mutations.forEach(mutation => {
+          console.log(mutation)
+          if (mutation.type === 'attributes') {
+            // if (element.hadAttribute('e:class')) {
+            //   element.instance.render();
+            // }
+          } else {
+            mutation.addedNodes.forEach(nodeList => initFn(nodeList || []));
+          }
+        });
       });
-      observer.observe(document.body, {subtree: true, childList: true});
+      observer.observe(document.body, {attributes: true, subtree: true, childList: true});
       initFn(elements);
   }
 }
