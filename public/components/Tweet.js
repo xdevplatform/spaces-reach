@@ -64,7 +64,9 @@ class Tweet extends Emitter {
       }) : [])
       .concat(tweet.data.entities && tweet.data.entities.mentions ? tweet.data.entities.mentions.map(mention => {
         return { query: `@${mention.username}`, name: `@${mention.username}` };
-      }) : [])
+      }) : []);
+    
+    this.props.tweet.entities = tweet.data.entities;
 
     this.setState({
       show: true,
@@ -72,6 +74,13 @@ class Tweet extends Emitter {
     });
     
     this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.query}`)));
+  }
+  
+  hyperlinkEntities() {
+    this.props.tweet.entities.mentions.map(mention => {
+      const link = `<a target="_blank" href="https://twitter.com/${mention.username}">@${username}</a>`;
+      this.text.innerHTML
+    });
   }
   
   render() {
@@ -99,6 +108,8 @@ class Tweet extends Emitter {
           this[key].innerText = this.props.tweet[key];
       }
     });
+    
+    this.hyperlinkEntities();
 
     if (twemoji) {
       twemoji.parse(this.component, {
