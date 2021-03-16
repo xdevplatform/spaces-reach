@@ -51,7 +51,14 @@ app.get('/embed/:id([0-9]{1,19})', async (request, response) => {
   try {
     const url = new URL('https://publish.twitter.com/oembed');
     url.searchParams.append('url', `https://twitter.com/i/status/request.params.id`);
-    url.searchParams.append('dnt', '1')
+    url.searchParams.append('dnt', 'true');
+    url.searchParams.append('hide_media', 'true');
+    url.searchParams.append('hide_thread', 'true');
+    const res = await get({
+      url: url.href
+    });
+    response.json(res);
+    
   }
   catch (e) {
     console.error(e);
