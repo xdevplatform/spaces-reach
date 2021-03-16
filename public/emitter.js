@@ -79,6 +79,7 @@ class Emitter {
         }
         
         const className = element.getAttribute('e:class');
+        console.log(className);
         const fn = new Function('element', `return new ${className}(element)`);
         if (new Function(`return typeof ${className} !== 'undefined'`)()) {
           Emitter.registry.set(element, fn(element));
@@ -106,3 +107,5 @@ class Emitter {
   }
 }
 Emitter.registry = new WeakMap();
+
+// document.createRange().createContextualFragment
