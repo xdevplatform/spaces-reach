@@ -1,8 +1,14 @@
 class Chart extends Emitter {
   constructor(element) {
     super(element);
-    console.log(this.props);
-    this.render();
   }
-  render() {console.log('render', this.props)}
+  
+  render() {
+    try {
+      const data = JSON.parse(this.component.dataset.data);
+      console.log(data);
+    } catch(e) {
+      return;
+    }
+  }
 }

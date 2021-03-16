@@ -1,12 +1,6 @@
 class TrendsContainer extends Emitter {
   constructor(element) {
     super(element);
-    this.props = {};
-    this.stats = [];
-  }
-  
-  getInitialState() {
-    return {done: []}
   }
   
   async didReceiveData(response) {
@@ -39,8 +33,13 @@ class TrendsContainer extends Emitter {
     if (document.querySelector(`[data-query="${this.state.query}"]`)) {
       return;
     }
+    
+    if (!this.state.stats) {
+      return;
+    }
+    
     const bigNumber = document.querySelector('[e\\:class="BigNumber"]').cloneNode(true);
-    this.stats.push(this.state);
+    // this.stats.push(this.state);
     bigNumber.dataset.results = JSON.stringify(this.state.stats.results);
     bigNumber.dataset.volume = this.state.stats.totalCount;
     bigNumber.dataset.name = this.state.name;
