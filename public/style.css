@@ -189,3 +189,11 @@ div.chart-container > div {
   font-size: 30px;
 }
 
+div.chart-container.down > div {
+  background-color: #F94144;
+}
+
+div.chart-container.up > div {
+  background-color: #43AA8B;
+}
+
