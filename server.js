@@ -24,60 +24,7 @@ app.get('/:id([0-9]{1,19})', (request, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
-// app.delete('/hide/:id', async (request, response) => {
-//   return response.json({success: true});
-//   const token = request.cookies['access_token'] || null;
-
-//   if (!token) {
-//     response.status(400).json({success: false, error: 'other-error'});
-//     return;
-//   }
-
-//   try {
-//     await unmoderate({id: request.params.id}, {
-//       consumer_key: process.env.TWITTER_CONSUMER_KEY,
-//       consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-//       token: token.oauth_token,
-//       token_secret: token.oauth_token_secret,
-//     });
-//   } catch (e) {
-//     console.error('Moderation error:', e);
-//     response.status(400).json({success: false, error: 'other-error'});
-//   }
-
-//   response.status(200);
-// });
-
-// app.post('/hide/:id', async (request, response) => {
-//   return response.json({success: true});
-//   const token = request.cookies['access_token'] || null;
-
-//   if (!token) {
-//     response.status(400).json({success: false, error: 'other-error'});
-//     return;
-//   }
-
-//   try {
-//     console.log('request');
-//     const res = await moderate({id: request.params.id}, {
-//       consumer_key: process.env.TWITTER_CONSUMER_KEY,
-//       consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-//       token: token.oauth_token,
-//       token_secret: token.oauth_token_secret,
-//     });
-//     console.log(res);
-//   } catch (e) {
-//     console.error('Moderation error:', e);
-//     response.status(400).json({success: false, error: 'cannot-hide-reply'})
-//   }
-
-//   response.status(200);
-// });
-
-// app.get('/test', (req, res) => res.json({success: true, message: 'test'}));
-
 app.get('/counts', async (request, response) => {
-
   const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
   url.searchParams.append('bucket', 'day');
   url.searchParams.append('query', request.query.q);
@@ -98,6 +45,19 @@ app.get('/counts', async (request, response) => {
     }
     response.json(res.body);
   }, 1000);
+});
+
+app.get('/embed/:id([0-9]{1,19})', async (request, response) => {  
+  try {
+    const url = new URL('https://publish.twitter.com/oembed');
+    url.searchParams.append('url', `https://twitter.com/i/status/request.params.id`);
+    url.searchParams.append('dnt', '1')
+  }
+  catch (e) {
+    console.error(e);
+    response.status(400).json({success: false, error: 'api-error'});
+  }
+
 });
 
 app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {  
