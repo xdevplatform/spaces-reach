@@ -107,5 +107,3 @@ class Emitter {
   }
 }
 Emitter.registry = new WeakMap();
-
-// document.createRange().createContextualFragment
