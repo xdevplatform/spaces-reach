@@ -12,6 +12,10 @@ class Emitter {
       typeof this.render === 'function' ? this.render() : null;
     }
   }
+  
+  template() {
+    return window[this.component.getAttribute('e:class') + 'Template'].content.firstElementChild.cloneNode(true);
+  }
 
   didReceiveData(data) {}
 
