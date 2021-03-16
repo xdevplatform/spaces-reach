@@ -2,8 +2,7 @@ class TrendsContainer extends Emitter {
   constructor(element) {
     super(element);
     this.props = {};
-    this.props.queries = Emitter.registry.get(document.querySelector('main.tweet')).props.tweet.countsQuery;
-    console.log(this.props.queries);
+    // this.props.queries = Emitter.registry.get(document.querySelector('main.tweet')).props.tweet.countsQuery;
     this.props.queries.map(query => Emitter.dispatch(fetch(`/counts/${Object.entries(query[0][0])}`)));
   }
   
@@ -17,7 +16,7 @@ class TrendsContainer extends Emitter {
     if (!response.url.match(/\/counts/)) {
       return;
     }
-    
+
     if (!response.ok) {
       return;
     }
@@ -33,9 +32,11 @@ class TrendsContainer extends Emitter {
       return;
     }
 
-    const done = this.state.done;
-    done.push({query: query, name: name, stats: await response.clone().json()});
-    this.setState({done: done});
+    const done = {};
+    const json = await response.json();
+    console.log(json)
+    done[query] = {query: query, name: name, stats: json};
+    this.setState(done);
   }
   
   render() {
@@ -43,11 +44,12 @@ class TrendsContainer extends Emitter {
       if (document.querySelector(`[data-query="${stat.query}"]`)) {
         return;
       }
-      
+      console.log(stat);
       const bigNumber = document.querySelector('[e\\:class="BigNumber"]').cloneNode(true);
-      big
-      bigNumber.props.stats = stat.stats
-      
+      bigNumber.dataset.results = stat.stats.results;
+      bigNumber.dataset.volume = stat.stats.totalCount;
+      bigNumber.dataset.name = stat.name;
+      this.component.appendChild(bigNumber);
     })    
   }
 }
