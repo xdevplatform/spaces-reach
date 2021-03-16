@@ -4,7 +4,6 @@ const server = require('http').Server(app);
 const cookieParser = require('cookie-parser');
 
 const { defaults, get } = require('./client');
-const { moderate, unmoderate } = require('./moderate');
 const oauth = require('./oauth/index.js');
 
 require('dotenv').config();
@@ -55,6 +54,7 @@ app.get('/embed/:id([0-9]{1,19})', async (request, response) => {
     url.searchParams.append('dnt', 'true');
     url.searchParams.append('hide_media', 'true');
     url.searchParams.append('hide_thread', 'true');
+    url.searchParams.append('omit_script', 'true');
     const res = await get({
       url: url.href
     });

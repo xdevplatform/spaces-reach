@@ -37,12 +37,11 @@ class Tweet extends Emitter {
     
     if (response.url.match(/\embed\/\d{1,19}/)) {
       const embed = await response.clone().json();
-      this.embed = embed;
+      this.setState({embed: embed});
     }
   }
   
   dispatchTrends(tweet) {
-    console.log(tweet);
     const entities = [];
     
     if (!tweet.data.context_annotations) {
@@ -79,7 +78,13 @@ class Tweet extends Emitter {
   }
   
   render() {
-    this.wrapper.innerHTML = this.embed.html;
+    if (this.state.embed) {
+      this.wrapper.innerHTML = this.state.embed.html;  
+      twttr.widgets.load(this.wrapper);
+    }
+    
+    
+    
 //     this.component.classList.remove('hidden');
 //     Object.keys(this.props.tweet).forEach(key => {
 //       if (!this[key]) {
