@@ -48,13 +48,26 @@ class Tweet extends Emitter {
     // }
 
     const tweet = await response.clone().json();
-
+    const entities = [];
     this.props.tweet.profilePic = tweet.includes.users[0].profile_image_url;
     this.props.tweet.name = tweet.includes.users[0].name;
     this.props.tweet.username = tweet.includes.users[0].username;
     this.props.tweet.text = tweet.data.text;
     this.props.tweet.repliesCount = tweet.data.public_metrics.reply_count;
     this.props.tweet.timestamp = tweet.data.created_at;
+    
+    if (!tweet.data.context_annotations) {
+      tweet.data.context_annotations = [];
+    }
+    
+    tweet.data.context_annotations = tweet.data.context_annotations.filter(ctx => {
+      if (entities.includes(ctx.entity.id)) {
+        return false;
+      }
+      entities.push(ctx.entity.id);
+      return true;
+    });
+
     this.props.tweet.countsQuery =
       [].concat(tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => {
         return { query: `context:${ctx.domain.id}.${ctx.entity.id}`, name: ctx.entity.name }
@@ -98,7 +111,7 @@ class Tweet extends Emitter {
           this[key].innerText = Intl.DateTimeFormat(navigator.language, {dateStyle: 'long'}).format(new Date(this.props.tweet.timestamp));
           break;
         default:
-          this[key].innerText = this.props.tweet[key];
+          this[key].innerHTML = this.props.tweet[key];
       }
     });
     
