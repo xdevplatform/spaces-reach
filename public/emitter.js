@@ -54,7 +54,7 @@ class Emitter {
     });
   }
 
-  static registry = new WeakMap();
+  //static registry = new WeakMap();
 
   static async dispatch(dispatchFn) {
     const data = dispatchFn instanceof Promise ? await dispatchFn : dispatchFn;
@@ -105,3 +105,4 @@ class Emitter {
       initFn(elements);
   }
 }
+Emitter.registry = new WeakMap();
