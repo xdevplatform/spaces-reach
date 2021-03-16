@@ -76,13 +76,6 @@ class Tweet extends Emitter {
     this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.query}`)));
   }
   
-  hyperlinkEntities() {
-    this.props.tweet.entities.mentions.map(mention => {
-      const link = `<a target="_blank" href="https://twitter.com/${mention.username}">@${username}</a>`;
-      this.text.innerHTML
-    });
-  }
-  
   render() {
     this.component.classList.remove('hidden');
     Object.keys(this.props.tweet).forEach(key => {
@@ -109,8 +102,6 @@ class Tweet extends Emitter {
       }
     });
     
-    this.hyperlinkEntities();
-
     if (twemoji) {
       twemoji.parse(this.component, {
         folder: 'svg',
