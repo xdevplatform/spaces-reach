@@ -21,10 +21,7 @@ class Chart extends Emitter {
   
   determineTrend() {   
     const length = this.dataCounts.length;
-    let sumOfLength = this.dataCounts.reduce((ac, el, i) => {
-      console.log(ac, el, i);
-      return ac + i;
-    }, 0);
+    let sumOfLength = this.dataCounts.reduce(ac => ac + 1, 0);
     let sumOfMultipliedValues = this.dataCounts.reduce((ac, el, i) => ac + el * i);
     let sumOfValues = this.volume;
     let sumOfSquares = this.dataCounts.reduce((ac, el, i) => ac + el ** 2);
