@@ -40,7 +40,7 @@ class TrendsContainer extends Emitter {
       return;
     }
     const bigNumber = document.querySelector('[e\\:class="BigNumber"]').cloneNode(true);
-    bigNumber.dataset.results = this.state.stats.results;
+    bigNumber.dataset.results = JSON.stringify(this.state.stats.results);
     bigNumber.dataset.volume = this.state.stats.totalCount;
     bigNumber.dataset.name = this.state.name;
     bigNumber.dataset.query = this.state.query;
