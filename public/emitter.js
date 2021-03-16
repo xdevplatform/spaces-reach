@@ -9,11 +9,13 @@ class Emitter {
     if (oldstate !== newstate) {
       this.state = Object.assign(this.state, JSON.parse(newstate));
       typeof this.stateDidChange === 'function' ? this.stateDidChange() : null;
-      typeof this.render === 'function' ? this.render() : null;
+      this.willRender() && this.render();
     }
   }
   
   didReceiveData(data) {}
+  render() {}
+  willRender() {return true}
 
   childNodes(className = null) {
     let selector = '';
@@ -80,7 +82,7 @@ class Emitter {
         const fn = new Function('element', `return new ${className}(element)`);
         if (new Function(`return typeof ${className} !== 'undefined'`)()) {
           Emitter.registry.set(element, fn(element));
-          element.instance.render();
+          element.instance.willRender() && element.instance.render();
         }
 
         if (!document.querySelector(`script[for='${className}']`)) {
@@ -91,7 +93,7 @@ class Emitter {
           script.onload = () => {
             document.querySelectorAll(`[e\\:class=${className}]`).forEach(element => {
               Emitter.registry.set(element, fn(element));
-              element.instance.render();
+              element.instance.willRender() && element.instance.render();
             });
           };
           document.head.appendChild(script);
@@ -101,7 +103,7 @@ class Emitter {
       const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
           if (mutation.type === 'attributes' && mutation.attributeName.match(/data-/) && mutation.target.hasAttribute('e:class') && mutation.target.instance) {
-            mutation.target.instance.render();
+            element.instance.willRender() && mutation.target.instance.render();
           } else {
             initFn(mutation.addedNodes);
           }
