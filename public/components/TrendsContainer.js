@@ -3,13 +3,11 @@ class TrendsContainer extends Emitter {
     super(element);
     this.props = {};
     // this.props.queries = Emitter.registry.get(document.querySelector('main.tweet')).props.tweet.countsQuery;
-    this.props.queries.map(query => Emitter.dispatch(fetch(`/counts/${Object.entries(query[0][0])}`)));
+    // this.props.queries.map(query => Emitter.dispatch(fetch(`/counts/${Object.entries(query[0][0])}`)));
   }
   
   getInitialState() {
-    return {
-      done: []
-    };
+    return {done: {}}
   }
   
   async didReceiveData(response) {
@@ -27,28 +25,33 @@ class TrendsContainer extends Emitter {
       return;
     }
 
-    const { name } = this.props.queries.find(q => q.query === query );
+    const countsQuery = Emitter.registry.get(document.querySelector('main.tweet')).props.tweet.countsQuery;
+    const { name } = countsQuery.find(q => q.query === query);
+    
     if (!name) {
       return;
     }
 
-    const done = {};
     const json = await response.json();
-    console.log(json)
+    const done = Object.create(this.state.done);
     done[query] = {query: query, name: name, stats: json};
-    this.setState(done);
+    console.log(done);
+    this.setState({done: this.state.done});
   }
   
   render() {
+    console.log(this.state)
     this.state.done.forEach(stat => {
+      console.log(stat, stat.query);
+
       if (document.querySelector(`[data-query="${stat.query}"]`)) {
         return;
       }
-      console.log(stat);
       const bigNumber = document.querySelector('[e\\:class="BigNumber"]').cloneNode(true);
       bigNumber.dataset.results = stat.stats.results;
       bigNumber.dataset.volume = stat.stats.totalCount;
       bigNumber.dataset.name = stat.name;
+      bigNumber.dataset.query = stat.query;
       this.component.appendChild(bigNumber);
     })    
   }
