@@ -6,7 +6,8 @@ class Chart extends Emitter {
   render() {
     try {
       const data = JSON.parse(this.component.dataset.data);
-      console.log(data);
+      const max = Math.max(...data.map(data => data.count));
+      data.map
     } catch(e) {
       return;
     }

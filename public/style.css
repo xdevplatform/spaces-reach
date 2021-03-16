@@ -169,3 +169,22 @@ div.pagination.flex-container > div.grow {
 div.pagination h4 {
   line-height: 0rem;
 }
+
+
+div.chart-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  height: 200px;
+  padding: 5px;
+}
+
+div.chart-container > div {
+  background-color: DodgerBlue;
+  width: 100px;
+  margin: 1px;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 30px;
+}
+
