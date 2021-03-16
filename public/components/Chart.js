@@ -12,7 +12,14 @@ class Chart extends Emitter {
   }
   
   determineTrend() {
-    // datacounts.length * sum 
+    // datacounts.length * sumOfMultipliedValues - sumOfLength * sumOfValues / doatacounts.length * sumOfSquares - sqrt(sumOfLength)
+    
+    const length = this.dataCounts.length;
+    let sumOfMultipliedValues = this.dataCounts.reduce((ac, el, i) => ac + el * i);
+    let sumOfLength = 0;
+    let sumOfValues = this.dataCounts.reduce((ac, el) => ac + el);
+    let sumOfSquares = this.dataCounts.reduce((ac, el, i) => ac + el * i);
+    
   }
   
   render() {
