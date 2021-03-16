@@ -64,8 +64,13 @@ class Emitter {
 
   static init(path = '') {
     const elements = document.querySelectorAll('[e\\:class]');
-    const initFn = (elements) => 
+    const initFn = (elements) => {
       elements.forEach(element => {
+        if (element.childElementCount) {
+          initFn(element.childNodes);
+          return;
+        }
+        
         if (typeof element.hasAttribute === 'undefined' || Emitter.registry.has(element)) {
           return;
         }
@@ -90,9 +95,7 @@ class Emitter {
           };
           document.head.appendChild(script);
         }
-        
-        if (element.childNodes)
-      });   
+      });   }
 
       const observer = new MutationObserver((mutations) => {
         const addedNodeLists = mutations.map(mutation => mutation.addedNodes);
