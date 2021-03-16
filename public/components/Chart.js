@@ -25,17 +25,22 @@ class Chart extends Emitter {
     let sumOfValues = this.dataCounts.reduce((ac, el) => ac + el);
     let sumOfSquares = this.dataCounts.reduce((ac, el, i) => ac + el ** i);
     
-    return length * sumOfMultipliedValues - sumOfLength * sumOfValues / length * sumOfSquares - Math.sqrt(sumOfLength);
+    return (length * sumOfMultipliedValues - sumOfLength * sumOfValues) / (length * sumOfSquares - Math.sqrt(sumOfLength));
   }
   
   render() {
-    const formatter = new Intl.DateTimeFormat();
+    const dateFormatter = new Intl.DateTimeFormat();
+    const numberFormatter = new Intl.NumberFormat();
     this.component.innerHTML = '';
     const max = Math.max(...this.dataCounts);
-    this.dataCounts.map(count => {
+    this.dataCounts.map((count, i) => {
       const histogram = document.createElement('div');
       const height = (count / max) * 100;
       histogram.style.height = height === 0 ? '1px' : height.toFixed(2) + '%';
+      let dateParts = this.data[i].timePeriod.match(/(\d{4})(\d{2})(\d{2})/).splice(1,3);
+      dateParts = dateParts.concat([0, 0, 0, 0]);
+      const date = new Date(Date.UTC(...dateParts));
+      histogram.title = `${dateFormatter.format(date)}: ${numberFormatter.format(count)}`;
       this.component.appendChild(histogram);
     });
     
