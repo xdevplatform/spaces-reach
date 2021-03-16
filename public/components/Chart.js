@@ -46,7 +46,6 @@ class Chart extends Emitter {
     });
     
     const trend = this.determineTrend();
-    console.log(trend);
     if (trend < 0) {
       this.component.classList.add('down');
     } else if (trend > 0) {
