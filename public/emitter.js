@@ -73,7 +73,7 @@ class Emitter {
         if (!element.hasAttribute('e:class')) {
           return;
         }
-
+        
         const className = element.getAttribute('e:class');
         const fn = new Function('element', `return new ${className}(element)`);
         if (new Function(`return typeof ${className} !== 'undefined'`)()) {
@@ -90,6 +90,8 @@ class Emitter {
           };
           document.head.appendChild(script);
         }
+        
+        if (element.childNodes)
       });   
 
       const observer = new MutationObserver((mutations) => {
