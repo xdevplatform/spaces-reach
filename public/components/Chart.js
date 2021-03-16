@@ -25,9 +25,7 @@ class Chart extends Emitter {
     let sumOfMultipliedValues = this.dataCounts.reduce((ac, el, i) => ac + el * i);
     let sumOfValues = this.volume;
     let sumOfSquares = this.dataCounts.reduce((ac, el, i) => ac + el ** 2);
-    
-    console.log('length:', length, 'x:', sumOfLength, 'y:', sumOfValues, 'x*y:', sumOfMultipliedValues, 'x^2:', sumOfSquares);
-    
+        
     return (length * sumOfMultipliedValues - sumOfLength * sumOfValues) / (length * sumOfSquares - Math.sqrt(sumOfLength));
   }
   
