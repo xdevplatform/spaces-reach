@@ -103,9 +103,6 @@ class Emitter {
             mutation.target.instance.render();
           } else {
             initFn(mutation.addedNodes);
-            // const addedNodeLists = mutations.map(mutation => mutation.addedNodes);
-            // console.log(addedNodeLists)
-            // addedNodeLists.forEach(nodeList => initFn(nodeList));
           }
         });
       });

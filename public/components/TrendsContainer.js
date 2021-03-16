@@ -40,10 +40,10 @@ class TrendsContainer extends Emitter {
       return;
     }
     const bigNumber = document.querySelector('[e\\:class="BigNumber"]').cloneNode(true);
-    bigNumber.dataset.results = JSON.stringify(this.state.stats.results);
-    bigNumber.dataset.volume = this.state.stats.totalCount;
-    bigNumber.dataset.name = this.state.name;
-    bigNumber.dataset.query = this.state.query;
+    bigNumber.props.results = JSON.stringify(this.state.stats.results);
+    bigNumber.props.volume = this.state.stats.totalCount;
+    bigNumber.props.name = this.state.name;
+    bigNumber.props.query = this.state.query;
     this.stats.push(this.state);
     this.component.appendChild(bigNumber);
   }
