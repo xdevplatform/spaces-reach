@@ -35,14 +35,9 @@
           <div class="timestamp">March 7, 2020</div>
         </div>
       </div>
-      <div class="flex-container annotations-controls">
-        <div class="related-label">Probably not sports related</div>
-        <div class="grow"></div>
-        <div><button e:click="hideReply">Hide</button></div>
-      </div>
     </main>
     <section e:class="TrendsContainer">
-      <div e:class="BigNumber">
+      <template e:class="BigNumber">
         <h2 class="entity">
           #btc
         </h2>
@@ -59,7 +54,7 @@
           <div class="chart"><div class="chart-container" e:class="Chart"></div></div>
         </div>
 
-      </div>      
+      </template>      
     </section>
     <div e:class="ConversationContainer" class="hidden convo-container">
       <div class="conversation"></div>
@@ -70,7 +65,7 @@
       </div>
     </div>
     <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="resource-not-found">
-      <p>🏏</p>
+      <p>🦗</p>
       <h1>Crickets</h1>
       <h4>We couldn't find this Tweet. Please try a different one.</h4>
       <button class="try-again">Try another Tweet</button>
@@ -94,7 +89,7 @@
       <button class="try-again">Try another Tweet</button>
     </main>
     <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="api-error">
-      <p>🤕</p>
+      <p>🐳</p>
       <h1>Oops</h1>
       <h4>Something’s not right with the Twitter API. You can check the <a target="_blank" href="https://api.twitterstat.us">platform status</a> or try again later.</h4>
       <button class="try-again">Try again</button>

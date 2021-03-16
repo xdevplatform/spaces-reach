@@ -175,7 +175,8 @@ div.chart-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: flex-end;
-  height: 200px;
+  height: 72px;
+  width: 580px;
   padding: 5px;
 }
 
