@@ -100,7 +100,7 @@ class Emitter {
 
       const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
-          if (mutation.type === 'attributes' && mutation.attributeName.match(/data-/) && mutation.target.hasAttribute('e:class')) {
+          if (mutation.type === 'attributes' && mutation.attributeName.match(/data-/) && mutation.target.hasAttribute('e:class') && mutation.target.instance) {
             mutation.target.instance.render();
           } else {
             initFn(mutation.addedNodes);
