@@ -99,13 +99,13 @@ class Emitter {
 
       const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
-          console.log(mutation)
-          if (mutation.type === 'attributes') {
-            // if (element.hadAttribute('e:class')) {
-            //   element.instance.render();
-            // }
+          if (mutation.type === 'attributes' && mutation.attributeName.match(/data-/) && mutation.target.hasAttribute('e:class')) {
+            mutation.target.instance.render();
           } else {
-            mutation.addedNodes.forEach(nodeList => initFn(nodeList || []));
+            initFn(mutation.addedNodes);
+            // const addedNodeLists = mutations.map(mutation => mutation.addedNodes);
+            // console.log(addedNodeLists)
+            // addedNodeLists.forEach(nodeList => initFn(nodeList));
           }
         });
       });
