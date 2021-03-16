@@ -7,10 +7,6 @@ class BigNumber extends Emitter {
     this.chart = this.childNodes()[0];
   }
     
-  update() {
-    this.setState({refresh: new Date().getTime()});
-  }
-  
   render() {
     this.title.innerText = this.component.dataset.name;
     this.chart.dataset.data = this.component.dataset.results;

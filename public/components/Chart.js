@@ -1,12 +1,18 @@
 class Chart extends Emitter {
   constructor(element) {
     super(element);
-    try {
-      const data = JSON.parse(this.component.dataset.data);
-      this.dataCounts = data.map(data => data.count);      
-    } catch (e) {
-      console.error(e);
-    }
+    this.dataCounts = false;
+    // try {
+    //   const data = JSON.parse(this.component.dataset.data);
+    //   this.dataCounts = data.map(data => data.count);      
+    // } catch (e) {
+    //   console.error(e);
+    // }
+  }
+  
+  didReceiveData(data) {
+    console.log('received');
+    this.dataCounts = data.map(data => data.count);
   }
   
   willRender() {

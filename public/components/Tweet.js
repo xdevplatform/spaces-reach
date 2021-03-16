@@ -84,6 +84,7 @@ class Tweet extends Emitter {
       switch (key) {
         case 'profilePic':
           this[key].src = this.props.tweet.profilePic;
+          this[key].addEventListener('click', () => window.open(`https://twitter.com/${this.props.tweet.username}`));
           break;
         case 'repliesCount':
           this[key].innerText = `${this.props.tweet.repliesCount} ${this.props.tweet.repliesCount === 1 ? 'reply' : 'replies'}`;
