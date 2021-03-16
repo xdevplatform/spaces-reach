@@ -6,6 +6,7 @@ class TweetLink extends Emitter {
     
     if (this.tweetId) {
       Emitter.dispatch(fetch(`/tweet/${this.tweetId}`));
+      Emitter.dispatch(fetch(`/embed/${this.tweetId}`));
     }
     
     this.field = document.getElementById('tweet-url');
@@ -43,6 +44,7 @@ class TweetLink extends Emitter {
 
     const [, , tweetId] = this.getTweetUrlRegex(this.field.value);
     const tweet = await Emitter.dispatch(fetch(`/tweet/${tweetId}`));
+    await Emitter.dispatch(fetch(`/embed/${tweetId}`));
   }
 
   render() {

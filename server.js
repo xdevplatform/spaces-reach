@@ -51,14 +51,14 @@ app.get('/counts', async (request, response) => {
 app.get('/embed/:id([0-9]{1,19})', async (request, response) => {  
   try {
     const url = new URL('https://publish.twitter.com/oembed');
-    url.searchParams.append('url', `https://twitter.com/i/status/request.params.id`);
+    url.searchParams.append('url', `https://twitter.com/i/status/${request.params.id}`);
     url.searchParams.append('dnt', 'true');
     url.searchParams.append('hide_media', 'true');
     url.searchParams.append('hide_thread', 'true');
     const res = await get({
       url: url.href
     });
-    response.json(res);
+    response.json(res.body);
     
   }
   catch (e) {
@@ -72,9 +72,7 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
   let res;
   try {
     const url = new URL(`https://api.twitter.com/2/tweets/${request.params.id}`);
-    url.searchParams.append('tweet.fields', 'author_id,created_at,public_metrics,context_annotations,entities')
-    url.searchParams.append('user.fields', 'profile_image_url');
-    url.searchParams.append('expansions', 'author_id');
+    url.searchParams.append('tweet.fields', 'context_annotations,entities')
     res = await get({
       url: url.href, 
       options: {

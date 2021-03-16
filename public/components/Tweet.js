@@ -30,23 +30,20 @@ class Tweet extends Emitter {
   }
 
   async didReceiveData(response) {
-    if (!response.url.match(/\/tweet\/\d{1,19}/)) {
-      return;
+    if (response.url.match(/\/tweet\/\d{1,19}/)) {
+      const tweet = await response.clone().json();
+      return this.dispatchTrends(tweet);
     }
-
-    // if (!response.ok) {
-    //   this.setState({show: false});
-    //   return;
-    // }
-
-    const tweet = await response.clone().json();
+    
+    if (response.url.match(/\embed\/\d{1,19}/)) {
+      const embed = await response.clone().json();
+      this.embed = embed;
+    }
+  }
+  
+  dispatchTrends(tweet) {
+    console.log(tweet);
     const entities = [];
-    this.props.tweet.profilePic = tweet.includes.users[0].profile_image_url;
-    this.props.tweet.name = tweet.includes.users[0].name;
-    this.props.tweet.username = tweet.includes.users[0].username;
-    this.props.tweet.text = tweet.data.text;
-    this.props.tweet.repliesCount = tweet.data.public_metrics.reply_count;
-    this.props.tweet.timestamp = tweet.data.created_at;
     
     if (!tweet.data.context_annotations) {
       tweet.data.context_annotations = [];
@@ -82,37 +79,38 @@ class Tweet extends Emitter {
   }
   
   render() {
-    this.component.classList.remove('hidden');
-    Object.keys(this.props.tweet).forEach(key => {
-      if (!this[key]) {
-        return;
-      }
+    this.wrapper.innerHTML = this.embed.html;
+//     this.component.classList.remove('hidden');
+//     Object.keys(this.props.tweet).forEach(key => {
+//       if (!this[key]) {
+//         return;
+//       }
 
-      switch (key) {
-        case 'profilePic':
-          this[key].src = this.props.tweet.profilePic;
-          this[key].addEventListener('click', () => window.open(`https://twitter.com/${this.props.tweet.username}`));
-          break;
-        case 'repliesCount':
-          this[key].innerText = `${this.props.tweet.repliesCount} ${this.props.tweet.repliesCount === 1 ? 'reply' : 'replies'}`;
-          break;
-        case 'username':
-          this[key].innerText = '@' + this.props.tweet.username;
-          break;
-        case 'timestamp':
-          this[key].innerText = Intl.DateTimeFormat(navigator.language, {dateStyle: 'long'}).format(new Date(this.props.tweet.timestamp));
-          break;
-        default:
-          this[key].innerHTML = this.props.tweet[key];
-      }
-    });
+//       switch (key) {
+//         case 'profilePic':
+//           this[key].src = this.props.tweet.profilePic;
+//           this[key].addEventListener('click', () => window.open(`https://twitter.com/${this.props.tweet.username}`));
+//           break;
+//         case 'repliesCount':
+//           this[key].innerText = `${this.props.tweet.repliesCount} ${this.props.tweet.repliesCount === 1 ? 'reply' : 'replies'}`;
+//           break;
+//         case 'username':
+//           this[key].innerText = '@' + this.props.tweet.username;
+//           break;
+//         case 'timestamp':
+//           this[key].innerText = Intl.DateTimeFormat(navigator.language, {dateStyle: 'long'}).format(new Date(this.props.tweet.timestamp));
+//           break;
+//         default:
+//           this[key].innerHTML = this.props.tweet[key];
+//       }
+//     });
     
-    if (twemoji) {
-      twemoji.parse(this.component, {
-        folder: 'svg',
-        ext: '.svg'
-      });
-    }
+//     if (twemoji) {
+//       twemoji.parse(this.component, {
+//         folder: 'svg',
+//         ext: '.svg'
+//       });
+//     }
   
   }
 }
