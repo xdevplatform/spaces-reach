@@ -86,7 +86,13 @@ class Tweet extends Emitter {
       tweetId: tweet.data.id,
     });
     
-    this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.query}`)));
+    this.props.tweet.countsQuery.map(query => {
+      console.log(query);
+      if (query.query) {
+        const url = `/counts?q=${encodeURIComponent(query.query)}`;
+        Emitter.dispatch(fetch(url));  
+      }
+    });
   }
   
   render() {
