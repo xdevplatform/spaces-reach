@@ -16,10 +16,12 @@ class Chart extends Emitter {
     
     const length = this.dataCounts.length;
     let sumOfMultipliedValues = this.dataCounts.reduce((ac, el, i) => ac + el * i);
-    let sumOfLength = 0;
+    let sumOfLength = this.dataCounts.reduce((ac, el, i) => ac + i);
     let sumOfValues = this.dataCounts.reduce((ac, el) => ac + el);
-    let sumOfSquares = this.dataCounts.reduce((ac, el, i) => ac + el * i);
+    let sumOfSquares = this.dataCounts.reduce((ac, el, i) => ac + el ** i);
     
+
+    return length * sumOfMultipliedValues - sumOfLength * sumOfValues / length * sumOfSquares - Math.sqrf(sumOfLength);
   }
   
   render() {
