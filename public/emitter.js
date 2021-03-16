@@ -79,10 +79,10 @@ class Emitter {
         }
         
         const className = element.getAttribute('e:class');
-        console.log(className);
         const fn = new Function('element', `return new ${className}(element)`);
         if (new Function(`return typeof ${className} !== 'undefined'`)()) {
           Emitter.registry.set(element, fn(element));
+          element.instance.render();
         }
 
         if (!document.querySelector(`script[for='${className}']`)) {
@@ -91,7 +91,10 @@ class Emitter {
           script.setAttribute('async', '');
           script.setAttribute('for', className);
           script.onload = () => {
-            document.querySelectorAll(`[e\\:class=${className}]`).forEach(element => Emitter.registry.set(element, fn(element)));
+            document.querySelectorAll(`[e\\:class=${className}]`).forEach(element => {
+              Emitter.registry.set(element, fn(element));
+              element.instance.render();
+            });
           };
           document.head.appendChild(script);
         }

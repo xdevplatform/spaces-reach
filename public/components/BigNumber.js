@@ -15,6 +15,7 @@ class BigNumber extends Emitter {
   render() {
     this.title.innerText = this.component.dataset.name;
     this.chart.setAttribute('e:data', this.component.dataset.results);
+    console.log(this.chart.instance)
     this.number.innerText = new Intl.NumberFormat().format(this.component.dataset.volume);
   }
 }
