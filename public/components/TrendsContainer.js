@@ -46,8 +46,5 @@ class TrendsContainer extends Emitter {
     bigNumber.dataset.query = this.state.query;
     this.stats.push(this.state);
     this.component.appendChild(bigNumber);
-    const instance = new BigNumber(bigNumber);
-    instance.update();
-
   }
 }

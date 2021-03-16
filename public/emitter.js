@@ -65,12 +65,11 @@ class Emitter {
   static init(path = '') {
     const elements = document.querySelectorAll('[e\\:class]');
     const initFn = (elements) => {
-      elements.forEach(element => {
+      elements.forEach(element => {        
         if (element.childElementCount) {
           initFn(element.childNodes);
-          return;
         }
-        
+
         if (typeof element.hasAttribute === 'undefined' || Emitter.registry.has(element)) {
           return;
         }
