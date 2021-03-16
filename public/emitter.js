@@ -112,5 +112,12 @@ class Emitter {
   }
 }
 Emitter.registry = new WeakMap();
-
-HTMLTemplateElement.clone = () => this.content.firstElementChild.cloneNode(true);
+Emitter.template = new Proxy({}, {
+  get(target, prop, receiver) {
+    const template = document.querySelector(`template[for="${prop}"]`);
+    if (!template) {
+      throw new Error(`Cannot find ${prop} template`);
+    }
+    return document.querySelector(`template[for="${prop}"]`).content.firstElementChild.cloneNode(true);
+  }
+});
