@@ -10,6 +10,7 @@ class Chart extends Emitter {
     
     try {
       this.data = JSON.parse(this.component.dataset.data);
+      this.volume = +this.component.dataset.volume;
       this.dataCounts = this.data.map(data => data.count);
       return true;  
     } catch (e) {
@@ -20,9 +21,12 @@ class Chart extends Emitter {
   
   determineTrend() {   
     const length = this.dataCounts.length;
-    let sumOfLength = this.dataCounts.reduce((ac, el, i) => ac + i);
+    let sumOfLength = this.dataCounts.reduce((ac, el, i) => {
+      console.log(ac, el, i);
+      return ac + i;
+    });
     let sumOfMultipliedValues = this.dataCounts.reduce((ac, el, i) => ac + el * i);
-    let sumOfValues = this.dataCounts.reduce((ac, el) => ac + el);
+    let sumOfValues = this.volume;
     let sumOfSquares = this.dataCounts.reduce((ac, el, i) => ac + el ** 2);
     
     console.log('length:', length, 'x:', sumOfLength, 'y:', sumOfValues, 'x*y:', sumOfMultipliedValues, 'x^2:', sumOfSquares);
