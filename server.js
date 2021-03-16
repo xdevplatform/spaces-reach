@@ -88,6 +88,7 @@ app.get('/counts', async (request, response) => {
       options: {
         headers: {
           authorization: `Basic ${authHash}`
+        }
       }
     });
     

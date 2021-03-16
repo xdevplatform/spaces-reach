@@ -9,8 +9,8 @@ class Chart extends Emitter {
     }
     
     try {
-      const data = JSON.parse(this.component.dataset.data);
-      this.dataCounts = data.map(data => data.count);
+      this.data = JSON.parse(this.component.dataset.data);
+      this.dataCounts = this.data.map(data => data.count);
       return true;  
     } catch (e) {
       return false;
@@ -29,16 +29,18 @@ class Chart extends Emitter {
   }
   
   render() {
+    const formatter = new Intl.DateTimeFormat();
     this.component.innerHTML = '';
     const max = Math.max(...this.dataCounts);
     this.dataCounts.map(count => {
       const histogram = document.createElement('div');
       const height = (count / max) * 100;
-      histogram.style.height = height.toFixed(2) + '%';
+      histogram.style.height = height === 0 ? '1px' : height.toFixed(2) + '%';
       this.component.appendChild(histogram);
     });
     
     const trend = this.determineTrend();
+    console.log(trend);
     if (trend < 0) {
       this.component.classList.add('down');
     } else if (trend > 0) {
