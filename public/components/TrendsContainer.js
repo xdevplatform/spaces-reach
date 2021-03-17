@@ -1,9 +1,19 @@
 class TrendsContainer extends Emitter {
   constructor(element) {
     super(element);
+    this.error = this.component.querySelector('.error');
   }
   
   async didReceiveData(response) {
+    if (response.url.match(/\/tweet\/\d{1,19}/)) {
+      const tweet = await response.clone().json();
+      this.setState({
+        tweetId: tweet.data.id,
+      });
+
+      return this.dispatchTrends(tweet);
+    }    
+
     if (!response.url.match(/\/counts/)) {
       return;
     }
@@ -57,17 +67,28 @@ class TrendsContainer extends Emitter {
     
     this.props.tweet.entities = tweet.data.entities;
     
-    this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.search}`)));
+    // this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.search}`)));
+    
+    if (this.props.tweets.countQuery.length) {
+      this.setState({hasQueries: true});
+    }    
   }
   
   render() {
-    if (document.querySelector(`[data-query="${this.state.query}"]`)) {
+    if (!this.state.hasQueries) {
+      this.error.hidden = false;
       return;
     }
     
-    if (!this.state.stats) {
-      return;
-    }
+    this.error.hidden = false;
+    return;
+//     if (document.querySelector(`[data-query="${this.state.query}"]`)) {
+//       return;
+//     }
+    
+//     if (!this.state.stats) {
+//       return;
+//     }
     
     const bigNumber = Emitter.template.BigNumber;
     bigNumber.dataset.results = JSON.stringify(this.state.stats.results);
