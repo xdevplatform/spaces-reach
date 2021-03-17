@@ -3,7 +3,6 @@ const app = express();
 const server = require('http').Server(app);
 
 const { get } = require('./client');
-const oauth = require('./oauth/index.js');
 require('dotenv').config();
 
 app.use(express.static('public'));
