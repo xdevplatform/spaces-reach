@@ -167,6 +167,9 @@ div.bignumber h4 {
 
 iframe {border-radius: 16px}
 
+section[e\:class="TrendsContainer"] div.error {
+  text-align: center;
+}
 
 @media (prefers-color-scheme: dark) {
   h1, h2, h3, h4, p {
