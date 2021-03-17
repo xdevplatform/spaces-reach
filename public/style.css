@@ -2,8 +2,6 @@
   color-scheme: light dark;
 }
 
-html { max-width: 80%; margin: 0 auto }
-
 .hidden {display:none}
 
 body, input {
@@ -130,7 +128,7 @@ main.error p {
 }
 
 main.tweet {
-  width: 50%;
+  width: fit-content;
   margin: 0 auto 3rem;
 }
 
@@ -196,4 +194,11 @@ div.chart-container.up > div {
   h1, h2, h3, h4, p {
     color: #aaa;
   }  
+}
+
+@media (min-width:320px) {
+  html { max-width: 100% }
+  main.tweet { width: 80%; margin: 0 auto }
+  div.flex-container { display: block }
+  div.chart-container { width: auto }
 }
