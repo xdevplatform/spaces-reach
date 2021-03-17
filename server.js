@@ -21,9 +21,10 @@ app.get('/:id([0-9]{1,19})?', (request, response) => {
 
 app.get('/counts', async (request, response) => {
   
-  
   const count = async (next = null) => {
     const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
+    const authHash = Buffer.from(`${process.env.GNIP_USER}:${process.env.GNIP_PASS}`).toString('base64');
+    
     const res = await get({
       url: url.href,
       options: {
@@ -37,19 +38,24 @@ app.get('/counts', async (request, response) => {
       return {statusCode: res.statusCode, body: null, next: null};
     }
     
-    return {statusCode: res.statusCode, body: res.body, next: res.body.next || null}
+    return {statusCode: res.statusCode, body: res.body, next: res.body.next || null};
   }
   
   let next = null;
   let body = [];
-  
+  let totalCount = 0;
+  let statusCode = 200;
   do {
    setTimeout(async() => {
      const currentBody = await count(next);
-     body.concat(currentBody.body.results);
+     statusCode = currentBody.statusCode;
+     body = [].concat(currentBody.body.results, body);
+     totalCount += currentBody.body.totalCount || 0;
      next = currentBody.next;
-   });
+   }, 1000);
   } while (next);
+  
+  
   
   const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
   url.searchParams.append('bucket', 'day');
