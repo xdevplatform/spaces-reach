@@ -11,43 +11,13 @@
      + 'Be safe out there,\n— Your friends at Twitter', fontStyle + small);
   }
   
-  const setToken = () => {
-    const url = new URL(location.href);
-    for (const [key, value] of url.searchParams.entries()) {
-      localStorage.setItem(key, value);
-    }
-  };
-
-  const prepareOAuthHandler = () => {
-    try {
-      const isNativeWindow = window.top.location.href === location.href;
-    } catch (e) {
-      const button = document.querySelector('form>button');
-      const windowSize = 500;
-      const top = (window.screen.height - windowSize) / 2;
-      const left = (window.screen.width - windowSize) / 2;
-      if (button) {
-        button.addEventListener('click', (e) => {
-          e.preventDefault();
-          const url = document.querySelector('form[action]').getAttribute('action');
-          const oAuthWindow = window.open(
-            url,
-            '',
-            `width=${windowSize},height=${windowSize},top=${top},left=${left},resizable=0`);
-          window.addEventListener('message', (e) => {
-            setToken();
-            e.source.close();
-            window.location.href = '/moderate';
-          }, false);
-        });
-      }      
-    }
-  };
   
   const onColorSchemeChange = (query) => {
-    <meta
-  name="twitter:widgets:theme"
-  content="dark">
+    if (query.matches) {
+      document.head.innerHTML += '<meta name="twitter:widgets:theme" content="dark">'  
+    } else {
+      document.querySelector('meta[content="dark"]')?.remove();
+    }
   }
   
   const setupDarkTheme = () => {
@@ -57,8 +27,6 @@
   }
   
   printConsoleMessage();
-  setToken();
-  prepareOAuthHandler();
   setupDarkTheme();
 
   if (twemoji) {

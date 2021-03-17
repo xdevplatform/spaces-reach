@@ -1,3 +1,7 @@
+:root {
+  color-scheme: light dark;
+}
+
 html { max-width: 80%; margin: 0 auto }
 
 .hidden {display:none}
@@ -188,3 +192,8 @@ div.chart-container.up > div {
   background-color: #43AA8B;
 }
 
+@media (prefers-color-scheme: dark) {
+  h1, h2, h3, h4, p {
+    color: #aaa;
+  }  
+}

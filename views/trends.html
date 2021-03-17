@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/style.css">
     <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-    <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script src="/emitter.js"></script>
     <script src="/client.js" defer></script>
   </head>
@@ -75,7 +74,7 @@
         <button>Restart</button>
       </form>
     </main>
-
+    <script
     <footer>
       <h4>
         What are you going to build next?
@@ -87,5 +86,21 @@
     <script>
       Emitter.init('/components/');
     </script>
+    <script>window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+
+      return t;
+    }(document, "script", "twitter-wjs"));</script>
   </body>
 </html>
