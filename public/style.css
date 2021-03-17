@@ -161,6 +161,11 @@ div.bignumber {
   background: #000;
 }
 
+div.bignumber h2,
+div.bignumber h4 {
+  margin: 10px 5px;
+}
+
 iframe {border-radius: 16px}
 
 
