@@ -33,19 +33,23 @@ app.get('/counts', async (request, response) => {
       }
     });
     
-    // if first request
-      // if error
-        // fail
-      // if success
-        // store payload
-        // if has next token
-          // call function with next token
-    // if next request
-      // if error
-        // fail
-      // if success
-        // add payload 
+    if (res.statusCode !== 200) {
+      return {statusCode: res.statusCode, body: null, next: null};
+    }
+    
+    return {statusCode: res.statusCode, body: res.body, next: res.body.next || null}
   }
+  
+  let next = null;
+  let body = [];
+  
+  do {
+   setTimeout(async() => {
+     const currentBody = await count(next);
+     body.concat(currentBody.body.results);
+     next = currentBody.next;
+   });
+  } while (next);
   
   const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
   url.searchParams.append('bucket', 'day');
