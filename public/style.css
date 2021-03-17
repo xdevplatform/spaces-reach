@@ -107,7 +107,7 @@ main.error p {
   font-size: 10em;
 }
 
-div.flex-container {
+/* div.flex-container {
   display: flex;
   flex-wrap: nowrap;
 }
@@ -117,7 +117,7 @@ div.flex-container.hidden {display:none}
 div.flex-container > div.grow {
   flex-grow: 2;
 }
-
+ */
 main.tweet img.profile-pic { width: 48px;height: 48px; margin-right: 0.5rem;border-radius: 32px;}
 main.tweet .name { font-weight: bold;}
 main.tweet .annotations-controls {margin: 0.5rem}
@@ -129,8 +129,8 @@ div.chart-container {
   flex-wrap: nowrap;
   align-items: flex-end;
   height: 72px;
-  width: 300px;
-  max-width: 580px;
+/*   width: 300px;
+  max-width: 580px; */
   padding: 5px;
 }
 
@@ -152,11 +152,17 @@ div.chart-container.up > div {
 }
 
 div.bignumber {
+  width: 520px;
   max-width: 1024px;
-  margin: 0 auto;
+  margin: 20px auto;
+  border-radius: 16px;
+  border: 1px solid;
+  padding: 10px;
+  background: #000;
 }
 
 iframe {border-radius: 16px}
+
 
 @media (prefers-color-scheme: dark) {
   h1, h2, h3, h4, p {
