@@ -20,6 +20,14 @@ app.get('/:id([0-9]{1,19})?', (request, response) => {
 });
 
 app.get('/counts', async (request, response) => {
+  
+  const count = async (next = null) => {
+    const res = await get({
+      
+    });
+  }
+  
+  
   const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
   url.searchParams.append('bucket', 'day');
   url.searchParams.append('query', request.query.q);
