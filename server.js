@@ -21,8 +21,10 @@ app.get('/:id([0-9]{1,19})?', (request, response) => {
 
 app.get('/counts', async (request, response) => {
   
-  const count = async (next = null) => {
+  const count = async (q, next = null) => {
     const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
+    url.searchParams.append('bucket', 'day');
+    
     const authHash = Buffer.from(`${process.env.GNIP_USER}:${process.env.GNIP_PASS}`).toString('base64');
     
     const res = await get({
@@ -45,6 +47,7 @@ app.get('/counts', async (request, response) => {
   let body = [];
   let totalCount = 0;
   let statusCode = 200;
+  let i = 1;
   do {
    setTimeout(async() => {
      const currentBody = await count(next);
@@ -52,32 +55,14 @@ app.get('/counts', async (request, response) => {
      body = [].concat(currentBody.body.results, body);
      totalCount += currentBody.body.totalCount || 0;
      next = currentBody.next;
-   }, 1000);
+   }, 1000 * i++);
   } while (next);
   
-  
-  
-  const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
-  url.searchParams.append('bucket', 'day');
-  url.searchParams.append('query', request.query.q);
-  const authHash = Buffer.from(`${process.env.GNIP_USER}:${process.env.GNIP_PASS}`).toString('base64');
-  setTimeout(async () => {
-    const res = await get({
-      url: url.href,
-      options: {
-        headers: {
-          authorization: `Basic ${authHash}`
-        }
-      }
-    });
-    
-    if (res.statusCode !== 200) {
-      console.error('HTTP error', res.statusCode, res);
-      response.status(400).json({success: false, error: 'api-error'});
-    } else {
-      response.json(res.body);  
-    }
-  }, 1000);
+  if (body.length > 0) {
+    response.json({results: body, totalCount});
+  } else {
+    response.status(statusCode).body({results: body, totalCount});
+  }  
 });
 
 app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {  
