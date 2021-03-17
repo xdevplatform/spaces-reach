@@ -44,9 +44,8 @@ class TweetLink extends Emitter {
     const [, , tweetId] = this.getTweetUrlRegex(this.field.value);
     
     if (!this.tweetId) {
-      
+      window.history.pushState({}, '', `/${tweetId}`);  
     }
-    window.history.pushState({}, '', `/${tweetId}`);
 
     const tweet = await Emitter.dispatch(fetch(`/tweet/${tweetId}`));
   }
