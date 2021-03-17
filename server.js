@@ -8,22 +8,25 @@ require('dotenv').config();
 app.use(express.static('public'));
 app.use(express.json());
 
-const baseURL = process.env.PROJECT_DOMAIN ?
-  `https://${process.env.PROJECT_DOMAIN}.glitch.me` :
-  'http://localhost';
-
-
-const callbackURL = new URL(`${baseURL}/oauth-callback`);
-
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 app.get('/:id([0-9]{1,19})?', (request, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
 app.get('/counts', async (request, response) => {
   
+  if (!request.query.q) {
+    response.status(422).json({});
+  }
+  
   const count = async (q, next = null) => {
     const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
     url.searchParams.append('bucket', 'day');
+    url.searchParams.append('query', q);
+    
+    if (next) {
+      url.searchParams.append('next', next);
+    }
     
     const authHash = Buffer.from(`${process.env.GNIP_USER}:${process.env.GNIP_PASS}`).toString('base64');
     
@@ -47,21 +50,20 @@ app.get('/counts', async (request, response) => {
   let body = [];
   let totalCount = 0;
   let statusCode = 200;
-  let i = 1;
   do {
-   setTimeout(async() => {
-     const currentBody = await count(next);
-     statusCode = currentBody.statusCode;
-     body = [].concat(currentBody.body.results, body);
-     totalCount += currentBody.body.totalCount || 0;
-     next = currentBody.next;
-   }, 1000 * i++);
+   const currentBody = await count(request.query.q, next);
+   statusCode = currentBody.statusCode;
+   body = [].concat(currentBody.body.results, body);
+   totalCount += currentBody.body.totalCount || 0;
+   console.log('current:', next, 'next:', currentBody.next)
+   next = currentBody.next;
+    sleep(1000);
   } while (next);
   
   if (body.length > 0) {
     response.json({results: body, totalCount});
   } else {
-    response.status(statusCode).body({results: body, totalCount});
+    response.status(statusCode).json({results: body, totalCount});
   }  
 });
 
