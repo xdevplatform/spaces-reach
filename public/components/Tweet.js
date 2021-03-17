@@ -74,40 +74,5 @@ class Tweet extends Emitter {
           conversation: 'none'
         });
     }
-    
-    
-    
-//     this.component.classList.remove('hidden');
-//     Object.keys(this.props.tweet).forEach(key => {
-//       if (!this[key]) {
-//         return;
-//       }
-
-//       switch (key) {
-//         case 'profilePic':
-//           this[key].src = this.props.tweet.profilePic;
-//           this[key].addEventListener('click', () => window.open(`https://twitter.com/${this.props.tweet.username}`));
-//           break;
-//         case 'repliesCount':
-//           this[key].innerText = `${this.props.tweet.repliesCount} ${this.props.tweet.repliesCount === 1 ? 'reply' : 'replies'}`;
-//           break;
-//         case 'username':
-//           this[key].innerText = '@' + this.props.tweet.username;
-//           break;
-//         case 'timestamp':
-//           this[key].innerText = Intl.DateTimeFormat(navigator.language, {dateStyle: 'long'}).format(new Date(this.props.tweet.timestamp));
-//           break;
-//         default:
-//           this[key].innerHTML = this.props.tweet[key];
-//       }
-//     });
-    
-//     if (twemoji) {
-//       twemoji.parse(this.component, {
-//         folder: 'svg',
-//         ext: '.svg'
-//       });
-//     }
-  
   }
 }
