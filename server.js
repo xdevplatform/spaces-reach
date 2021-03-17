@@ -21,12 +21,31 @@ app.get('/:id([0-9]{1,19})?', (request, response) => {
 
 app.get('/counts', async (request, response) => {
   
-  const count = async (next = null) => {
-    const res = await get({
-      
-    });
-  }
   
+  const count = async (next = null) => {
+    const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
+    const res = await get({
+      url: url.href,
+      options: {
+        headers: {
+          authorization: `Basic ${authHash}`
+        }
+      }
+    });
+    
+    // if first request
+      // if error
+        // fail
+      // if success
+        // store payload
+        // if has next token
+          // call function with next token
+    // if next request
+      // if error
+        // fail
+      // if success
+        // add payload 
+  }
   
   const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
   url.searchParams.append('bucket', 'day');
