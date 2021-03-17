@@ -43,29 +43,6 @@ app.get('/counts', async (request, response) => {
   }, 1000);
 });
 
-app.get('/embed/:id([0-9]{1,19})', async (request, response) => {  
-  try {
-    const url = new URL('https://publish.twitter.com/oembed');
-    url.searchParams.append('url', `https://twitter.com/i/status/${request.params.id}`);
-    url.searchParams.append('dnt', 'true');
-    url.searchParams.append('hide_media', 'true');
-    url.searchParams.append('hide_thread', 'true');
-    url.searchParams.append('omit_script', 'true');
-    url.searchParams.append('align', 'center');
-    
-    const res = await get({
-      url: url.href
-    });
-    response.json(res.body);
-    
-  }
-  catch (e) {
-    console.error(e);
-    response.status(400).json({success: false, error: 'api-error'});
-  }
-
-});
-
 app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {  
   let res;
   try {
