@@ -51,6 +51,8 @@ app.get('/embed/:id([0-9]{1,19})', async (request, response) => {
     url.searchParams.append('hide_media', 'true');
     url.searchParams.append('hide_thread', 'true');
     url.searchParams.append('omit_script', 'true');
+    url.searchParams.append('align', 'center');
+    
     const res = await get({
       url: url.href
     });

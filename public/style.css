@@ -127,11 +127,6 @@ main.error p {
   font-size: 10em;
 }
 
-main.tweet {
-  width: fit-content;
-  margin: 0 auto 3rem;
-}
-
 div.flex-container {
   display: flex;
   flex-wrap: nowrap;
@@ -169,7 +164,8 @@ div.chart-container {
   flex-wrap: nowrap;
   align-items: flex-end;
   height: 72px;
-  width: 580px;
+  width: 300px;
+  max-width: 580px;
   padding: 5px;
 }
 
@@ -194,11 +190,4 @@ div.chart-container.up > div {
   h1, h2, h3, h4, p {
     color: #aaa;
   }  
-}
-
-@media (min-width:320px) {
-  html { max-width: 100% }
-  main.tweet { width: 80%; margin: 0 auto }
-  div.flex-container { display: block }
-  div.chart-container { width: auto }
 }
