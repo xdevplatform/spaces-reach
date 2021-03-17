@@ -69,7 +69,9 @@ class Tweet extends Emitter {
         this.wrapper,
         { 
           theme: document.querySelector('meta[name="twitter:widgets:theme"]')?.content || 'light',
-          align: 'center'
+          align: 'center',
+          dnt: true,
+          conversation: 'none'
         });
     }
     

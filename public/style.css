@@ -65,26 +65,6 @@ footer {
   border-top: 1px solid lightgrey;
 }
 
-.replies {
-  display: flex;
-}
-
-.replies > p:nth-child(2) {
-  flex-grow: 2;
-}
-
-.replies small,
-.end-hide small {
-  min-width: 4.5rem;
-  display: inline-block;
-  color: grey;
-}
-
-.replies p a.tweet-link {
-  display: block;
-  font-size: 0.8rem;
-}
-
 input[type=url], input[type=url]:focus {
   border-radius: 0.2rem;
   padding: 0.5rem;
@@ -143,21 +123,6 @@ main.tweet .name { font-weight: bold;}
 main.tweet .annotations-controls {margin: 0.5rem}
 main.tweet .related-label {line-height:2.2rem}
 
-.convo-container .pagination {width: 50%; margin: 0 auto}
-
-div.pagination.flex-container {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-div.pagination.flex-container > div.grow {
-  flex-grow: 2;
-}
-
-div.pagination h4 {
-  line-height: 0rem;
-}
-
 
 div.chart-container {
   display: flex;
@@ -190,6 +155,8 @@ div.bignumber {
   max-width: 1024px;
   margin: 0 auto;
 }
+
+iframe {border-radius: 16px}
 
 @media (prefers-color-scheme: dark) {
   h1, h2, h3, h4, p {
