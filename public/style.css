@@ -152,8 +152,7 @@ div.chart-container.up > div {
 }
 
 div.bignumber {
-  width: 520px;
-  max-width: 1024px;
+  max-width: 520px;
   margin: 20px auto;
   border-radius: 16px;
   border: 1px solid;
