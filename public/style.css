@@ -186,6 +186,11 @@ div.chart-container.up > div {
   background-color: #43AA8B;
 }
 
+div.bignumber {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
 @media (prefers-color-scheme: dark) {
   h1, h2, h3, h4, p {
     color: #aaa;
