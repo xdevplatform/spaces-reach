@@ -20,7 +20,7 @@ app.get('/counts', async (request, response) => {
   }
   
   const count = async (q, next = null) => {
-    const url = new URL('https://gnip-api.twitter.com/search/fullarchive/accounts/daniele-bernardi/prod/counts.json');
+    const url = new URL('https://gnip-api.twitter.com/search/30day/accounts/daniele-bernardi/prod/counts.json');
     url.searchParams.append('bucket', 'day');
     url.searchParams.append('query', q);
     
@@ -51,13 +51,12 @@ app.get('/counts', async (request, response) => {
   let totalCount = 0;
   let statusCode = 200;
   do {
-   const currentBody = await count(request.query.q, next);
-   statusCode = currentBody.statusCode;
-   body = [].concat(currentBody.body.results, body);
-   totalCount += currentBody.body.totalCount || 0;
-   console.log('current:', next, 'next:', currentBody.next)
-   next = currentBody.next;
-    sleep(1000);
+    const currentBody = await count(request.query.q, next);
+    statusCode = currentBody.statusCode;
+    body = [].concat(currentBody.body.results, body);
+    totalCount += currentBody.body.totalCount || 0;
+    next = currentBody.next;
+    sleep(500);
   } while (next);
   
   if (body.length > 0) {
