@@ -2,11 +2,10 @@ class TweetLink extends Emitter {
   constructor(component) {
     super(component);
     
-    [this.tweetId] = location.pathname.match(/\d{1,19}/);
+    [this.tweetId] = location.pathname.match(/\d{1,19}$/) || [null];
     
     if (this.tweetId) {
       Emitter.dispatch(fetch(`/tweet/${this.tweetId}`));
-      Emitter.dispatch(fetch(`/embed/${this.tweetId}`));
     }
     
     this.field = document.getElementById('tweet-url');
@@ -15,7 +14,7 @@ class TweetLink extends Emitter {
   }
 
   getTweetUrlRegex(value) {
-    return value.match(/https:\/\/(www\.)?twitter\.com\/[\d\w_]+\/status\/(\d{1,19})/)
+    return value.match(/https:\/\/(www|m\.)?twitter\.com\/[\d\w_]+\/status\/(\d{1,19})/) || value.match(/\d{1,19}/);
   }
 
   validate(event) {
@@ -41,15 +40,21 @@ class TweetLink extends Emitter {
     if (event.target !== this.button) {
       return;
     }
-
+    
     const [, , tweetId] = this.getTweetUrlRegex(this.field.value);
+    
+    if (!this.tweetId) {
+      
+    }
+    window.history.pushState({}, '', `/${tweetId}`);
+
     const tweet = await Emitter.dispatch(fetch(`/tweet/${tweetId}`));
-    await Emitter.dispatch(fetch(`/embed/${tweetId}`));
   }
 
   render() {
-    if (!this.tweetId) {
-      this.component.hidden = false;  
+    this.component.hidden = this.tweetId ? true : false;  
+    
+    if (!this.field.value) {
       return;
     }
     
