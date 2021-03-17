@@ -80,7 +80,7 @@ class Tweet extends Emitter {
   render() {
     if (this.state.embed) {
       this.wrapper.innerHTML = this.state.embed.html;  
-      // twttr.widgets.load(this.wrapper);
+      twttr.widgets.load(this.wrapper);
     }
     
     
