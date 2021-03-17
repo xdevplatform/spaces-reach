@@ -18,27 +18,17 @@ class Tweet extends Emitter {
         this.props.tweet[key] = this.component.dataset[key];
       }
     });
-
-    if (Object.keys(this.props.tweet).length > 0) {
-      this.setState({show: true});
-    }
-
-  }
-
-  showAnnotationsControls(value) {
-    this.setState({showAnnotationsControls: value});
   }
 
   async didReceiveData(response) {
     if (response.url.match(/\/tweet\/\d{1,19}/)) {
       const tweet = await response.clone().json();
+      this.setState({
+        tweetId: tweet.data.id,
+      });
+
       return this.dispatchTrends(tweet);
-    }
-    
-    if (response.url.match(/\embed\/\d{1,19}/)) {
-      const embed = await response.clone().json();
-      this.setState({embed: embed});
-    }
+    }    
   }
   
   dispatchTrends(tweet) {
@@ -68,19 +58,19 @@ class Tweet extends Emitter {
       }) : []);
     
     this.props.tweet.entities = tweet.data.entities;
-
-    this.setState({
-      show: true,
-      tweetId: tweet.data.id,
-    });
     
     this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.search}`)));
   }
   
   render() {
-    if (this.state.embed) {
-      this.wrapper.innerHTML = this.state.embed.html;  
-      twttr.widgets.load(this.wrapper);
+    if (this.state.tweetId) {
+      twttr.widgets.createTweet(
+        this.state.tweetId,
+        this.wrapper,
+        { 
+          theme: document.querySelector('meta[name="twitter:widgets:theme"]')?.content || 'light',
+          align: 'center'
+        });
     }
     
     
