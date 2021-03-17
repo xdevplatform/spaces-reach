@@ -44,10 +44,22 @@
     }
   };
   
+  const onColorSchemeChange = (query) => {
+    <meta
+  name="twitter:widgets:theme"
+  content="dark">
+  }
+  
+  const setupDarkTheme = () => {
+    const query = window.matchMedia('(prefers-color-scheme: dark)');
+    onColorSchemeChange(query);
+    query.addListener(onColorSchemeChange);
+  }
   
   printConsoleMessage();
   setToken();
   prepareOAuthHandler();
+  setupDarkTheme();
 
   if (twemoji) {
     twemoji.parse(document.body, {
