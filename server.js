@@ -1,6 +1,17 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
+const redis = require('redis');
+const { promisify } = require('util');
+
+const cache = redis.createClient({
+  host: 'redis-12422.c8.us-east-1-3.ec2.cloud.redislabs.com',
+  port: '12422',
+  auth_pass: process.env.REDIS_KEY
+});
+
+const cacheGet = promisify(cache.get);
+const cachePut = promisify(cache.hmset);
 
 const { get } = require('./client');
 require('dotenv').config();
@@ -13,7 +24,7 @@ app.get('/:id([0-9]{1,19})?', (request, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
-app.get('/counts', async (request, response) => {  
+app.get('/counts', async (request, response) => {
   if (!request.query.q) {
     response.status(422).json({});
   }
@@ -44,6 +55,14 @@ app.get('/counts', async (request, response) => {
     
     return {statusCode: res.statusCode, body: res.body, next: res.body.next || null};
   }
+  
+  try {
+    const cached = await cacheGet(q);
+  } catch (e) {
+    
+  }
+  
+  
   
   let next = null;
   let body = [];
