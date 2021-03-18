@@ -5,8 +5,8 @@ const redis = require('redis');
 const { promisify } = require('util');
 
 const cache = redis.createClient({
-  host: 'redis-12422.c8.us-east-1-3.ec2.cloud.redislabs.com',
-  port: '12422',
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
   auth_pass: process.env.REDIS_KEY
 });
 
@@ -31,7 +31,7 @@ app.get('/counts', async (request, response) => {
   }
   
   const count = async (q, next = null) => {
-    const url = new URL('https://gnip-api.twitter.com/search/30day/accounts/daniele-bernardi/prod/counts.json');
+    const url = new URL(process.env.TWITTER_SEARCH_URL);
     url.searchParams.append('bucket', 'day');
     url.searchParams.append('query', q);
     
