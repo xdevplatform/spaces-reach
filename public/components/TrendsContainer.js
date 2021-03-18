@@ -82,19 +82,13 @@ class TrendsContainer extends Emitter {
     
     this.error.hidden = false;
     return;
-//     if (document.querySelector(`[data-query="${this.state.query}"]`)) {
-//       return;
-//     }
     
-//     if (!this.state.stats) {
-//       return;
-//     }
-    
-    const bigNumber = Emitter.template.BigNumber;
-    bigNumber.dataset.results = JSON.stringify(this.state.stats.results);
-    bigNumber.dataset.volume = this.state.stats.totalCount;
-    bigNumber.dataset.name = this.state.name;
-    bigNumber.dataset.query = this.state.query;
-    this.component.appendChild(bigNumber);
+    this.props.tweets.countQuery.map(query => {
+      const bigNumber = Emitter.template.BigNumber;
+      bigNumber.dataset.name = query.name;
+      bigNumber.dataset.query = query.query;
+      bigNumber.dataset.search = query.search;
+      this.component.appendChild(bigNumber);      
+    });    
   }
 }
