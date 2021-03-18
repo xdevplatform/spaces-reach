@@ -165,9 +165,19 @@ div.bignumber h4 {
   margin: 10px 5px;
 }
 
+div.bignumber .error,
+div.bignumber .loading {
+  text-align: center;
+}
+
+div.bignumber .error {
+  display: none;
+}
+
 iframe {border-radius: 16px}
 
 section[e\:class="TrendsContainer"] div.error {
+  display: none;
   text-align: center;
 }
 

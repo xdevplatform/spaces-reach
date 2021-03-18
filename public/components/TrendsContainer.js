@@ -2,10 +2,11 @@ class TrendsContainer extends Emitter {
   constructor(element) {
     super(element);
     this.error = this.component.querySelector('.error');
+    this.countsQuery = [];
   }
   
   async didReceiveData(response) {
-    if (response.url.match(/\/tweet\/\d{1,19}/)) {
+    if (!response.url.match(/\/tweet\/\d{1,19}/)) {
       const tweet = await response.clone().json();
       this.setState({
         tweetId: tweet.data.id,
@@ -13,10 +14,6 @@ class TrendsContainer extends Emitter {
 
       return this.dispatchTrends(tweet);
     }    
-
-    if (!response.url.match(/\/counts/)) {
-      return;
-    }
 
     if (!response.ok) {
       return;
@@ -54,7 +51,7 @@ class TrendsContainer extends Emitter {
       return true;
     });
 
-    this.props.tweet.countsQuery =
+    this.countsQuery =
       [].concat(tweet.data.context_annotations ? tweet.data.context_annotations.map(ctx => {
         return { query: `context:${ctx.domain.id}.${ctx.entity.id}`, name: ctx.entity.name, search: `context:${ctx.domain.id}.${ctx.entity.id}` }
       }) : [])
@@ -65,11 +62,9 @@ class TrendsContainer extends Emitter {
         return { query: `@${mention.username}`, name: `@${mention.username}`, search: `@${mention.username}` };
       }) : []);
     
-    this.props.tweet.entities = tweet.data.entities;
-    
     // this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.search}`)));
     
-    if (this.props.tweets.countQuery.length) {
+    if (this.countsQuery.length) {
       this.setState({hasQueries: true});
     }    
   }
@@ -80,10 +75,7 @@ class TrendsContainer extends Emitter {
       return;
     }
     
-    this.error.hidden = false;
-    return;
-    
-    this.props.tweets.countQuery.map(query => {
+    this.countsQuery.map(query => {
       const bigNumber = Emitter.template.BigNumber;
       bigNumber.dataset.name = query.name;
       bigNumber.dataset.query = query.query;

@@ -4,14 +4,20 @@ class BigNumber extends Emitter {
     this.title = element.querySelector('h2');
     this.number = element.querySelector('h4.trend');
     this.loading = element.querySelector('h4.loading');
+    this.error = element.querySelector('h4.error');
     
     this.chart = this.childNodes()[0];
+    this.fetch();
   }
   
   async didReceiveData(response) {
     console.log(response.url);
-    const regex = new RegExp(`/counts\?${this.component.dataset.search}`);
-    if (!response.url.match(/\/counts\/\?))
+    
+    const regex = new RegExp(`\\/counts\\?q=${this.component.dataset.search}`);
+    if (!response.url.match(regex)) {
+      return;
+    }
+    
     try {
       const json = await response.clone().json();
       this.setState(json);
@@ -22,19 +28,30 @@ class BigNumber extends Emitter {
   
   fetch() {
     Emitter.dispatch(fetch(`/counts?q=${this.component.dataset.search}`));
-    this.loading.innerText = 'Loading…';
+    this.error.hidden = true;
     this.loading.hidden = false;
-    Emitter.dispatch(fetch)
   }
     
   render() {
+    this.title.innerText = this.component.dataset.name;
+    
     if (this.state.error) {
-      
+      this.chart.hidden = true;
+      this.loading.hidden = true;
+      this.error.hidden = false;
+      return;
+    } else if (this.state.loading) {
+      this.chart.hidden = true;
+      this.loading.hidden = false;
+      this.error.hidden = true;
+      return;
     }
     
-    this.title.innerText = this.component.dataset.name;
-    this.chart.dataset.data = this.component.dataset.results;
-    this.chart.dataset.volume = this.component.dataset.volume
-    this.number.innerText = new Intl.NumberFormat().format(this.component.dataset.volume);
+    if (this.state.results) {
+      this.chart.dataset.data = this.state.results;
+      this.chart.dataset.volume = this.state.volume;
+      this.number.innerText = new Intl.NumberFormat().format(this.state.volume);
+    }
+    
   }
 }
