@@ -13,8 +13,7 @@ app.get('/:id([0-9]{1,19})?', (request, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
-app.get('/counts', async (request, response) => {
-  
+app.get('/counts', async (request, response) => {  
   if (!request.query.q) {
     response.status(422).json({});
   }

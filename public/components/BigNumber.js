@@ -11,8 +11,6 @@ class BigNumber extends Emitter {
   }
   
   async didReceiveData(response) {
-    console.log(response.url);
-    
     const regex = new RegExp(`\\/counts\\?q=${this.component.dataset.search}`);
     if (!response.url.match(regex)) {
       return;
@@ -48,9 +46,13 @@ class BigNumber extends Emitter {
     }
     
     if (this.state.results) {
-      this.chart.dataset.data = this.state.results;
-      this.chart.dataset.volume = this.state.volume;
-      this.number.innerText = new Intl.NumberFormat().format(this.state.volume);
+      this.error.hidden = true;
+      this.loading.hidden = true;
+      this.chart.hidden = false;
+      
+      this.chart.dataset.data = JSON.stringify(this.state.results);
+      this.chart.dataset.volume = this.state.totalCount;
+      this.number.innerText = new Intl.NumberFormat().format(this.state.totalCount);
     }
     
   }

@@ -7,33 +7,19 @@ class TrendsContainer extends Emitter {
   
   async didReceiveData(response) {
     if (!response.url.match(/\/tweet\/\d{1,19}/)) {
-      const tweet = await response.clone().json();
-      this.setState({
-        tweetId: tweet.data.id,
-      });
-
-      return this.dispatchTrends(tweet);
-    }    
+      return;
+    }
 
     if (!response.ok) {
       return;
     }
-    
-    const url = new URL(response.url);
-    const query = url.searchParams.get('q');
-    if (!query) {
-      return;
-    }
 
-    const countsQuery = Emitter.registry.get(document.querySelector('main.tweet')).props.tweet.countsQuery;
-    const { name } = countsQuery.find(q => q.query === query);
-    
-    if (!name) {
-      return;
-    }
+    const tweet = await response.clone().json();
+    this.setState({
+      tweetId: tweet.data.id,
+    });
 
-    const json = await response.json();
-    this.setState({query: query, name: name, stats: json});
+    return this.dispatchTrends(tweet);
   }
   
   dispatchTrends(tweet) {
