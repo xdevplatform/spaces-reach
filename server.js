@@ -10,8 +10,9 @@ const cache = redis.createClient({
   auth_pass: process.env.REDIS_KEY
 });
 
-const cacheGet = promisify(cache.get);
-const cachePut = promisify(cache.hmset);
+const cacheGet = promisify(cache.get).bind(cache);
+const cachePut = promisify(cache.set).bind(cache);
+const cacheExpire = promisify(cache.expire).bind(cache);
 
 const { get } = require('./client');
 require('dotenv').config();
@@ -57,12 +58,14 @@ app.get('/counts', async (request, response) => {
   }
   
   try {
-    const cached = await cacheGet(q);
+    const cached = await cacheGet(request.query.q);
+    if (cached) {
+      response.json(JSON.parse(cached));
+      return;
+    }
   } catch (e) {
-    
+    console.warn(e);
   }
-  
-  
   
   let next = null;
   let body = [];
@@ -78,6 +81,20 @@ app.get('/counts', async (request, response) => {
   } while (next);
   
   if (body.length > 0) {
+    try {
+      await cachePut(request.query.q, JSON.stringify({results: body, totalCount}));   
+    } catch (e) {
+      console.warn('cacheput error')
+      console.warn(e);
+    }
+    
+    try {
+      await cacheExpire(request.query.q, 60 * 60 * 24);  
+    } catch (e) {
+      console.warn('cache expire set error');
+      console.warn(e);
+    }
+    
     response.json({results: body, totalCount});
   } else {
     response.status(statusCode).json({results: body, totalCount});
