@@ -32,17 +32,18 @@ class BigNumber extends Emitter {
   }
   
   prepareLink() {
-    if (this.component.dataset.query.match(/^context/)) {
-      const entityId = this.component.query.replace('context:', '');
-
-      const url = new URL('https://twitter.com/search');
-      url.searchParams.append('q', `(* [entity_id: ${entityId}])`);
-      
-      this.link.href = url;
-      return;
-    }
+    const url = new URL('https://twitter.com/search');
     
-    if (this.component.dataset.query.match(/^[#/)) {}
+    
+    if (this.component.dataset.query.match(/^context/)) {
+      const entityId = this.component.dataset.query.replace('context:', '');
+      url.searchParams.append('q', `(* [entity_id ${entityId}])`);
+    } else if (this.component.dataset.query.match(/^[#@]/)) {
+      url.searchParams.append('q', this.component.dataset.query);
+    }
+
+    this.link.href = url;
+
   }
     
   render() {
