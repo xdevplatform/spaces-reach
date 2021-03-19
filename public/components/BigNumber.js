@@ -1,6 +1,7 @@
 class BigNumber extends Emitter {
   constructor(element) {
     super(element);
+    this.link = element.querySelector('a');
     this.title = element.querySelector('h2');
     this.number = element.querySelector('h4.trend');
     this.loading = element.querySelector('h4.loading');
@@ -29,6 +30,20 @@ class BigNumber extends Emitter {
     this.error.hidden = true;
     this.loading.hidden = false;
   }
+  
+  prepareLink() {
+    if (this.component.dataset.query.match(/^context/)) {
+      const entityId = this.component.query.replace('context:', '');
+
+      const url = new URL('https://twitter.com/search');
+      url.searchParams.append('q', `(* [entity_id: ${entityId}])`);
+      
+      this.link.href = url;
+      return;
+    }
+    
+    if (this.component.dataset.query.match(/^[#/)) {}
+  }
     
   render() {
     this.title.innerText = this.component.dataset.name;
@@ -49,6 +64,7 @@ class BigNumber extends Emitter {
       this.error.hidden = true;
       this.loading.hidden = true;
       this.chart.hidden = false;
+      this.prepareLink();
       
       this.chart.dataset.data = JSON.stringify(this.state.results);
       this.chart.dataset.volume = this.state.totalCount;
