@@ -1,6 +1,7 @@
 class Chart extends Emitter {
   constructor(element) {
     super(element);
+    this.previouslySelected = null;
   }
     
   willRender() {
@@ -25,12 +26,16 @@ class Chart extends Emitter {
     
     if (e.target.classList.contains('selected')) {
       e.target.classList.remove('selected');
-      this.parent.component.dataset.volume = this.volume;
+      this.previouslySelected = null;
+      const numberFormatter = new Intl.NumberFormat();
+      this.component.parent.component.dataset.volume = numberFormatter.format(this.volume);
       return;
     }
     
+    this.previouslySelected?.classList.remove('selected');
     e.target.classList.add('selected');
-    this.parent.component.dataset.volume = e.target.dataset.title;
+    this.component.parent.component.dataset.volume = e.target.dataset.title;
+    this.previouslySelected = e.target;
   }
   
   determineTrend() {   

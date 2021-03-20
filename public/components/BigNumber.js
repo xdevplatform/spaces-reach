@@ -45,7 +45,7 @@ class BigNumber extends Emitter {
   }
   
   didUpdateDataset() {
-    this.setState({volume: this.component.dataset.volume});
+    this.setState({volumeLabel: this.component.dataset.volume});
   }
     
   render() {
@@ -73,6 +73,10 @@ class BigNumber extends Emitter {
       this.chart.dataset.volume = this.state.totalCount;
       this.chart.parent = this;
       this.number.innerText = new Intl.NumberFormat().format(this.state.totalCount);
+    }
+    
+    if (this.state.volumeLabel) {
+      this.number.innerText = this.state.volumeLabel;
     }
     
   }
