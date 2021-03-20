@@ -14,6 +14,7 @@ class Emitter {
   }
   
   didReceiveData(data) {}
+  didUpdateDataset(data) {}
   stateDidChange() {}
   render() {}
   willRender() {return true}
@@ -104,7 +105,7 @@ class Emitter {
       const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
           if (mutation.type === 'attributes' && mutation.attributeName.match(/data-/) && mutation.target.hasAttribute('e:class') && mutation.target.instance) {
-            mutation.target.instance.willRender() && mutation.target.instance.render();
+            mutation.target.instance.didUpdateDataset(mutation.dataset);
           } else {
             initFn(mutation.addedNodes);
           }

@@ -29,6 +29,13 @@ class Chart extends Emitter {
     return (length * sumOfMultipliedValues - sumOfLength * sumOfValues) / (length * sumOfSquares - Math.sqrt(sumOfLength));
   }
   
+  didUpdateDataset(data) {
+    try {
+      this.data = JSON.parse(this.component.dataset.data);
+      this.setState({ data: this.data });
+    } catch (e) {}
+  }
+  
   render() {
     const dateFormatter = new Intl.DateTimeFormat();
     const numberFormatter = new Intl.NumberFormat();
