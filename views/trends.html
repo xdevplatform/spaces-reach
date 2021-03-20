@@ -34,7 +34,7 @@
   </head>
   <body>
     <header>
-      <section e:class="TweetLink" class="tweet-url-container">
+      <section e:class="TweetLink" class="tweet-url-container" hidden>
         <input e:keyup="validate" type="url" aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button disabled="true" e:click="fetch" id="fetch">Get Tweet</button>
       </section>
     </header>
@@ -44,7 +44,7 @@
       </div>
     </main>
     <section e:class="TrendsContainer">
-      <div class="error">
+      <div class="error" hidden>
         <h1>
           No context for this Tweet.
         </h1>

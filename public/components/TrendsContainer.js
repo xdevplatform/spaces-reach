@@ -22,6 +22,10 @@ class TrendsContainer extends Emitter {
     return this.dispatchTrends(tweet);
   }
   
+  getInitialState() {
+    return { hasQueries: false };
+  }
+  
   dispatchTrends(tweet) {
     const entities = [];
     
@@ -50,7 +54,7 @@ class TrendsContainer extends Emitter {
        
     if (this.countsQuery.length) {
       this.setState({hasQueries: true});
-    }    
+    }
   }
   
   render() {
@@ -59,6 +63,8 @@ class TrendsContainer extends Emitter {
       return;
     }
     
+    this.error.hidden = true;
+        
     this.countsQuery.map(query => {
       const bigNumber = Emitter.template.BigNumber;
       bigNumber.dataset.name = query.name;

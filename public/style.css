@@ -177,7 +177,6 @@ div.bignumber .error {
 iframe {border-radius: 16px}
 
 section[e\:class="TrendsContainer"] div.error {
-  display: none;
   text-align: center;
 }
 
