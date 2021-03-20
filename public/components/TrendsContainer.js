@@ -19,14 +19,10 @@ class TrendsContainer extends Emitter {
       tweetId: tweet.data.id,
     });
 
-    return this.dispatchTrends(tweet);
+    return this.prepareQueries(tweet);
   }
-  
-  getInitialState() {
-    return { hasQueries: false };
-  }
-  
-  dispatchTrends(tweet) {
+   
+  prepaeQueries(tweet) {
     const entities = [];
     
     if (!tweet.data.context_annotations) {
@@ -62,8 +58,6 @@ class TrendsContainer extends Emitter {
       this.error.hidden = false;
       return;
     }
-    
-    this.error.hidden = true;
         
     this.countsQuery.map(query => {
       const bigNumber = Emitter.template.BigNumber;
