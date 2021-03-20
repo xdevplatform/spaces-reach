@@ -16,7 +16,6 @@ class Chart extends Emitter {
     } catch (e) {
       return false;
     }
-    
   }
   
   determineTrend() {   
@@ -46,6 +45,7 @@ class Chart extends Emitter {
       const height = (count / max) * 100;
       histogram.style.height = height === 0 ? '1px' : height.toFixed(2) + '%';
       let dateParts = this.data[i].timePeriod.match(/(\d{4})(\d{2})(\d{2})/).splice(1,3);
+      dateParts[1] -= 1;
       dateParts = dateParts.concat([0, 0, 0, 0]);
       const date = new Date(Date.UTC(...dateParts));
       histogram.title = `${dateFormatter.format(date)}: ${numberFormatter.format(count)}`;
