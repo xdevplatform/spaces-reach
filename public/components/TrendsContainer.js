@@ -22,7 +22,7 @@ class TrendsContainer extends Emitter {
     return this.prepareQueries(tweet);
   }
    
-  prepaeQueries(tweet) {
+  prepareQueries(tweet) {
     const entities = [];
     
     if (!tweet.data.context_annotations) {
@@ -48,13 +48,11 @@ class TrendsContainer extends Emitter {
         return { query: `@${mention.username}`, name: `@${mention.username}`, search: `@${mention.username}` };
       }) : []);
        
-    if (this.countsQuery.length) {
-      this.setState({hasQueries: true});
-    }
+    this.setState({queriesDidPrepare: true});
   }
   
-  render() {
-    if (!this.state.hasQueries) {
+  render() {   
+    if (this.state.queriesDidPrepare && this.countsQuery.length === 0) {
       this.error.hidden = false;
       return;
     }
