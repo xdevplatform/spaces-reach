@@ -42,7 +42,10 @@ class BigNumber extends Emitter {
     }
 
     this.link.href = url;
-
+  }
+  
+  didUpdateDataset() {
+    this.setState({volume: this.component.dataset.volume});
   }
     
   render() {

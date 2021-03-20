@@ -19,7 +19,18 @@ class Chart extends Emitter {
   }
   
   showDetail(e) {
-    if (e.target.cl)
+    if (!e.target.classList.contains('histogram')) {
+      return;
+    }
+    
+    if (e.target.classList.contains('selected')) {
+      e.target.classList.remove('selected');
+      this.parent.component.dataset.volume = this.volume;
+      return;
+    }
+    
+    e.target.classList.add('selected');
+    this.parent.component.dataset.volume = e.target.dataset.title;
   }
   
   determineTrend() {   
@@ -53,7 +64,7 @@ class Chart extends Emitter {
       dateParts[1] -= 1;
       dateParts = dateParts.concat([0, 0, 0, 0]);
       const date = new Date(Date.UTC(...dateParts));
-      histogram.title = `${dateFormatter.format(date)}: ${numberFormatter.format(count)}`;
+      histogram.dataset.title = `${dateFormatter.format(date)}: ${numberFormatter.format(count)}`;
       this.component.appendChild(histogram);
     });
     
