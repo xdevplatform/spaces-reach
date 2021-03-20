@@ -18,6 +18,10 @@ class Chart extends Emitter {
     }
   }
   
+  showDetail(e) {
+    if (e.target.cl)
+  }
+  
   determineTrend() {   
     const length = this.dataCounts.length;
     let sumOfLength = this.dataCounts.reduce((ac, el, i) => ac + i, 0);
@@ -36,12 +40,13 @@ class Chart extends Emitter {
   }
   
   render() {
-    const dateFormatter = new Intl.DateTimeFormat();
+    const dateFormatter = new Intl.DateTimeFormat('default', {month: 'short', day: 'numeric'});
     const numberFormatter = new Intl.NumberFormat();
     this.component.innerHTML = '';
     const max = Math.max(...this.dataCounts);
     this.dataCounts.map((count, i) => {
       const histogram = document.createElement('div');
+      histogram.classList.add('histogram');
       const height = (count / max) * 100;
       histogram.style.height = height === 0 ? '1px' : height.toFixed(2) + '%';
       let dateParts = this.data[i].timePeriod.match(/(\d{4})(\d{2})(\d{2})/).splice(1,3);

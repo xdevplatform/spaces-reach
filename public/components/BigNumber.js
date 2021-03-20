@@ -68,6 +68,7 @@ class BigNumber extends Emitter {
       
       this.chart.dataset.data = JSON.stringify(this.state.results);
       this.chart.dataset.volume = this.state.totalCount;
+      this.chart.parent = this;
       this.number.innerText = new Intl.NumberFormat().format(this.state.totalCount);
     }
     
