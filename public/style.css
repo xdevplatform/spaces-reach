@@ -160,7 +160,7 @@ div.chart-container.down > div.zero {
 
 div.chart-container.up > div.zero {
   background-color: #000;
-  border-bottom: px solid #43AA8B;
+  border-bottom: 1px solid #43AA8B;
   border-radius: 0;
 }
 
