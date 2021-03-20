@@ -34,7 +34,6 @@ class BigNumber extends Emitter {
   prepareLink() {
     const url = new URL('https://twitter.com/search');
     
-    
     if (this.component.dataset.query.match(/^context/)) {
       const entityId = this.component.dataset.query.replace('context:', '');
       url.searchParams.append('q', `(* [entity_id ${entityId}])`);

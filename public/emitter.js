@@ -8,12 +8,13 @@ class Emitter {
     const oldstate = JSON.stringify(this.state);
     if (oldstate !== newstate) {
       this.state = Object.assign(this.state, JSON.parse(newstate));
-      typeof this.stateDidChange === 'function' ? this.stateDidChange() : null;
+      this.stateDidChange();
       this.willRender() && this.render();
     }
   }
   
   didReceiveData(data) {}
+  stateDidChange() {}
   render() {}
   willRender() {return true}
 

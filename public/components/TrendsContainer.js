@@ -47,9 +47,7 @@ class TrendsContainer extends Emitter {
       .concat(tweet.data.entities && tweet.data.entities.mentions ? tweet.data.entities.mentions.map(mention => {
         return { query: `@${mention.username}`, name: `@${mention.username}`, search: `@${mention.username}` };
       }) : []);
-    
-    // this.props.tweet.countsQuery.map(query => Emitter.dispatch(fetch(`/counts?q=${query.search}`)));
-    
+       
     if (this.countsQuery.length) {
       this.setState({hasQueries: true});
     }    
