@@ -64,7 +64,10 @@ class Chart extends Emitter {
       const histogram = document.createElement('div');
       histogram.classList.add('histogram');
       const height = (count / max) * 100;
-      histogram.style.height = height === 0 ? '1px' : height.toFixed(2) + '%';
+      histogram.style.height = height === 0 ? '100%' : height.toFixed(2) + '%';
+      if (height === 0) {
+        histogram.classList.add('zero');
+      }
       let dateParts = this.data[i].timePeriod.match(/(\d{4})(\d{2})(\d{2})/).splice(1,3);
       dateParts[1] -= 1;
       dateParts = dateParts.concat([0, 0, 0, 0]);

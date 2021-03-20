@@ -151,6 +151,17 @@ div.chart-container.up > div {
   background-color: #43AA8B;
 }
 
+div.chart-container.down > div.zero {
+  background-color: #000;
+}
+
+div.chart-container.up > div.zero {
+  background-color: #000;
+  outline-bottom: 1px solid #43AA8B;
+}
+
+
+
 div.bignumber {
   max-width: 530px;
   margin: 20px auto;
