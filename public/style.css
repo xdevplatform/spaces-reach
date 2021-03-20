@@ -153,11 +153,15 @@ div.chart-container.up > div {
 
 div.chart-container.down > div.zero {
   background-color: #000;
+  border-bottom: 2px solid #F94144;
+  border-radius: 0;
+
 }
 
 div.chart-container.up > div.zero {
   background-color: #000;
-  outline-bottom: 1px solid #43AA8B;
+  border-bottom: 2px solid #43AA8B;
+  border-radius: 0;
 }
 
 
