@@ -7,16 +7,11 @@ export default class extends Domo {
   }
   
   submit() {
-    location.href = '/' + this.getTweetId(this.shadowRoot.querySelector('input')?.value);
+    location.href = '/' + this.getTweetId(this.state.tweetId);
   }
   
-  isValidTweetId() {
-    const value = this.shadowRoot.querySelector('input')?.value || '';
-    return !!this.getTweetId(value);
-  }
-  
-  updateButton() {
-    this.setState({validTweet: this.isValidTweetId()})
+  updateButton(e) {
+    this.setState({tweetId: this.getTweetId(e.target.value)});
   }
   
   render() {
@@ -28,7 +23,7 @@ export default class extends Domo {
       return html`
         <style>@import "/style.css"; :host {margin: 0 auto}</style>
         <input type="url" placeholder="Enter URL or Tweet ID" on-keyup="updateButton" />
-        <button on-click="submit" ${this.isValidTweetId() ? '' : 'disabled'}>Get trends</button>`
+        <button on-click="submit" ${this.state.tweetId ? '' : 'disabled'}>Get trends</button>`
     }
     
   }
