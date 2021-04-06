@@ -4,6 +4,7 @@ import { DomoTest } from '/test/components.js';
 const t = s => html([s]).children[0] || null;
 
 export default class DiffTest extends DomoTest {
+  get name() { return 'DOM diffing' }
   get tests() {
     return {
       'no change': {
