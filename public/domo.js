@@ -43,13 +43,6 @@ const diff = (currentDom, newDom, changes = {added: [], removed: []}) => {
       diff(currentNode, newNode, changes);
     }
 
-    // Diffing of elements with a shadow root is handled directly
-    // by the element, and so it does not require recursion.
-    // if (currentNode.shadowRoot && newNode.shadowRoot) {
-    //   diff(currentNode.shadowRoot, newNode.shadowRoot);
-    // }
-
-    
     if (!currentNode.shadowRoot && newNode.shadowRoot) {
       diff(currentNode, newNode.shadowRoot, changes)
     }
@@ -67,8 +60,6 @@ const diff = (currentDom, newDom, changes = {added: [], removed: []}) => {
 
   return [currentDom, changes];
 }
-
-const registry = new Set();
 
 const classNameFromTag = tag =>
   tag
@@ -90,15 +81,12 @@ const init = async (el) => {
   const tag = el.tagName.toLowerCase();
   const href = document.querySelector('link[rel="components"]')?.href;
   const path = el.getAttribute('module');
-  let module;
-  module = await import(href || path);    
+  const module = await import(href || path);    
   
-  
-  if (!registry.has(tag)) {
+  if (!customElements.get(tag)) {
     try {
       customElements.define(tag, href ? module[classNameFromTag(tag)] : module.default);  
       await customElements.whenDefined(tag);
-      registry.add(tag);  
     } catch (e) { }
   }
 };
