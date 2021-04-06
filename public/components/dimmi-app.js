@@ -1,4 +1,4 @@
-import Domo, { html } from '/domo.js';
+import Domo, { html } from 'https://cdn.jsdelivr.net/gh/iamdaniele/domo/domo.js';
 
 export default class extends Domo {  
   getTweetId() {

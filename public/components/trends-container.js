@@ -1,4 +1,4 @@
-import Domo, { html } from '/domo.js';
+import Domo, { html } from 'https://cdn.jsdelivr.net/gh/iamdaniele/domo/domo.js';
 
 export default class extends Domo {
   constructor() {
@@ -45,7 +45,6 @@ export default class extends Domo {
   }
   
   render() {
-    console.log(this.dataset.tweetId)
     if (!this.dataset.tweetId) {
       return html``;
     }
@@ -60,7 +59,7 @@ export default class extends Domo {
           `<big-number data-name="${name}" data-query="${query}" data-search="${search}"></big-number>`);
         
         if (elements.length === 0) {
-          elements.push(`<div style="text-align: center; font-size: 2rem"><b>No trends for this Tweet.</b><br><a class="button" style="display: inline-block;margin: 1rem" href="/">Try a different Tweet</a></div>`);
+          elements.push(`<div style="text-align: center; font-size: 1.5rem;line-height: 2rem"><b>This Tweet has to annotations, hashtags, or mentions.</b><br><a class="button" style="display: inline-block;margin: 1rem" href="/">Try a different Tweet</a></div>`);
         }
         elements.push('<style> @import "/style.css"; </style>');
         return html(elements);
