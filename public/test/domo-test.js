@@ -4,6 +4,11 @@ export default class DomoTest extends Domo {
   constructor() {
     super();
     this.runTest();
+    console.log('run')
+  }
+  
+  get name() {
+    return 'Test suite';
   }
 
   renderStatusIcon(name) {
@@ -27,8 +32,11 @@ export default class DomoTest extends Domo {
   }
 
   render() {
-    const tests = Object.keys(this.tests).map(name => `<div>${this.renderStatusIcon(name)} ${name}</div>`)
-    tests.unshift(`<style>div {line-height: 2rem}</style>`);
+    const tests = [
+      `<style>div {line-height: 2rem}</style>`
+      `<h1>${this.name}</h1>`
+    ].concat(Object.keys(this.tests).map(name => `<div>${this.renderStatusIcon(name)} ${name}</div>`));
+    
     return html(tests);
   }
 }

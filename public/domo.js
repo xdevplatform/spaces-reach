@@ -82,12 +82,13 @@ const init = async (el) => {
   const href = document.querySelector('link[rel="components"]')?.href;
   const path = el.getAttribute('module');
   const module = await import(href || path);    
-  
+
   if (!customElements.get(tag)) {
     try {
       customElements.define(tag, href ? module[classNameFromTag(tag)] : module.default);  
       await customElements.whenDefined(tag);
-    } catch (e) { }
+    } catch (e) { console.error(`Could not initialize <${tag}>. Check that the component exist and that is has been imported. (${e.message})`); }
+    
   }
 };
 
