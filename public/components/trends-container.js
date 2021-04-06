@@ -93,7 +93,6 @@ export default class extends Domo {
         return { query: `@${mention.username}`, name: `@${mention.username}`, search: `@${mention.username}` };
       }) : []);
     
-    this.countsQuery = [];
     this.setState({queriesDidPrepare: true, status: 'done'});
   }
 }
