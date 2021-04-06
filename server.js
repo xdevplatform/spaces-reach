@@ -120,6 +120,7 @@ app.get('/tweet/:id([0-9]{1,19})', async (request, response) => {
   }
 
   if (res.statusCode !== 200) {
+    console.warn(`Received HTTP ${res.statusCode}: ${JSON.stringify(res.body)}`);
     return response.status(400).json({success: false, error: 'api-error'});
   }
 

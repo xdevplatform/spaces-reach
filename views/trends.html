@@ -3,13 +3,13 @@
   <head>
     <title>Dimmi</title>
     <link id="favicon" rel="icon" href="https://abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
+    <link rel="components" href="/components/components.js" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/style.css">
     <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-    <script src="/emitter.js"></script>
-    <script src="/client.js" defer></script>
+    <script src="/client.js"></script>
     <script>
       window.twttr = (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0],
@@ -33,85 +33,13 @@
 
   </head>
   <body>
-    <header>
-      <section e:class="TweetLink" class="tweet-url-container" hidden>
-        <input e:keyup="validate" type="url" aria-label="Paste a link to a Tweet" placeholder="Paste a link to a Tweet" id="tweet-url" /><button disabled="true" e:click="fetch" id="fetch">Get Tweet</button>
-      </section>
-    </header>
-
-    <main e:class="Tweet" class="tweet">      
-      <div class="tweet-wrapper">
-      </div>
-    </main>
-    <section e:class="TrendsContainer">
-      <div class="error" hidden>
-        <h1>
-          No context for this Tweet.
-        </h1>
-        <p>
-          We couldn't infer any valid context. Try with a different Tweet.
-        </p>
-      </div>
-      <template for="BigNumber">
-        <div e:class="BigNumber" class="bignumber">
-          <div class="flex-container">
-            <div>
-              <a target="_blank"><h2></h2></a>
-              <h4 class="trend"></h4>
-            </div>
-            <div class="grow"></div>
-            <div class="chart">
-              <h4 class="error" e:click="fetch">
-                Error (click to retry)
-              </h4>
-              <h4 class="loading">
-                Loading…
-              </h4>
-              <div class="chart-container" e:class="Chart" e:click="showDetail"></div></div>
-          </div>
-        </div>      
-      </template>
-    </section>
-    <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="resource-not-found">
-      <p>🦗</p>
-      <h1>Crickets</h1>
-      <h4>We couldn't find this Tweet. Please try a different one.</h4>
-      <button class="try-again">Try another Tweet</button>
-    </main>
-    <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="tweet-too-old">
-      <p>⏱️</p>
-      <h1>Tweet too old</h1>
-      <h4>This Tweet is too old. Try with something you Tweeted in the past 7 days.</h4>
-      <button class="try-again">Try another Tweet</button>
-    </main>
-    <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="not-authorized-for-resource">
-      <p>🙈</p>
-      <h1>That’s not your Tweet</h1>
-      <h4>You can only manage replies to your conversations.</h4>
-      <button class="try-again">Try another Tweet</button>
-    </main>
-    <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="no-replies">
-      <p>🙅</p>
-      <h1>No replies yet</h1>
-      <h4>This Tweet did not receive any replies… Yet. Try another Tweet or check back later.</h4>
-      <button class="try-again">Try another Tweet</button>
-    </main>
-    <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="api-error">
-      <p>🐳</p>
-      <h1>Oops</h1>
-      <h4>Something’s not right with the Twitter API. You can check the <a target="_blank" href="https://api.twitterstat.us">platform status</a> or try again later.</h4>
-      <button class="try-again">Try again</button>
-    </main>
-    <main e:class="ErrorMessage" e:click="dismiss" class="error hidden" data-message="other-error">
-      <p>🐞</p>
-      <h1>Something’s wrong</h1>
-      <h4>This may be a bug, or you may have your cookies disabled. Try to authenticate again.</h4>
-      <form action="/">
-        <button>Restart</button>
-      </form>
-    </main>
-    <script>
-      Emitter.init('/components/');
+    <div id="tweet">
+      
+    </div>
+    <dimmi-app></dimmi-app>
+    <script type="module">
+      import { init } from '/domo.js';
+      init(document.querySelector('dimmi-app'));
     </script>
   </body>
 </html>

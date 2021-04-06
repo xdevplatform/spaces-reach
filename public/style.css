@@ -31,7 +31,7 @@ form {
 
 a.button, button {
   padding: .25em 1em;
-  margin: 0;
+  margin: 0 auto;
   border: 2px solid #1da1f2;
   background-color: #1da1f2;
   cursor: pointer;
@@ -43,6 +43,13 @@ a.button, button {
   border-radius: 3rem;
   text-align: center;
   outline: 0;
+  display: block;
+}
+
+a.button {
+  display: inline-block;
+  margin: 1rem;
+  text-decoration: none
 }
 
 button[disabled] {
@@ -66,6 +73,7 @@ footer {
 }
 
 input[type=url], input[type=url]:focus {
+  display: block;
   border-radius: 0.2rem;
   padding: 0.5rem;
   width: 60%;
@@ -124,7 +132,7 @@ main.tweet .annotations-controls {margin: 0.5rem}
 main.tweet .related-label {line-height:2.2rem}
 
 
-div.chart-container {
+.chart-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: flex-end;
@@ -134,7 +142,7 @@ div.chart-container {
   padding: 5px;
 }
 
-div.chart-container > div {
+.chart-container > div {
   background-color: DodgerBlue;
   width: 100px;
   margin: 1px;
@@ -143,22 +151,22 @@ div.chart-container > div {
   font-size: 30px;
 }
 
-div.chart-container.down > div {
+.chart-container.down > div {
   background-color: #F94144;
 }
 
-div.chart-container.up > div {
+.chart-container.up > div {
   background-color: #43AA8B;
 }
 
-div.chart-container.down > div.zero {
+.chart-container.down > div.zero {
   background-color: #000;
   border-bottom: 1px solid #F94144;
   border-radius: 0;
 
 }
 
-div.chart-container.up > div.zero {
+.chart-container.up > div.zero {
   background-color: #000;
   border-bottom: 1px solid #43AA8B;
   border-radius: 0;
@@ -166,32 +174,19 @@ div.chart-container.up > div.zero {
 
 
 
-div.bignumber {
+big-number {
   max-width: 530px;
   margin: 20px auto;
   border-radius: 16px;
   border: 1px solid;
+  border-color: #2f3336;
   padding: 10px;
-  background: #000;
-}
-
-div.bignumber h2,
-div.bignumber h4 {
-  margin: 10px 5px;
-}
-
-div.bignumber .error,
-div.bignumber .loading {
-  text-align: center;
-}
-
-div.bignumber .error {
-  display: none;
+  display: block;
 }
 
 iframe {border-radius: 16px}
 
-section[e\:class="TrendsContainer"] div.error {
+trends-container div.error {
   text-align: center;
 }
 
@@ -206,5 +201,13 @@ div.histogram.selected {
   
   a:hover h2 {
     color: #1da1f2;
+  }
+  
+  big-number {
+    background: #000;
+  }
+  
+  input[type=url], input[type=url]:focus {
+    color: #aaa;
   }
 }

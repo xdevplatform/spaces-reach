@@ -13,12 +13,16 @@
     query.addListener(onColorSchemeChange);
   }
   
-  setupDarkTheme();
-
-  if (twemoji) {
-    twemoji.parse(document.body, {
-      folder: 'svg',
-      ext: '.svg'
-    });
+  const setupTwemoji = () => {
+    if (twemoji) {
+      twemoji.parse(document.body, {
+        folder: 'svg',
+        ext: '.svg'
+      });
+    }
   }
+  
+  setupDarkTheme();
+  // setupTwemoji();
+    
 })();
