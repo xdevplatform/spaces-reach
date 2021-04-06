@@ -132,11 +132,12 @@ export default class extends HTMLElement {
             .map(el => init(el) && el.getAttributeNames && setupListeners(this, el))
         }
         
-        if (mutation.type === 'attributes' && mutation.attributeName.match(/data-/)) {
+        if (mutation.type === 'attributes' && mutation.target.tagName.includes('-') && mutation.attributeName.match(/data-/)) {
           const datasetKey = mutation.attributeName.replace('data-', '');
-          mutation.newValue = mutation.target.dataset[datasetKey];
-          mutation.datasetKey = datasetKey;
-          this.didUpdateDataset(mutation);
+          mutation.newValue = mutation.target.getAttribute(mutation.attributeName);
+          mutation.datasetKey = classNameFromTag(datasetKey);
+          mutation.datasetKey = mutation.datasetKey.charAt(0).toLowerCase() + mutation.datasetKey.slice(1);
+          mutation.target.didUpdateDataset(mutation);
         }
       });
     }).observe(this.shadowRoot, {attributes: true, childList: true, subtree: true, attributeOldValue: true});

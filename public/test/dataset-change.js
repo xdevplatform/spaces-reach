@@ -13,7 +13,7 @@ export default class DatasetChange extends DomoTest {
   }
   
   didUpdateDataset(mutation) { 
-    console.log('didUpdateDataset')
+    console.log('didUpdateDataset', mutation, this)
     this.pass(mutation.newValue);
   }
 
