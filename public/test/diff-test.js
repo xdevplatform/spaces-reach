@@ -1,4 +1,4 @@
-import Domo, { html, diff } from '/domo.js'
+import { html, diff } from '/domo.js'
 import { DomoTest } from '/test/components.js';
 
 const t = s => html([s]).children[0] || null;
