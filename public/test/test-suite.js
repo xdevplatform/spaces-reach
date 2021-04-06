@@ -1,6 +1,6 @@
 import Domo, { html, diff } from '/domo.js'
 
-export default class DomoTest extends Domo {
+export default class Test extends Domo {
   constructor() {
     super();
     this.runTest();

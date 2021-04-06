@@ -1,3 +1,3 @@
 import DomoTest from '/test/domo-test.js';
-
-export { DomoTest };
+import DiffTest from '/test/diff-test.js';
+export { DomoTest, DiffTest };
