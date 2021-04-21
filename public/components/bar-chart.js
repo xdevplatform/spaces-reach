@@ -5,7 +5,7 @@ export default class extends Domo {
     return JSON.parse(sessionStorage.getItem(this.dataset.state));
   }
   
-  histogramClick(e) {
+  chartClick(e) {
     if (e.target.dataset.title === this.state.currentLabel) {
       this.setState({currentLabel: null});
     } else {
@@ -26,7 +26,7 @@ export default class extends Domo {
       const dateLabel = `${dateFormatter.format(date)}: ${numberFormatter.format(count)}`;
       const zero = height === 0 ? 'zero' : '';
       const selected = this.state.currentLabel === dateLabel ? 'selected' : '';
-      return `<div on-click="histogramClick" data-title="${dateLabel}" class="histogram ${selected} ${zero}" style="height: ${height === 0 ? '100' : height.toFixed(2)}%"></div>`;
+      return `<div on-click="chartClick" data-title="${dateLabel}" class="histogram ${selected} ${zero}" style="height: ${height === 0 ? '100' : height.toFixed(2)}%"></div>`;
     }).join('');
   }
   
