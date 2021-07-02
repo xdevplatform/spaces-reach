@@ -31,7 +31,7 @@ app.get('/2/counts', async (request, response) => {
   }
   
   const count = async (q, next = null) => {
-    const url = new URL(process.env.TWITTER_SEARCH_URL);
+    const url = new URL('https://api.twitter.com/2/tweets/counts/recent');
     url.searchParams.append('granularity', 'day');
     url.searchParams.append('query', q);
 
@@ -47,12 +47,12 @@ app.get('/2/counts', async (request, response) => {
         }
       }
     });
-    
+    console.log(res.body)
     if (res.statusCode !== 200) {
       return {statusCode: res.statusCode, body: null, next: null};
     }
-    
-    return {statusCode: res.statusCode, body: res.body, next: res.body.next || null};
+
+    return {statusCode: res.statusCode, body: res.body, next: res.body.meta.next_token || null};
   }
   
   try {

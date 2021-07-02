@@ -21,11 +21,11 @@ export default class extends Domo {
     
     try {
       const results = await response.json();
-      const dataCounts = results.results.map(data => data.tweet_count)
+      const dataCounts = results.data.map(data => data.tweet_count);
       const state = {
         status: 'done',
         results: results.data,
-        totalCount: results.meta.total_tweet.count,
+        totalCount: results.meta.total_tweet_count,
         dataCounts: dataCounts,
         max: Math.max(...dataCounts),
         trend: this.determineTrend(results),
@@ -56,11 +56,11 @@ export default class extends Domo {
   }
   
   determineTrend(results) {   
-    const length = results.results.length;
-    let sumOfLength = results.results.reduce((ac, el, i) => ac + i, 0);
-    let sumOfMultipliedValues = results.results.reduce((ac, el, i) => ac + el.count * i, 0);
+    const length = results.data.length;
+    let sumOfLength = results.data.reduce((ac, el, i) => ac + i, 0);
+    let sumOfMultipliedValues = results.data.reduce((ac, el, i) => ac + el.tweet_count * i, 0);
     let sumOfValues = results.totalCount;
-    let sumOfSquares = results.results.reduce((ac, el, i) => ac + el.count ** 2, 0);
+    let sumOfSquares = results.data.reduce((ac, el, i) => ac + el.count ** 2, 0);
     return (length * sumOfMultipliedValues - sumOfLength * sumOfValues) / (length * sumOfSquares - Math.sqrt(sumOfLength));
   }
   
