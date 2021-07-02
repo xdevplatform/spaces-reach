@@ -56,11 +56,11 @@ export default class extends Domo {
   }
   
   determineTrend(results) {   
-    const length = results.data.length;
-    let sumOfLength = results.data.reduce((ac, el, i) => ac + i, 0);
-    let sumOfMultipliedValues = results.data.reduce((ac, el, i) => ac + el.tweet_count * i, 0);
+    const length = results.results.length;
+    let sumOfLength = results.results.reduce((ac, el, i) => ac + i, 0);
+    let sumOfMultipliedValues = results.results.reduce((ac, el, i) => ac + el.tweet_count * i, 0);
     let sumOfValues = results.totalCount;
-    let sumOfSquares = results.data.reduce((ac, el, i) => ac + el.count ** 2, 0);
+    let sumOfSquares = results.results.reduce((ac, el, i) => ac + el.count ** 2, 0);
     return (length * sumOfMultipliedValues - sumOfLength * sumOfValues) / (length * sumOfSquares - Math.sqrt(sumOfLength));
   }
   
