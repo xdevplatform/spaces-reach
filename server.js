@@ -47,7 +47,7 @@ app.get('/2/counts', async (request, response) => {
         }
       }
     });
-    console.log(res.body)
+
     if (res.statusCode !== 200) {
       return {statusCode: res.statusCode, body: null, next: null};
     }

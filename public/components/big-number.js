@@ -21,11 +21,11 @@ export default class extends Domo {
     
     try {
       const results = await response.json();
-      const dataCounts = results.data.map(data => data.tweet_count);
+      const dataCounts = results.results.map(data => data.tweet_count);
       const state = {
         status: 'done',
-        results: results.data,
-        totalCount: results.meta.total_tweet_count,
+        results: results.results,
+        totalCount: results.totalCount,
         dataCounts: dataCounts,
         max: Math.max(...dataCounts),
         trend: this.determineTrend(results),

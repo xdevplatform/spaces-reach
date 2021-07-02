@@ -19,10 +19,10 @@ export default class extends Domo {
     
     return this.state.results.map(({tweet_count, end}, i) => {
       let height = (tweet_count / this.state.max) * 100;
-      let dateParts = end.match(/(\d{4})(\d{2})(\d{2})/).splice(1,3);
-      dateParts[1] -= 1;
-      dateParts = dateParts.concat([0, 0, 0, 0]);
-      const date = new Date(Date.UTC(...dateParts));
+      // let dateParts = end.match(/(\d{4})(\d{2})(\d{2})/).splice(1,3);
+      // dateParts[1] -= 1;
+      // dateParts = dateParts.concat([0, 0, 0, 0]);
+      const date = new Date(end);
       const dateLabel = `${dateFormatter.format(date)}: ${numberFormatter.format(tweet_count)}`;
       const zero = height === 0 ? 'zero' : '';
       const selected = this.state.currentLabel === dateLabel ? 'selected' : '';
