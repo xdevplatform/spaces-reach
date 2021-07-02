@@ -13,7 +13,7 @@ export default class extends Domo {
   }
   
   async fetch() {   
-    const response = await fetch(`/counts?q=${this.dataset.search}`)
+    const response = await fetch(`/2/counts?q=${this.dataset.search}`)
     if (!response.ok) {
       this.setState({status: 'error'});
       return;
@@ -21,11 +21,11 @@ export default class extends Domo {
     
     try {
       const results = await response.json();
-      const dataCounts = results.results.map(data => data.count)
+      const dataCounts = results.results.map(data => data.tweet_count)
       const state = {
         status: 'done',
-        results: results.results,
-        totalCount: results.totalCount,
+        results: results.data,
+        totalCount: results.meta.total_tweet.count,
         dataCounts: dataCounts,
         max: Math.max(...dataCounts),
         trend: this.determineTrend(results),

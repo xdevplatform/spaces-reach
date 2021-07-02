@@ -34,7 +34,11 @@ app.get('/2/counts', async (request, response) => {
     const url = new URL(process.env.TWITTER_SEARCH_URL);
     url.searchParams.append('granularity', 'day');
     url.searchParams.append('query', q);
-    
+
+    if (next) {
+      url.searchParams.append('next_token', next);
+    }
+
     const res = await get({
       url: url.href,
       options: {
@@ -68,8 +72,8 @@ app.get('/2/counts', async (request, response) => {
   do {
     const currentBody = await count(request.query.q, next);
     statusCode = currentBody.statusCode;
-    body = [].concat(currentBody.body.results, body);
-    totalCount += currentBody.body.totalCount || 0;
+    body = [].concat(currentBody.body.data, body);
+    totalCount += currentBody.body.meta.total_tweet_count || 0;
     next = currentBody.next;
     sleep(500);
   } while (next);
