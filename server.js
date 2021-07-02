@@ -25,6 +25,76 @@ app.get('/:id([0-9]{1,19})?', (request, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
+app.get('/2/counts', async (request, response) => {
+    if (!request.query.q) {
+    response.status(422).json({});
+  }
+  
+  const count = async (q, next = null) => {
+    const url = new URL(process.env.TWITTER_SEARCH_URL);
+    url.searchParams.append('granularity', 'day');
+    url.searchParams.append('query', q);
+    
+    const res = await get({
+      url: url.href,
+      options: {
+        headers: {
+          authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`
+        }
+      }
+    });
+    
+    if (res.statusCode !== 200) {
+      return {statusCode: res.statusCode, body: null, next: null};
+    }
+    
+    return {statusCode: res.statusCode, body: res.body, next: res.body.next || null};
+  }
+  
+  try {
+    const cached = await cacheGet(request.query.q);
+    if (cached) {
+      response.json(JSON.parse(cached));
+      return;
+    }
+  } catch (e) {
+    console.warn(e);
+  }
+  
+  let next = null;
+  let body = [];
+  let totalCount = 0;
+  let statusCode = 200;
+  do {
+    const currentBody = await count(request.query.q, next);
+    statusCode = currentBody.statusCode;
+    body = [].concat(currentBody.body.results, body);
+    totalCount += currentBody.body.totalCount || 0;
+    next = currentBody.next;
+    sleep(500);
+  } while (next);
+  
+  if (body.length > 0) {
+    try {
+      await cachePut(request.query.q, JSON.stringify({results: body, totalCount}));   
+    } catch (e) {
+      console.warn('cacheput error')
+      console.warn(e);
+    }
+    
+    try {
+      await cacheExpire(request.query.q, 60 * 60 * 24);  
+    } catch (e) {
+      console.warn('cache expire set error');
+      console.warn(e);
+    }
+    
+    response.json({results: body, totalCount});
+  } else {
+    response.status(statusCode).json({results: body, totalCount});
+  }
+});
+
 app.get('/counts', async (request, response) => {
   if (!request.query.q) {
     response.status(422).json({});
