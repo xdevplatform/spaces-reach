@@ -1,45 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Dimmi</title>
+    <title>Rocketreach 🚀</title>
     <link id="favicon" rel="icon" href="https://abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
     <link rel="components" href="/components/components.js" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/style.css">
-    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
     <script src="/client.js"></script>
-    <script>
-      window.twttr = (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0],
-          t = window.twttr || {};
-        if (d.getElementById(id)) return t;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://platform.twitter.com/widgets.js";
-        fjs.parentNode.insertBefore(js, fjs);
-
-        t._e = [];
-        t.ready = function(f) {
-          t._e.push(f);
-        };
-
-        return t;
-      }(document, "script", "twitter-wjs"));
-      
-    </script>
-
-
   </head>
   <body>
-    <div id="tweet">
-      
-    </div>
-    <dimmi-app></dimmi-app>
+    <spaces-reach></spaces-reach>
     <script type="module">
       import { init } from 'https://cdn.jsdelivr.net/gh/iamdaniele/domo/domo.js';
-      init(document.querySelector('dimmi-app'));
+      init(document.querySelector('spaces-reach'));
     </script>
   </body>
 </html>

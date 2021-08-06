@@ -1,29 +1,29 @@
 import Domo, { html } from 'https://cdn.jsdelivr.net/gh/iamdaniele/domo/domo.js';
 
 export default class extends Domo {
-  getTweetId(value) {
-    const [tweetId] = value.match(/\d{1,19}$/) || [null];
-    return tweetId;
+  getSpaceId(value) {
+    const [spaceId] = value.match(/\d\w{1,13}$/i) || [null];
+    return spaceId;
   }
   
   submit() {
-    location.href = '/' + this.getTweetId(this.state.tweetId);
+    location.href = '/' + this.getSpaceId(this.state.spaceId);
   }
   
   updateButton(e) {
-    this.setState({tweetId: this.getTweetId(e.target.value)});
+    this.setState({spaceId: this.getSpaceId(e.target.value)});
   }
   
   render() {
-    const tweetId = this.getTweetId(location.pathname);
+    const spaceId = this.getSpaceId(location.pathname);
     
-    if (tweetId) {
+    if (spaceId) {
       return html``;
     } else {
       return html`
         <style>@import "/style.css"; :host {margin: 0 auto}</style>
-        <input type="url" placeholder="Enter URL or Tweet ID" on-keyup="updateButton" />
-        <button on-click="submit" ${this.state.tweetId ? '' : 'disabled'}>Get trends</button>`
+        <input type="url" placeholder="Enter URL or Space ID" on-keyup="updateButton" />
+        <button on-click="submit" ${this.state.spaceId ? '' : 'disabled'}>Get Space</button>`
     }
     
   }

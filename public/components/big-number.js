@@ -1,8 +1,13 @@
 import Domo, { html } from 'https://cdn.jsdelivr.net/gh/iamdaniele/domo/domo.js';
+import { intervalToDuration } from 'https://esm.run/date-fns';
 
 export default class extends Domo { 
+  key() {
+    return `chart-${this.dataset.spaceId}`;
+  }
+
   getInitialState() {
-    const cachedItem = sessionStorage.getItem(this.dataset.search);
+    const cachedItem = sessionStorage.getItem(this.key());
     if (cachedItem) {
       const state = JSON.parse(cachedItem);
       return state;
@@ -11,26 +16,47 @@ export default class extends Domo {
     this.fetch();
     return { status: 'loading', results: null, currentLabel: null };
   }
+
+  duration(start, end) {
+    const {hours, minutes, seconds} = intervalToDuration({
+      start: start, 
+      end: end,
+    });
+
+    const zero = component => component <= 9 ? '0' + component : '' + component;
+
+    if (hours > 0) {
+      return `${zero(hours)}:${zero(minutes)}:${zero(seconds)}`;
+    } else {
+      return `${zero(minutes)}:${zero(seconds)}`;
+    }
+  }
+
   
   async fetch() {   
-    const response = await fetch(`/2/counts?q=${this.dataset.search}`)
+    const response = await fetch(`/2/spaces/${this.dataset.spaceId}`)
     if (!response.ok) {
-      this.setState({status: 'error'});
+      console.warning(response);
+      // this.setState({status: 'error'});
       return;
     }
     
     try {
-      const results = await response.json();
-      const dataCounts = results.results.map(data => data.tweet_count);
+      const { data } = await response.json();
       const state = {
         status: 'done',
-        results: results.results,
-        totalCount: results.totalCount,
-        dataCounts: dataCounts,
-        max: Math.max(...dataCounts),
-        trend: this.determineTrend(results),
+        series: this.state.series || [],
+        currentCount: data.participant_count,
+        max: 0,
+        min: 0,
       };
-      sessionStorage.setItem(this.dataset.search, JSON.stringify(state));
+      state.series.push({
+        label: this.duration(new Date(data.started_at), new Date()),
+        value: data.participant_count
+      });
+      state.max = Math.max(...state.series.map(({ value }) => value));
+      state.min = Math.min(...state.series.map(({ value }) => value));
+      sessionStorage.setItem(this.key(), JSON.stringify(state));
       this.setState(state);
       
     } catch (e) {
@@ -54,41 +80,33 @@ export default class extends Domo {
     this.fetch();
     this.setState({status: 'loading'});
   }
-  
-  determineTrend(results) {   
-    const length = results.results.length;
-    let sumOfLength = results.results.reduce((ac, el, i) => ac + i, 0);
-    let sumOfMultipliedValues = results.results.reduce((ac, el, i) => ac + el.tweet_count * i, 0);
-    let sumOfValues = results.totalCount;
-    let sumOfSquares = results.results.reduce((ac, el, i) => ac + el.count ** 2, 0);
-    return (length * sumOfMultipliedValues - sumOfLength * sumOfValues) / (length * sumOfSquares - Math.sqrt(sumOfLength));
-  }
-  
+   
   render() {
     switch (this.state.status) {
       case 'loading':
         return html`
           <style> @import "/style.css"; div {text-align: center;height:72px} </style>
-          <h2>${this.dataset.name}</h2>
           <h4></h4>
           <div>Loading…</div>`;
 
       case 'error':
         return html`
           <style> @import "/style.css"; div {text-align: center;height:72px} </style>
-          <h2>${this.dataset.name}</h2>
           <h4></h4>
           <div on-click="reload"><b>Error.</b> Tap to reload</div>`;
 
       case 'done':
-        const volume = this.state.currentLabel || new Intl.NumberFormat().format(this.state.totalCount);
-        const trend = this.state.trend >= 0 ? 'up' : 'down';       
+        const volume = this.state.currentLabel || new Intl.NumberFormat().format(this.state.currentCount);
         return html`
           <style> @import "/style.css"; h2, h4 {margin: 1rem 0.5rem} </style>
-          <h2>${this.dataset.name}</h2>
-          <h4>${volume}</h4>
-          <bar-chart on-click="chartClick" data-trend="${trend}" data-state="${this.dataset.search}"></bar-chart>`;
+          <h4>Current participants: ${volume}</h4>
+          <h5>Min: ${this.state.min}, max: ${this.state.max}</h5>
+          <bar-chart on-click="chartClick" data-refresh="${Date.now()}" data-space-id="${this.dataset.spaceId}"></bar-chart>`;
     }    
+  }
+
+  componentDidRender() {
+    setTimeout(() => this.fetch(), 60 * 1000);
   }
 }
 
