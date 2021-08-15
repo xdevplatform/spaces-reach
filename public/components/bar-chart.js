@@ -1,12 +1,9 @@
 import Domo, { html } from 'https://cdn.jsdelivr.net/gh/iamdaniele/domo/domo.js';
+import { chartKey } from '/consts.js';
 
 export default class extends Domo {
-  key() {
-    return `chart-${this.dataset.spaceId}`;
-  }
-
   getInitialState() {
-    return JSON.parse(sessionStorage.getItem(this.key()));
+    return JSON.parse(sessionStorage.getItem(chartKey(this.dataset.spaceId)));
   }
   
   chartClick(e) {
@@ -18,6 +15,10 @@ export default class extends Domo {
   }
   
   renderBars() {
+    if (!this.state?.series) {
+      return '';
+    }
+
     return this.state.series.map(({label, value}, i) => {
       let height = (value / this.state.max) * 100;
       const zero = height === 0 ? 'zero' : '';

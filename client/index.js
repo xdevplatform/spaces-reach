@@ -1,7 +1,8 @@
-const needle = require('needle');
-const package = require('../package.json');
-const { oauth } = require('../oauth-signature/index.js');
-needle.defaults({user_agent: `${package.name}/${package.version}`})
+import needle from 'needle';
+import { oauth } from '../oauth-signature/index.js';
+import { readFileSync } from 'fs';
+const { name, version } = JSON.parse(readFileSync('../package.json'));
+needle.defaults({user_agent: `${name}/${version}`});
 
 let defaultOptions = {};
 const defaults = (config) => {
@@ -23,28 +24,28 @@ const auth = (method, url, options, body) => {
 }
 
 const get = ({url, ...options}) => {
-  method = 'GET';
+  const method = 'GET';
   options.options = auth(method, url, options.options);
 
   return needle(method, url, null, options.options);
 }
 
 const del = ({url, ...options}) => {
-  method = 'DELETE';
+  const method = 'DELETE';
   options.options = auth(method, url, options.options);
   return needle(method, url, null, options.options);
 }
 
 const post = ({url, body = {}, ...options}) => {
-  method = 'POST';
+  const method = 'POST';
   options.options = auth(method, url, options.options, body);
   return needle(method, url, body, options.options);
 }
 
 const put = ({url, body = {}, ...options}) => {
-  method = 'PUT';
+  const method = 'PUT';
   options.options = auth(method, url, options.options, body);
   return needle(method, url, body, options.options);
 }
 
-module.exports = { get, del, post, put, defaults };
+export { get, del, post, put, defaults };

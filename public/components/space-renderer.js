@@ -15,14 +15,14 @@ export default class extends Domo {
       return;
     }
     
-    const cache = sessionStorage.getItem(this.dataset.spaceId);
-    if (cache) {
-      try {
-        const tweet = JSON.parse(cache);
-        this.prepareQueries(tweet);
-        return;
-      } catch(e) { }
-    }
+    // const cache = sessionStorage.getItem(this.dataset.spaceId);
+    // if (cache) {
+    //   try {
+    //     const tweet = JSON.parse(cache);
+    //     this.prepareQueries(tweet);
+    //     return;
+    //   } catch(e) { }
+    // }
     
     const response = await fetch(`/2/spaces/${this.dataset.spaceId}`);
     if (!response.ok) {
@@ -43,6 +43,17 @@ export default class extends Domo {
     this.fetch();
     this.setState({ status: 'loading'});
   }
+
+  getTitle() {
+    const { space } = this.state;
+    if (!space.data.title) {
+      const creatorId = space.data.creator_id;
+      const { name } = space.includes.users.find(({id}) => id === creatorId);
+      return `${name}'s Space`;
+    }
+
+    return space.data.title;
+  }
   
   render() {
     if (!this.dataset.spaceId) {
@@ -57,18 +68,10 @@ export default class extends Domo {
       case 'done':
         const space = this.state.space.data;
         return html`
-          <h1>${space.title}</h1>
-          <space-runtime data-state="${space.state}" data-started-at=${space.started_at}></space-runtime>
+          <h1>${this.getTitle()}</h1>
+          <space-runtime data-space-id=${this.dataset.spaceId} data-state="${space.state}" data-started-at=${space.started_at}></space-runtime>
           <big-number data-space-id="${this.dataset.spaceId}"></big-number>
         `;
-        // const elements = this.countsQuery.map(({name, query, search}) => 
-        //   `<big-number data-name="${name}" data-query="${query}" data-search="${search}"></big-number>`);
-        
-        // if (elements.length === 0) {
-        //   elements.push(`<div style="text-align: center; font-size: 1.5rem;line-height: 2rem"><b>This Tweet has to annotations, hashtags, or mentions.</b><br><a class="button" style="display: inline-block;margin: 1rem" href="/">Try a different Tweet</a></div>`);
-        // }
-        // elements.push('<style> @import "/style.css"; </style>');
-        // return html(elements);
     }
   }  
 }

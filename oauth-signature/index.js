@@ -1,6 +1,6 @@
-const { URL } = require('url');
-const qs = require('querystring');
-const crypto = require('crypto');
+import { URL } from 'url';
+import qs from 'querystring';
+import crypto from 'crypto';
 
 const encode = (str) =>
   encodeURIComponent(str)
@@ -118,4 +118,4 @@ const oauth = (url, method, {oauth}, body) => {
   return signatureHeader;
 }
 
-module.exports = {oauth, setNonceFn, setTimestampFn};
+export {oauth, setNonceFn, setTimestampFn};
