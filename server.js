@@ -2,15 +2,15 @@ import express from 'express';
 import { Server } from 'http';
 import redis from 'redis';
 import { promisify } from 'util';
-import cron from 'node-cron';
-import dateFns from 'date-fns';
+import SpaceRefresher from './space-refresher/index.js';
+
 import { headers } from './config.js';
 import { createReadStream } from 'fs';
-import { Live, Ended, Scheduled, Canceled } from './public/consts.js';
-const { intervalToDuration } = dateFns;
+import { Live, Ended, Scheduled, Canceled, spaceKey, chartKey, SpaceFields, SpaceUserExpansions, UserFields } from './public/consts.js';
 import { get } from './client/index.js';
 import dotenv from 'dotenv';
-
+import TwitterOAuth1Router from './oauth1router/index.js';
+import TwitterOAuth2Router from './oauth2router/index.js';
 const app = express();
 
 import { dirname } from 'path';
@@ -26,40 +26,25 @@ const cache = redis.createClient({
 
 const cacheGet = promisify(cache.get).bind(cache);
 const cachePut = promisify(cache.set).bind(cache);
-const cacheDel = promisify(cache.del).bind(cache);
 const cacheExpire = promisify(cache.expire).bind(cache);
-
-
 
 dotenv.config();
 
 app.use(express.static('public'));
 app.use(express.json());
 
-const SpaceFields = 'title,created_at,started_at,participant_count';
-const SpaceUserExpansions = 'host_ids,creator_id,speaker_ids,invited_user_ids';
-const UserFields = 'profile_image_url,public_metrics,description';
+TwitterOAuth1Router(app, '/oauth1');
+TwitterOAuth2Router(app, '/oauth2');
 
-const duration = (start, end) => {
-  const {hours, minutes, seconds} = intervalToDuration({
-    start: start, 
-    end: end,
-  });
-
-  const zero = component => component <= 9 ? '0' + component : '' + component;
-
-  if (hours > 0) {
-    return `${zero(hours)}:${zero(minutes)}:${zero(seconds)}`;
-  } else {
-    return `${zero(minutes)}:${zero(seconds)}`;
-  }
-}
-
-app.get('/:id([0-9a-zA-Z]{1,13})?', (request, response) => {
+app.get('/:id([0-9a-zA-Z]{1,13})?', (_, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
-app.get('/code/view', async (request, response) => {
+app.get('/oauth/login', (_, response) => {
+  response.sendFile(__dirname + '/views/login.html');
+});
+
+app.get('/code/view', (_, response) => {
   response.write('<html><head><style> html td {white-space: pre !important}</style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script><script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.6.0/dist/highlightjs-line-numbers.min.js"></script></head><body><pre><code class="language-javascript">');
   createReadStream(__dirname + '/server.js').pipe(response).on('end', () => {
     response.write('</code></pre><script>hljs.highlightAll();hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();</script></body>');
@@ -69,7 +54,7 @@ app.get('/code/view', async (request, response) => {
 });
 
 app.get('/2/spaces/:id([0-9a-zA-Z]{1,13})', async (request, response) => {  
-  const key = 'space-' + request.params.id;
+  const key = spaceKey(request.params.id);
   const cache = await cacheGet(key);
   
   if (!cache) {
@@ -86,7 +71,7 @@ app.get('/2/spaces/:id([0-9a-zA-Z]{1,13})', async (request, response) => {
 });
 
 app.get('/2/chartdata/:id([0-9a-zA-Z]{1,13})', async (request, response) => {  
-  const key = 'space-chartdata-' + request.params.id;
+  const key = chartKey(request.params.id);
   const cache = await cacheGet(key);
   
   if (!cache) {
@@ -171,95 +156,8 @@ const track = async (id) => {
   return res.body;
 }
 
-cron.schedule('* * * * *', async () => {
-  // get list of things to track from redis
-  const ids = await cacheGet('tracking');
-
-  if (!ids) {
-    console.log('nothing to track');
-    return;
-  }
-
-  console.log('currently tracking these spaces:', ids);
-  // make bulk request
-  let res;
-  try {
-    const url = new URL(`https://api.twitter.com/2/spaces`);
-    url.searchParams.append('ids', ids.replace(/^,|,$/g, ''));
-    url.searchParams.append('space.fields', SpaceFields);
-    url.searchParams.append('user.fields', UserFields);
-    url.searchParams.append('expansions', SpaceUserExpansions);
-    res = await get({
-      url: url.href, 
-      options: {
-        headers: headers
-      }
-    });
-  } catch (e) {
-    console.warn(e);
-    return;
-  }
-
-  // get result
-  if (res.statusCode !== 200) {
-    console.warn(`Received HTTP ${res.statusCode}: ${JSON.stringify(res.body)}`);
-    return;
-  }
-
-  // for each space, check state and filter out ended spaces
-  const { data } = res.body;  
-  const trackingSpaces = data.filter(async (space) => {
-    if (space.state === Ended) {
-      await cachePush('ended', space.id);
-      await cacheRemoveFrom('tracking', space.id);
-      console.log('this space has ended:', space.id);
-      return false;
-    }
-
-    return true;
-  });
-
-  console.log('after filtering, tracking these spaces:', ids);
-
-  // if space is running, append participation details to payload
-  // save each space by id in its own bucket
-  trackingSpaces.forEach(async (space) => {
-    const data = await cacheGet('space-chartdata-' + space.id);
-    let cacheData;
-    try {
-      cacheData = JSON.parse(data);
-      console.log('got data from cache for', space.id);
-    } catch (e) {
-      console.warn('cannot get spaces series data for', space.id);
-      console.warn(e);
-    }
-
-    if (!cacheData) {
-      cacheData = {
-        status: 'done',
-        series: [],
-        currentCount: space.participant_count,
-        min: space.participant_count,
-        max: space.participant_count
-      };
-    }
-
-    cacheData.series.push({
-      label: duration(new Date(space.started_at), new Date()),
-      value: space.participant_count
-    });
-
-    cacheData.currentCount = space.participant_count;
-    cacheData.min = Math.min(...cacheData.series.map(series => series.value));
-    cacheData.max = Math.max(...cacheData.series.map(series => series.value));
-
-    await cachePut('space-chartdata-' + space.id, JSON.stringify(cacheData));
-
-  });
-
-  const trackingSpacesIds = trackingSpaces.map(({id}) => id).join(',');
-  await cachePut('tracking', trackingSpacesIds);
-});
+const refresher = new SpaceRefresher(cache);
+refresher.run();
 
 const listener = Server(app).listen(process.env.PORT || 5000, async () => {
   console.log(`Your app is listening on port ${listener.address().port}`);
