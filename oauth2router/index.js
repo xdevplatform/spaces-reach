@@ -25,7 +25,7 @@ export default (app, baseRoute = '/twitter', redirectURI = 'http://localhost:500
     url.searchParams.append('response_type', 'code');
     url.searchParams.append('client_id', process.env.TWITTER_CLIENT_ID);
     url.searchParams.append('redirect_uri', redirectURI);
-    url.searchParams.append('scope', 'users.read tweet.read space.read');
+    url.searchParams.append('scope', 'users.read tweet.read space.read offline.access');
     // We implement the PCKE extension for additional security.
     // Here, we're passing a randomly generate state parameter, along
     // with a code challenge. In this example, the code challenge is
@@ -48,6 +48,7 @@ export default (app, baseRoute = '/twitter', redirectURI = 'http://localhost:500
     if (request.query.state && request.query.code) {
       // exchange token for code
       const tokenData = await exchangeToken(request.query.code, redirectURI);
+      console.log(tokenData);
       tokenData.expires_at = new Date().getTime() + (tokenData.expires_in * 1000);
       response.clearCookie('state');
       response.cookie('token', tokenData);

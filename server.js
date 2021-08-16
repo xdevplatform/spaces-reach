@@ -40,6 +40,10 @@ app.get('/:id([0-9a-zA-Z]{1,13})?', (_, response) => {
   response.sendFile(__dirname + '/views/trends.html');
 });
 
+app.get('/me/spaces', (_, response) => {
+  response.sendFile(__dirname + '/views/my-spaces.html');
+});
+
 app.get('/oauth/login', (_, response) => {
   response.sendFile(__dirname + '/views/login.html');
 });
@@ -81,6 +85,31 @@ app.get('/2/chartdata/:id([0-9a-zA-Z]{1,13})', async (request, response) => {
 
   response.json(JSON.parse(cache));
   return;
+});
+
+app.get('/2/spaces/by/creator_ids', async (request, response) => {
+  const url = new URL(`https://api.twitter.com/2/spaces/by/creator_ids`);
+    url.searchParams.append('user_ids', request.query.user_ids);
+    url.searchParams.append('space.fields', SpaceFields);
+    url.searchParams.append('user.fields', UserFields);
+    url.searchParams.append('expansions', SpaceUserExpansions);
+    headers.authorization = 'Bearer ' + request.cookies.token.access_token;
+    let res;
+    try {
+      res = await get({
+        url: url.href,
+        options: {
+          headers: headers
+        }
+      });
+    } catch (e) {
+      console.warn(e);
+      response.json({error: true});
+      return;
+    }
+
+    response.json(res.body);
+    
 });
 
 const cachePush = async (key, value) => {
@@ -160,5 +189,5 @@ const refresher = new SpaceRefresher(cache);
 refresher.run();
 
 const listener = Server(app).listen(process.env.PORT || 5000, async () => {
-  console.log(`Your app is listening on port ${listener.address().port}`);
+  console.log(`🟣 🚀`);
 });
