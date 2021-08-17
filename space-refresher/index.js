@@ -3,6 +3,8 @@ import cron from 'node-cron';
 import dateFns from 'date-fns';
 const { intervalToDuration } = dateFns;
 import { promisify } from 'util';
+import { get } from '../client/index.js';
+import { headers } from '../config.js';
 
 export default class {
   constructor(cache) {
@@ -10,6 +12,37 @@ export default class {
     this.cachePut = promisify(cache.set).bind(cache);
     this.cacheExpire = promisify(cache.expire).bind(cache);
 
+  }
+
+  async cachePush(key, value) {
+    let cache;
+    try {
+      cache = (await this.cacheGet(key)).split(',');
+    } catch (e) {
+      console.warn(e);
+      cache = [];
+    }
+  
+    if (!cache.includes(value)) {
+      cache.push(value);
+      await this.cachePut(key, cache.join(','));
+    }
+  }
+  
+  async cacheRemoveFrom(key, value) {
+    let cache;
+    try {
+      cache = (await this.cacheGet(key)).split(',') || [];
+    } catch (e) {
+      console.warn(e);
+      cache = [];
+    }
+  
+    const index = cache.indexOf(value);
+    if (index > -1) {
+      cache.splice(index, 1);
+      await this.cachePut(key, cache.join(','));
+    }
   }
 
   duration (start, end) {
