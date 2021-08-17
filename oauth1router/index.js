@@ -9,8 +9,7 @@ export default (app, baseRoute = '/twitter') => {
   app.use(cookieParser());
 
   const baseRouteName = baseRoute.replace(/\/+$/, '');
-  // const baseURL = `https://${process.env.PROJECT_DOMAIN}.${process.env.PROJECT_BASE_URL || 'glitch.me'}`;
-  const baseURL = 'http://localhost:5000';
+  const baseURL = process.env.BASE_URL || `https://${process.env.PROJECT_DOMAIN}.${process.env.PROJECT_BASE_URL || 'glitch.me'}`;
   const callbackURL = new URL(`${baseURL}${baseRouteName}/oauth-callback`);
 
   app.get(`${baseRouteName}/oauth`, async (request, response) => {

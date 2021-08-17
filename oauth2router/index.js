@@ -1,6 +1,6 @@
 import { exchangeToken, refreshToken, revokeToken } from '../oauth2/index.js';
 
-export default (app, baseRoute = '/twitter', redirectURI = 'http://localhost:5000/oauth2/oauth-callback') => {
+export default (app, baseRoute = '/twitter', redirectURI = `${process.env.BASE_URL}/oauth2/oauth-callback`) => {
   app.get(`${baseRoute}/refresh`, async (request, response) => {
     if (!request.cookies.token) {
       return response.status(400).json({error: 'Could not find a token to refresh in your browser session.'});
